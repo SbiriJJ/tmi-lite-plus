@@ -10,6 +10,11 @@ preserved; the new package uses the separate v1.6-tmi release.
 
 ## Server-backed conversations and search
 
+Rolling 1.6.9767.40409 adds explicit bulk assignment in TThreadCatalog and the
+browser context menu. It collects candidates across active/archived pages before
+writing metadata, skips agents and assigned threads, and reports server failures.
+CatalogStartupCheck covers these cases; ThreadUiCheck and Release/Win64 build pass.
+
 - Startup fix: server project metadata is initialized independently of a local
   directory. This removes the erroneous empty-directory constructor call that
   stopped project loading. A protocol-fixture regression test covers catalog

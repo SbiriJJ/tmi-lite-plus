@@ -10,6 +10,21 @@ Minimum/tested Codex CLI: 0.157.1
 
 ## Main changes
 
+### Rolling 1.6.9767.40409 — 28 September 2026
+
+- Added **Assign unassigned threads to projects...** to the browser context menu.
+  After confirmation, it scans active and archived main threads and assigns only
+  unassigned threads whose working directory matches exactly one project root.
+  Agents and existing assignments are skipped. Ambiguous and unmatched threads
+  remain unassigned; no working directories or files are changed.
+- The scan completes before assignments begin. The final report shows assigned,
+  unmatched, ambiguous and failed counts, including server error messages.
+- Startup and Repair remain read-only with respect to project assignments.
+- Verified Release/Win64 compilation, catalog protocol fixtures (pagination,
+  archived threads, exclusions and errors) and main-form/UI regression checks.
+
+### Stable 1.6
+
 - Complete rename from Prompt Lite+ to **TMI Lite+**. Public title:
   **TMI Lite+ for AI agents**. New executable, INI, project, registry/cache/log
   names, repository and update URLs. Optional renderer: `TMILiteMath.dll`.

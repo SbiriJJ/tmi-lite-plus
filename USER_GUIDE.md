@@ -103,6 +103,13 @@ not an invented server project or a missing directory.
 - **Refresh projects**, **Search contents**, and **Repair server index** are
   available from the context menu, including the empty browser background.
   Repair is an explicit scan/repair; ordinary browsing uses the server index.
+- **Assign unassigned threads to projects...** asks for confirmation, then scans
+  active and archived main threads. It assigns only threads without a project
+  whose working directory matches exactly one existing project root. Agents and
+  already assigned threads are skipped; unmatched or ambiguous threads remain
+  unassigned. No project is created and no working directory or file is changed.
+  A final report lists successful assignments, unmatched/ambiguous counts and
+  any server errors. Startup and Repair never perform these assignments.
 - Opening reloads current server data. The same conversation cannot be opened
   by two TMI Lite+ instances at the same time.
 

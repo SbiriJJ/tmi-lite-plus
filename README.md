@@ -21,12 +21,18 @@ notices below for terms of use and responsibilities.
 Documentation version 1.6 — **stable release** (28 September 2026).
 Windows executable version: **1.6.9767.30081** (Release/Win64).
 
+Latest **Rolling**: **1.6.9767.40409** (Release/Win64). Adds the explicit
+**Assign unassigned threads to projects...** command, including archived main
+threads, with unique exact-root matching and a final report. Existing assignments,
+agents, working directories and files are left unchanged.
+[Download Rolling](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling).
+
 Formerly Prompt Lite+. This is the renamed 1.6 build; install it manually when
 switching from the old application. Do not run old and new names concurrently:
 they use separate instance-coordination namespaces.
 
 Requires Codex CLI **0.157.1** or later. Version 1.6 is available through the
-Release update channel. The existing Rolling build is unchanged.
+Release update channel. Rolling is a separate opt-in update channel.
 See [release notes](RELEASE_NOTES.md).
 
 [![Release](https://img.shields.io/github/v/release/SbiriJJ/tmi-lite-plus?style=flat-square&label=release&color=blue)](https://github.com/SbiriJJ/tmi-lite-plus/releases/latest)
