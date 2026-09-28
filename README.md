@@ -2,6 +2,22 @@
 
 **Lightweight interface for AI agents**
 
+TMI Lite+ is an independent Windows x64 desktop interface for Codex CLI,
+designed to keep AI-assisted development practical on computers with limited
+performance. It provides project and conversation management, working-directory
+selection, model and reasoning controls, approvals, tool activity, file access,
+diff viewing, and token/usage information in a compact, low-overhead interface.
+
+Each application instance runs its own Codex CLI app-server, allowing independent
+conversations to be used side by side. The interface avoids animations and heavy
+conversation rendering, while additional views such as full history, usage
+charts, images and diffs are available when requested.
+
+TMI Lite+ is the interface, not the AI engine: Codex CLI performs agent operations
+and provides the connection to models and services. The application is
+hobby-developed, free of charge, and independent of OpenAI. See the license and
+notices below for terms of use and responsibilities.
+
 Documentation version 1.6 — **stable release** (28 September 2026).
 Windows executable version: **1.6.9767.30081** (Release/Win64).
 
@@ -19,11 +35,6 @@ See [release notes](RELEASE_NOTES.md).
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
-
-TMI Lite+ is an independent, lightweight Windows interface for a locally
-installed Codex CLI `app-server`. It focuses on project directories,
-persistent conversations, approvals, tools, diffs, token information, and
-low-overhead parallel work.
 
 ## Screenshot
 
@@ -118,7 +129,7 @@ See [Release Notes](RELEASE_NOTES.md) for development status and release history
 7. Complete Codex CLI authentication when requested.
 
 The archive includes a neutral `TMILitePlus.ini`. It contains no project
-path, thread identifier, download directory, or accepted EULA identity. Prompt
+path, thread identifier, download directory, or accepted EULA identity. TMI
 Lite+ updates it locally as the application is used.
 
 Do not run TMI Lite+ directly from inside the ZIP archive.
