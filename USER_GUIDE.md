@@ -1,6 +1,15 @@
-# Prompt Lite+ User Guide
+# TMI Lite+ for AI agents — User Guide
 
 Version 1.6
+
+Lightweight interface for AI agents.
+
+The application was formerly named Prompt Lite+. Install this renamed package
+manually. The new EXE is `TMILitePlus.exe`; the INI beside it is `TMILitePlus.ini`.
+Only the new INI and registry names are used. There is no automatic migration
+or lookup of previous application names.
+Do not run Prompt Lite+ and TMI Lite+ together: cross-name instance coordination
+is not provided. Old caches and historical release ZIPs are not renamed.
 
 Version 1.6 includes a non-modal **Usage** statistics window (daily bars,
 weekly comparisons and a calendar heatmap), Unicode formulas and a
@@ -8,17 +17,17 @@ local image viewer. See [development notes](DEVELOPMENT_NOTES.md) for the exact
 scope and [optional MicroTeX setup](MICROTEX_SETUP.md) for graphical formulas.
 Existing release ZIPs are unchanged.
 
-## 1. What Prompt Lite+ is
+## 1. What TMI Lite+ is
 
-Prompt Lite+ is a lightweight Windows interface for Codex CLI `app-server`. It
+TMI Lite+ is a lightweight Windows interface for Codex CLI `app-server`. It
 does not provide its own AI model or OpenAI account. Codex CLI performs agent
 operations and preserves compatible conversations.
 
-Prompt Lite+ is independent from OpenAI. Read and accept the versioned disclaimer
+TMI Lite+ is independent from OpenAI. Read and accept the versioned disclaimer
 at first startup. Use the **Disclaimer** button at the top left to read it
 again.
 
-Prompt Lite+ is hobby-developed software provided free of charge and may be
+TMI Lite+ is hobby-developed software provided free of charge and may be
 used for any lawful personal or professional purpose. It is not designed,
 certified, supported, or warranted for professional, production,
 safety-critical, or business-continuity use. Any such use is at the user’s
@@ -29,7 +38,7 @@ app causes excessive system load.
 
 ## 2. First startup
 
-1. Start `PromptLitePlus.exe`.
+1. Start `TMILitePlus.exe`.
 2. Read the disclaimer and select **Accept and Continue**. Selecting **Exit**
    closes the application without recording acceptance.
 3. Open **CLI Setup** if Codex CLI is not detected.
@@ -39,7 +48,7 @@ app causes excessive system load.
 6. In the browser shown at startup, expand a project and click a conversation,
    or use the context menu's **New** command to create one.
 
-Prompt Lite+ stores the accepted EULA version and its SHA-256 fingerprint. When
+TMI Lite+ stores the accepted EULA version and its SHA-256 fingerprint. When
 the version or text of `EULA.md` changes, the disclaimer is displayed again.
 
 ## 3. Projects and conversations
@@ -95,12 +104,12 @@ not an invented server project or a missing directory.
   available from the context menu, including the empty browser background.
   Repair is an explicit scan/repair; ordinary browsing uses the server index.
 - Opening reloads current server data. The same conversation cannot be opened
-  by two Prompt Lite+ instances at the same time.
+  by two TMI Lite+ instances at the same time.
 
-Several Prompt Lite+ instances may run concurrently. Each instance starts its
+Several TMI Lite+ instances may run concurrently. Each instance starts its
 own Codex `app-server`, allowing independent work on different conversations.
 
-Prompt Lite+ can be used on the same computer as the ChatGPT desktop app, but
+TMI Lite+ can be used on the same computer as the ChatGPT desktop app, but
 do not use both applications on the same project at the same time.
 
 Spawn-agent conversations are available for review under their parent
@@ -163,7 +172,7 @@ The settings panel exposes the protocol settings directly.
 When Codex CLI explicitly permits a persistent MCP tool approval, the MCP
 request window also shows **Always allow**. This approves the current request
 and stores the matching tool policy across future Codex sessions. The option
-is not inferred by Prompt Lite+ and is absent when the server does not offer
+is not inferred by TMI Lite+ and is absent when the server does not offer
 it.
 
 Use **MCP...** beside the approval setting to open the runtime inspection window.
@@ -202,7 +211,7 @@ changes automatically correct. Review important work and maintain backups.
 The Send button changes color while the agent is working. Activity status and
 elapsed time are shown beside the Activity title.
 
-`Ctrl+Enter` sends the prompt. Prompt Lite+ processes this shortcut without
+`Ctrl+Enter` sends the prompt. TMI Lite+ processes this shortcut without
 altering the prompt text or leaving a key logically pressed. After sending, the
 empty prompt editor returns to its first line.
 
@@ -261,11 +270,11 @@ Download remembers its own last selected directory in the local INI file and
 runs without blocking the UI.
 
 The diff form lists available file-change snapshots for the current
-conversation, grouped by recent task, current Prompt Lite+ session, and date.
+conversation, grouped by recent task, current TMI Lite+ session, and date.
 
 ## 9. Token and rate information
 
-Prompt Lite+ displays context-window use, turn/thread token totals, and the rate
+TMI Lite+ displays context-window use, turn/thread token totals, and the rate
 information supplied by the server. Context is shown as used tokens over total
 capacity. Available account-limit percentages are shown as compact remaining
 capacity bars; a bar is omitted when the server does not supply that window.
@@ -291,16 +300,16 @@ reset the conversation total.
 **CLI Setup** shows the detected executable, installed version, latest version,
 and commands used for installation or update.
 
-Only one Prompt Lite+ instance performs the startup CLI version check. A later
+Only one TMI Lite+ instance performs the startup CLI version check. A later
 check may occur after the shared six-hour interval. Updating Codex CLI requires
-all Prompt Lite+ instances/app-server processes to be disconnected.
+all TMI Lite+ instances/app-server processes to be disconnected.
 
 CLI maintenance output is streamed into its dialog so progress remains visible.
 
 Development builds require Codex CLI 0.157.1 or later. Older versions cannot start
-the app-server from Prompt Lite+. Version 1.6 preview requires Codex CLI 0.157.1 or later and was checked against 0.157.1.
+the app-server from TMI Lite+. Version 1.6 preview requires Codex CLI 0.157.1 or later and was checked against 0.157.1.
 
-## 11. Prompt Lite+ application updates
+## 11. TMI Lite+ application updates
 
 Open **Config** using the gear button in the top toolbar. Choose one channel:
 
@@ -317,7 +326,7 @@ once per minute. Check timestamps are stored in the local INI, not the registry.
 Failed attempts follow the same selected schedule and do not cause retry loops.
 
 Checks and downloads run in the background, only while this is the sole
-Prompt Lite+ instance. A check already in progress can finish if another
+TMI Lite+ instance. A check already in progress can finish if another
 instance opens, but installation still requires a single instance. **Save and
 check now** performs a manual check. GitHub receives normal HTTPS request data
 and the application version, not conversation contents.
@@ -331,15 +340,15 @@ and confirm. An active task is never automatically interrupted.
 The local staging mechanism remains available:
 
 ```text
-update\PromptLitePlus.exe
+update\TMILitePlus.exe
 ```
 
-At startup, when Prompt Lite+ is the only running instance, it compares the
+At startup, when TMI Lite+ is the only running instance, it compares the
 staged executable version with the running version.
 
 If a newer version is available, the dialog displays both versions:
 
-- **Restart and Update** closes Prompt Lite+, replaces the executable, keeps a
+- **Restart and Update** closes TMI Lite+, replaces the executable, keeps a
   `.previous.exe` backup, and starts the updated version;
 - **Don't Update** continues using the current version without modifying the
   executable.
@@ -347,7 +356,7 @@ If a newer version is available, the dialog displays both versions:
 An update is never applied merely because it was detected. Remote packages
 include documentation for that build; installation updates those documents but
 never replaces the user's INI. An updated EULA triggers the existing acceptance
-check. Packages use the readable name `PromptLitePlus-M.m.G.T-Win64.zip`, with
+check. Packages use the readable name `TMILitePlus-M.m.G.T-Win64.zip`, with
 the full fixed EXE version. GitHub supplies the download URL and SHA-256; no
 separate manifest is required. If multiple matching ZIPs exist, the newest
 numeric version wins. Old ZIP names without the full version are reported and
@@ -369,15 +378,15 @@ The Download directory is remembered automatically by the link Download command
 and is intentionally not exposed in Config. Internal options and Codex server
 settings are not exposed there either.
 
-Prompt Lite+ uses:
+TMI Lite+ uses:
 
-- the INI beside `PromptLitePlus.exe` for UI preferences, selected
+- the INI beside `TMILitePlus.exe` for UI preferences, selected
   project/thread, accepted EULA version and fingerprint, rolling limits,
   conversation colors, download directory, update channel/frequencies and
   last-check timestamps;
-- `HKEY_CURRENT_USER\Software\PromptLitePlus` for common Codex-related settings;
+- `HKEY_CURRENT_USER\Software\TMILitePlus` for common Codex-related settings;
 - shared memory only for lightweight multi-instance coordination;
-- `PromptLitePlus.startup.log` for the current diagnostic session.
+- `TMILitePlus.startup.log` for the current diagnostic session.
 
 The first instance overwrites the startup log. Concurrent instances append to
 the same log with their process IDs.
@@ -387,11 +396,11 @@ the same log with their process IDs.
 - If **Send** is disabled, connect the server first.
 - If Codex CLI is missing or older than 0.157.1, open **CLI Setup**.
 - If a conversation reports that it is already open, close it in the other
-  Prompt Lite+ instance.
+  TMI Lite+ instance.
 - If a project is absent, refresh after Codex thread discovery completes.
 - If a thread is very large, the rolling conversation loads first; use
   **Full Load** only when the complete history is needed.
-- For startup or protocol problems, copy `PromptLitePlus.startup.log` before the
+- For startup or protocol problems, copy `TMILitePlus.startup.log` before the
   next first-instance startup overwrites it.
 - For protocol incompatibility, regenerate and review the app-server schemas.
 

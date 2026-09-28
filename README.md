@@ -1,34 +1,40 @@
-# Prompt Lite+
+# TMI Lite+ for AI agents
+
+**Lightweight interface for AI agents**
 
 Documentation version 1.6 — **stable release** (28 September 2026).
-Windows executable version: **1.6.9767.24629** (Release/Win64).
+Windows executable version: **1.6.9767.30081** (Release/Win64).
+
+Formerly Prompt Lite+. This is the renamed 1.6 build; install it manually when
+switching from the old application. Do not run old and new names concurrently:
+they use separate instance-coordination namespaces.
 
 Requires Codex CLI **0.157.1** or later. Version 1.6 is available through the
 Release update channel. The existing Rolling build is unchanged.
 See [release notes](RELEASE_NOTES.md).
 
-[![Release](https://img.shields.io/github/v/release/SbiriJJ/prompt-lite-plus?style=flat-square&label=release&color=blue)](https://github.com/SbiriJJ/prompt-lite-plus/releases/latest)
+[![Release](https://img.shields.io/github/v/release/SbiriJJ/tmi-lite-plus?style=flat-square&label=release&color=blue)](https://github.com/SbiriJJ/tmi-lite-plus/releases/latest)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.157.1-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
-[![Downloads](https://img.shields.io/github/downloads/SbiriJJ/prompt-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/prompt-lite-plus/releases)
+[![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-Prompt Lite+ is an independent, lightweight Windows interface for a locally
+TMI Lite+ is an independent, lightweight Windows interface for a locally
 installed Codex CLI `app-server`. It focuses on project directories,
 persistent conversations, approvals, tools, diffs, token information, and
 low-overhead parallel work.
 
 ## Screenshot
 
-![Prompt Lite+ running on Windows](assets/prompt-lite-plus-demo.png)
+![TMI Lite+ running on Windows](assets/tmi-lite-plus-demo.png)
 
-Prompt Lite+ is not affiliated with, endorsed by, sponsored by, or supported by
+TMI Lite+ is not affiliated with, endorsed by, sponsored by, or supported by
 OpenAI. Agent operations are performed by Codex CLI under the permissions
 selected by the user. The user is responsible for reviewing and authorizing
 those operations and their consequences.
 
-Prompt Lite+ is hobby-developed software provided free of charge and may be
+TMI Lite+ is hobby-developed software provided free of charge and may be
 used for any lawful personal or professional purpose. It is not designed,
 certified, supported, or warranted for professional, production,
 safety-critical, or business-continuity use. Any such use is at the user’s
@@ -90,7 +96,7 @@ See [release notes](RELEASE_NOTES.md) for limitations and verification.
   being placed at the top for quick access.
 - Large conversations use summarized cursor-paginated history and a local
   rolling-window cache. The cached view is shown immediately; if server
-  metadata has changed, Prompt Lite+ refreshes it in the background. Historical
+  metadata has changed, TMI Lite+ refreshes it in the background. Historical
   tool output and diffs are not downloaded by the normal reload. Full Load uses
   large message-only pages,
   reports progress, and can retain a partial transcript when stopped.
@@ -103,19 +109,19 @@ See [Release Notes](RELEASE_NOTES.md) for development status and release history
 
 ## Download and installation
 
-1. Open the [1.6 release](https://github.com/SbiriJJ/prompt-lite-plus/releases/tag/v1.6) and download its Win64 ZIP.
+1. Open the [TMI Lite+ 1.6 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v1.6-tmi) and download its Win64 ZIP.
 2. Verify the archive against the published SHA-256 checksum.
 3. Extract the complete archive into a writable directory.
-4. Start `PromptLitePlus.exe`.
+4. Start `TMILitePlus.exe`.
 5. Read and accept the displayed disclaimer.
 6. Use **CLI Setup** to detect, install, or update Codex CLI.
 7. Complete Codex CLI authentication when requested.
 
-The archive includes a neutral `PromptLitePlus.ini`. It contains no project
+The archive includes a neutral `TMILitePlus.ini`. It contains no project
 path, thread identifier, download directory, or accepted EULA identity. Prompt
 Lite+ updates it locally as the application is used.
 
-Do not run Prompt Lite+ directly from inside the ZIP archive.
+Do not run TMI Lite+ directly from inside the ZIP archive.
 
 ## Requirements
 
@@ -125,7 +131,7 @@ Do not run Prompt Lite+ directly from inside the ZIP archive.
 - an OpenAI account or subscription supported by Codex CLI.
 
 Codex CLI, OpenAI accounts, models, subscriptions, and services are not
-included with Prompt Lite+.
+included with TMI Lite+.
 
 ## Documentation
 
@@ -138,14 +144,14 @@ included with Prompt Lite+.
 
 ## Protocol compatibility
 
-Prompt Lite+ depends on the `app-server` protocol exposed by the installed Codex
-CLI. A later Codex CLI release may require a corresponding Prompt Lite+ update.
+TMI Lite+ depends on the `app-server` protocol exposed by the installed Codex
+CLI. A later Codex CLI release may require a corresponding TMI Lite+ update.
 
-Prompt Lite+ 1.6 requires Codex CLI 0.157.1 or later. The protocol was checked
+TMI Lite+ 1.6 requires Codex CLI 0.157.1 or later. The protocol was checked
 against CLI 0.157.1. New asynchronous questions require a CLI/model that emits
 them; absent metadata is confirmed through the normal thread resume response.
 
-Prompt Lite+ can be used on the same computer as the ChatGPT desktop app, but
+TMI Lite+ can be used on the same computer as the ChatGPT desktop app, but
 do not use both applications on the same project at the same time.
 
 Official Codex documentation:

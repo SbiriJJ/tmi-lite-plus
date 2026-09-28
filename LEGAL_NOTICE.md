@@ -1,4 +1,4 @@
-# Prompt Lite+ Legal and Copyright Notice
+# TMI Lite+ Legal and Copyright Notice
 
 Document version 1.6  
 Last updated: 28 September 2026
@@ -7,29 +7,29 @@ Last updated: 28 September 2026
 
 Copyright © 2026 Giacomo Boffa Sandalina. All rights reserved.
 
-Prompt Lite+ source code, executable files, original icons, user-interface
+TMI Lite+ source code, executable files, original icons, user-interface
 design, and documentation are protected by applicable copyright law except for
 third-party material identified separately.
 
 ## Independent project
 
-Prompt Lite+ is an independent, unofficial interface for Codex CLI. It is not
+TMI Lite+ is an independent, unofficial interface for Codex CLI. It is not
 affiliated with, endorsed by, sponsored by, certified by, or supported by
 OpenAI.
 
 The application name refers to compatibility with Codex CLI. No ownership of
 OpenAI names, products, services, or trademarks is claimed, and no OpenAI logo
-is part of Prompt Lite+ branding.
+is part of TMI Lite+ branding.
 
 ## Intended use
 
-Prompt Lite+ is hobby-developed software provided free of charge and may be
+TMI Lite+ is hobby-developed software provided free of charge and may be
 used for any lawful personal or professional purpose. It is not designed,
 certified, supported, or warranted for professional, production,
 safety-critical, or business-continuity use. Any such use is undertaken
 entirely at the User’s discretion and risk.
 
-Prompt Lite+ is designed as a lightweight interface for computers with limited
+TMI Lite+ is designed as a lightweight interface for computers with limited
 performance, particularly where the ChatGPT desktop app causes excessive
 system load. This is a design objective, not a performance guarantee.
 
@@ -53,7 +53,7 @@ OpenAI publishes current brand guidance at:
 
 Codex CLI, OpenAI accounts, models, subscriptions, hosted services, MCP
 servers, command-line tools, package managers, and downloaded content are not
-operated by the Prompt Lite+ copyright holder. They remain subject to their own
+operated by the TMI Lite+ copyright holder. They remain subject to their own
 terms, privacy practices, availability, and licenses.
 
 OpenAI’s current public terms are available at:
@@ -63,9 +63,9 @@ OpenAI’s current public terms are available at:
 
 ## No endorsement
 
-Distribution, screenshots, documentation, or discussion of Prompt Lite+ must not
+Distribution, screenshots, documentation, or discussion of TMI Lite+ must not
 state or imply that OpenAI created, approved, supports, certifies, sponsors, or
-endorses Prompt Lite+.
+endorses TMI Lite+.
 
 ## Related documents
 

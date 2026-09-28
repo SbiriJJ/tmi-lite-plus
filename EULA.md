@@ -1,4 +1,4 @@
-# Prompt Lite+ End User License Agreement
+# TMI Lite+ End User License Agreement
 
 Version 1.6  
 Effective date: 28 September 2026
@@ -7,11 +7,11 @@ Copyright © 2026 Giacomo Boffa Sandalina. All rights reserved.
 ## 1. Acceptance
 
 This End User License Agreement (“Agreement”) is between the copyright holder
-(“Licensor”) and the person or organization installing or using Prompt Lite+
+(“Licensor”) and the person or organization installing or using TMI Lite+
 (“User”).
 
 By accepting the in-application disclaimer, installing, copying, or using
-Prompt Lite+, the User agrees to this Agreement. If the User does not agree, the
+TMI Lite+, the User agrees to this Agreement. If the User does not agree, the
 User must not use the software.
 
 Mandatory rights that cannot legally be excluded remain unaffected.
@@ -19,36 +19,36 @@ Mandatory rights that cannot legally be excluded remain unaffected.
 ## 2. License grant
 
 The Licensor grants the User a limited, non-exclusive, non-transferable license
-to install and use Prompt Lite+ for any lawful personal or professional
+to install and use TMI Lite+ for any lawful personal or professional
 purpose.
 
-Prompt Lite+ is hobby-developed software provided free of charge. It is not
+TMI Lite+ is hobby-developed software provided free of charge. It is not
 designed, certified, supported, or warranted for professional, production,
 safety-critical, or business-continuity use. Any such use is undertaken
 entirely at the User’s discretion and risk.
 
-This Agreement does not grant ownership of Prompt Lite+, its source code,
+This Agreement does not grant ownership of TMI Lite+, its source code,
 branding, or documentation. A separately supplied source-code license, if any,
 controls only the material expressly covered by that license.
 
-Prompt Lite+ is designed as a lightweight interface for computers with limited
+TMI Lite+ is designed as a lightweight interface for computers with limited
 performance, particularly where the ChatGPT desktop app causes excessive
 system load. This design objective is not a performance guarantee.
 
 ## 3. Independent software
 
-Prompt Lite+ is an independent, unofficial client for a separately installed
+TMI Lite+ is an independent, unofficial client for a separately installed
 Codex CLI. It is not affiliated with, endorsed by, sponsored by, certified by,
 or supported by OpenAI.
 
-Prompt Lite+ does not include or provide an OpenAI account, subscription, model,
+TMI Lite+ does not include or provide an OpenAI account, subscription, model,
 AI service, Codex CLI license, or right to use OpenAI services. The User must
 obtain and maintain all required third-party software, accounts, permissions,
 and licenses.
 
 ## 4. User responsibility
 
-Prompt Lite+ can instruct Codex CLI to operate on files, execute commands, use
+TMI Lite+ can instruct Codex CLI to operate on files, execute commands, use
 tools and MCP servers, access networks, and perform other development actions.
 Those agent operations are performed by Codex CLI under settings and approvals
 selected by the User.
@@ -66,32 +66,32 @@ Full-access, automatic-review, network-access, and approval-bypass settings may
 permit consequential operations. The User must not enable them without
 understanding their effect.
 
-## 5. Prompt Lite+ client functions
+## 5. TMI Lite+ client functions
 
-Prompt Lite+ itself performs local client functions such as storing preferences,
+TMI Lite+ itself performs local client functions such as storing preferences,
 displaying and copying information, downloading a user-selected link, checking
-for software versions, and applying a staged Prompt Lite+ update.
+for software versions, and applying a staged TMI Lite+ update.
 
 The User is responsible for selecting correct source and target paths and for
 reviewing the result of those client functions.
 
 ## 6. Updates and compatibility
 
-Prompt Lite+, Codex CLI, Codex app-server, OpenAI services, Windows, 
+TMI Lite+, Codex CLI, Codex app-server, OpenAI services, Windows, 
 MCP servers, and other tools may change independently.
 Compatibility with earlier or later versions is not guaranteed.
 
-Prompt Lite+ may offer installation of a staged update after explicit User
+TMI Lite+ may offer installation of a staged update after explicit User
 confirmation. The User remains responsible for backups and for verifying the
 updated application.
 
 ## 7. Prohibited use
 
-The User must not use Prompt Lite+ to:
+The User must not use TMI Lite+ to:
 
 - violate applicable law or third-party rights;
 - gain unauthorized access to a system, account, network, or data;
-- misrepresent Prompt Lite+ as an OpenAI product or imply OpenAI endorsement;
+- misrepresent TMI Lite+ as an OpenAI product or imply OpenAI endorsement;
 - remove or falsify copyright, legal, or attribution notices;
 - distribute malware or intentionally defeat security controls.
 
@@ -103,7 +103,7 @@ IMPLIED, OR STATUTORY WARRANTIES, INCLUDING WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, COMPATIBILITY,
 AVAILABILITY, OR DATA PRESERVATION.
 
-The Licensor does not warrant that Prompt Lite+, Codex CLI, generated output,
+The Licensor does not warrant that TMI Lite+, Codex CLI, generated output,
 updates, or third-party services will be uninterrupted, error-free, secure, or
 suitable for any particular purpose.
 
@@ -127,12 +127,12 @@ Lite+, subject to any mandatory legal rights.
 ## 11. Changes
 
 The Licensor may update this Agreement and the in-application disclaimer for a
-future release. A changed EULA version will cause Prompt Lite+ to display the
+future release. A changed EULA version will cause TMI Lite+ to display the
 disclaimer again.
 
 ## 12. Entire agreement
 
 This Agreement, together with the disclaimer, Legal Notice, Privacy Notice,
 Third-Party Notices, and any separately supplied license, constitutes the
-applicable documentation for Prompt Lite+. Third-party products and services
+applicable documentation for TMI Lite+. Third-party products and services
 remain governed by their own terms.

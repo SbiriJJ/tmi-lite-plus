@@ -1,7 +1,12 @@
-# Prompt Lite+ 1.6 — development changes
+# TMI Lite+ for AI agents — 1.6 development changes
 
 Protocol baseline and minimum: Codex CLI 0.157.1. Stable release: 28 September 2026.
 Local release build environment: Codex CLI 0.158.0.
+
+Rebranding build: 1.6.9767.30081. Technical stem TMILitePlus; repository
+SbiriJJ/tmi-lite-plus. Runtime title/client metadata use uApplicationIdentity.
+Version components G.T remain compiler-generated. Old v1.6/rolling assets are
+preserved; the new package uses the separate v1.6-tmi release.
 
 ## Server-backed conversations and search
 
@@ -127,6 +132,6 @@ existing counters. A reply for a conversation no longer selected is discarded.
   No image previews are generated while loading the conversation.
 - Graphical formulas are available only when a compatible external MicroTeX
   renderer/resource tree is installed. See [MicroTeX setup](MICROTEX_SETUP.md).
-  No third-party renderer or fonts are bundled with Prompt Lite+.
+  No third-party renderer or fonts are bundled with TMI Lite+.
 - Reloaded image attachments now have compact textual markers, including
   `fileId` references when the server supplies no directly viewable URL/path.
