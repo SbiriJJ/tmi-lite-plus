@@ -1,7 +1,7 @@
 # Prompt Lite+ Legal and Copyright Notice
 
-Document version 1.5  
-Last updated: 6 September 2026
+Document version 1.6  
+Last updated: 28 September 2026
 
 ## Copyright
 

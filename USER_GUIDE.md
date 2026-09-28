@@ -1,6 +1,12 @@
 # Prompt Lite+ User Guide
 
-Version 1.5
+Version 1.6
+
+Version 1.6 includes a non-modal **Usage** statistics window (daily bars,
+weekly comparisons and a calendar heatmap), Unicode formulas and a
+local image viewer. See [development notes](DEVELOPMENT_NOTES.md) for the exact
+scope and [optional MicroTeX setup](MICROTEX_SETUP.md) for graphical formulas.
+Existing release ZIPs are unchanged.
 
 ## 1. What Prompt Lite+ is
 
@@ -30,34 +36,66 @@ app causes excessive system load.
 4. Install or update Codex CLI, or copy the displayed command and run it
    manually.
 5. Authenticate using the Codex CLI login procedure when required.
-6. Select a project directory and open an existing conversation or select
-   **New**.
+6. In the browser shown at startup, expand a project and click a conversation,
+   or use the context menu's **New** command to create one.
 
 Prompt Lite+ stores the accepted EULA version and its SHA-256 fingerprint. When
 the version or text of `EULA.md` changes, the disclaimer is displayed again.
 
 ## 3. Projects and conversations
 
-Projects are grouped from the working directories reported by Codex threads.
-The project name is normally the final directory name. Threads without a
-stored working directory, threads using the Windows Documents directory, and
-conversations stored in Codex-managed Documents workspaces are grouped under
-**`***Documents***`**.
+Version 1.6 uses the project IDs, names and roots supplied by Codex
+app-server. A project's roots and a conversation's working directory are
+different data: assigning a project does not move files or change the working
+directory. Unassigned conversations remain unassigned; browsing does not
+automatically rewrite their project membership. **Documents** is a convenient
+group for unassigned threads whose effective working directory is Documents,
+not an invented server project or a missing directory.
 
-- Select a project to load its main conversations into the conversation
-  dropdown. Selecting a conversation opens it immediately.
-- **New** prepares a new conversation in the selected working directory,
-  including a directory that already has conversations. The thread is created
-  when its first prompt is sent.
-- **Rescan** rebuilds the project list from the working directories currently
-  reported by Codex server threads. Normal thread refresh only updates the
-  selected project.
-- **Duplicate** forks the selected conversation into a new thread.
-- **Pin** and **Unpin** preserve the selected conversation's pinned state in
-  Codex CLI. Pinned conversations are marked with `[PIN]`.
-- Opening a conversation reloads its current server data.
-- The same conversation cannot be opened by two Prompt Lite+ instances at the
-  same time.
+- **Show Threads / Show Current** shows/hides the grouped browser over the left sidebar.
+  Project headers expand/collapse with one click; a single click on a thread
+  opens it. At startup the last-used project expands once the list is loaded,
+  enabled and visible. No thread opens automatically.
+- Project and thread ordering is by recent activity, retaining pinned markers
+  and compact dates. Expanding a project requests indexed metadata, not history.
+- **Find** searches titles across all projects and expands only matching groups.
+  Its integrated button shows a magnifier while editing, then **×** after searching.
+  With the field focused, Enter always searches and Esc always clears the text
+  and filter. The magnifier returns after clearing. These keys never submit a prompt.
+- **Show archived** switches to archived conversations only. Clicking one selects
+  it without resuming or restoring it. Its context
+  menu contains **Unarchive** and **Delete**.
+- The main header shows the active thread, project and effective working
+  directory. Only the project/thread names are bold, not the browser rows.
+  Selecting a project does not change the active work. Full paths are available in hints.
+- The **...** button beside **Working directory** opens **Project roots**.
+  Opening it merges the working directories of associated active and archived
+  threads into the server's root list. Add a folder by path or Browse; Remove
+  is refused when a root is used by a thread, identifying that thread.
+  **Assign to thread** changes only the current idle thread to the selected root.
+  The server persists the change for subsequent turns; no files are moved and
+  historical paths are not rewritten. Each thread has one working directory.
+- Right-click the relevant project or thread for management commands. Actions
+  use that row's identity, not whichever conversation happens to be active.
+- **New conversation** chooses a working directory and prepares the first prompt.
+  From a real project header it uses that project; from the background/virtual
+  groups it finds or creates a project for the chosen folder. The thread is
+  created when its first prompt is sent.
+- **Assign to project** provides a selection list identified internally by IDs,
+  including Unassigned; duplicate project names do not select the wrong project.
+  **New** creates a named project in this dialog. Assignment always preserves
+  the thread's working directory.
+- **Duplicate** requires its initial prompt and a target working directory.
+  **Rename**, **Pin/Unpin**, and **Archive** operate on the clicked thread.
+- **Delete conversation** is permanent and includes spawned descendants.
+  Confirmation shows the target identity and metadata. **Delete project** removes
+  only the project container: its threads are kept as unassigned, and working
+  files are untouched. Both require explicit confirmation.
+- **Refresh projects**, **Search contents**, and **Repair server index** are
+  available from the context menu, including the empty browser background.
+  Repair is an explicit scan/repair; ordinary browsing uses the server index.
+- Opening reloads current server data. The same conversation cannot be opened
+  by two Prompt Lite+ instances at the same time.
 
 Several Prompt Lite+ instances may run concurrently. Each instance starts its
 own Codex `app-server`, allowing independent work on different conversations.
@@ -70,14 +108,32 @@ conversation when the server exposes the required metadata.
 
 Large conversations are read through summarized paginated server history. The
 normal conversation window caches only the recent messages needed for its
-configured rolling line limit. The cached view is displayed immediately. If
-the server reports changed thread metadata, it is refreshed in the background
-while the current cached text remains visible. Historical Activity, tool
+configured rolling line limit. Only a valid cache is reused, and the conversation
+is displayed after the server completes resume. The normal history request loads
+30 recent turns by default; Config supports 1–100 turns (`Conversation.ResumeTurnLimit`
+in the INI). The line limit still controls the visible transcript. Historical Activity, tool
 output, and diffs are deliberately
 excluded from the normal reload path. **Full Load** opens a separate non-modal
-search window, uses larger message-only pages, shows page/turn progress, and
+search window, uses the existing message-summary pages, shows page/turn progress, and
 provides **Stop loading**. Stopping keeps and displays the history pages already
-received, marked as partial.
+received, marked as partial. Existing turn timestamps and speaker information
+remain visible. The 1 GB memory bound remains; no historical per-item timing or
+complete tool-payload download is added.
+
+**Use conversation history cache** in Config enables/disables local history-cache
+reuse and writes (`Conversation.CacheEnabled`, enabled by default), including
+Full Load. Disabling it does not remove existing cache files.
+
+**Search contents...** opens a separate non-modal server-search window. Search all
+conversations or the current conversation. Select a matching conversation to list
+its occurrences, then select a message to see its highlighted excerpt and turn
+context. **More conversations** and **More matches** page results; archived results
+are a separate phase when included. **Stop** retains downloaded results and ignores
+the outstanding response, but does not cancel work already running on the server.
+Only **Open conversation** acquires the normal conversation writer/instance lock.
+Server content search covers user and final assistant messages, not all tool/diff
+output. **Full Load** provides local search through the full conversation text;
+it is not a complete tool/diff archive.
 
 ## 4. Model and reasoning
 
@@ -110,8 +166,16 @@ and stores the matching tool policy across future Codex sessions. The option
 is not inferred by Prompt Lite+ and is absent when the server does not offer
 it.
 
-Use **MCP...** beside the approval setting to review stored permanent MCP and
-connected-app tool approvals. The list includes per-tool approvals and an
+Use **MCP...** beside the approval setting to open the runtime inspection window.
+It lists MCP servers, plugin ownership, connection/authentication state and discovery
+errors, plus installed connector enabled/callable state. **Details** loads the full
+catalog on demand. Cached/configured tools alone do not prove a live connection;
+desktop-only browser integrations need not appear as a separate Chrome MCP server.
+**Background** lists server-reported terminals for the window's thread snapshot;
+termination requires selecting one and confirming. Nothing is polled automatically.
+
+**Permanent approvals** reviews stored permanent MCP and connected-app tool
+approvals. The list includes per-tool approvals and an
 app-wide default approval when one is configured. Selecting an entry asks for
 confirmation, changes that policy back to `prompt`, reloads the configuration,
 and verifies that the effective policy was revoked. A policy from a
@@ -206,7 +270,11 @@ information supplied by the server. Context is shown as used tokens over total
 capacity. Available account-limit percentages are shown as compact remaining
 capacity bars; a bar is omitted when the server does not supply that window.
 When the server supplies more than the usual account-limit buckets, the title
-changes to **Limits+** and the complete set is available in the hint.
+changes to **Limits+**. Click the limits to open a persistent information menu;
+the hint reads **Click for info**. When supplied by Codex, reset credits appear
+on one line with their count and earliest reported expiry. **Use one reset credit...**
+opens a confirmation showing at most 10 credit details and the number remaining.
+No credit is consumed merely by opening the menu or confirmation.
 
 **Idle polling** requests rate information at a low frequency while no turn is
 running. Token events received during work update the displayed counters
@@ -229,8 +297,8 @@ all Prompt Lite+ instances/app-server processes to be disconnected.
 
 CLI maintenance output is streamed into its dialog so progress remains visible.
 
-Prompt Lite+ requires Codex CLI 0.152.0 or later. Older versions cannot start
-the app-server from Prompt Lite+. Version 1.5 was checked against CLI 0.153.4.
+Development builds require Codex CLI 0.157.1 or later. Older versions cannot start
+the app-server from Prompt Lite+. Version 1.6 preview requires Codex CLI 0.157.1 or later and was checked against 0.157.1.
 
 ## 11. Prompt Lite+ application updates
 
@@ -287,8 +355,9 @@ not downloaded automatically. The Rolling channel is available after its first p
 
 ## 12. Local configuration
 
-**Config** exposes only the conversation line limit (minimum 100), Activity row
-limit (minimum 1), conversation color presets, update channel and check
+**Config** exposes the conversation line limit (minimum 100), resume turn count
+(1–100), conversation cache toggle, Activity row limit (minimum 1), conversation
+color presets, update channel and check
 frequencies. The three presets are Classic charcoal, Cool slate and Warm
 graphite; all keep the existing dark application theme. **Keep current colors**
 preserves any colors edited manually in the INI. Smaller limits trim the visible
@@ -316,7 +385,7 @@ the same log with their process IDs.
 ## 13. Troubleshooting
 
 - If **Send** is disabled, connect the server first.
-- If Codex CLI is missing or older than 0.152.0, open **CLI Setup**.
+- If Codex CLI is missing or older than 0.157.1, open **CLI Setup**.
 - If a conversation reports that it is already open, close it in the other
   Prompt Lite+ instance.
 - If a project is absent, refresh after Codex thread discovery completes.

@@ -1,11 +1,15 @@
 # Prompt Lite+
 
-Documentation and public release version 1.5.
-Released 7 September 2026. Windows executable version: 1.5.9746.29740.
+Documentation version 1.6 — **stable release** (28 September 2026).
+Windows executable version: **1.6.9767.24629** (Release/Win64).
+
+Requires Codex CLI **0.157.1** or later. Version 1.6 is available through the
+Release update channel. The existing Rolling build is unchanged.
+See [release notes](RELEASE_NOTES.md).
 
 [![Release](https://img.shields.io/github/v/release/SbiriJJ/prompt-lite-plus?style=flat-square&label=release&color=blue)](https://github.com/SbiriJJ/prompt-lite-plus/releases/latest)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.153.4-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.157.1-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/prompt-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/prompt-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
@@ -34,7 +38,30 @@ It is designed as a lightweight interface for computers with limited
 performance, particularly where the ChatGPT desktop app causes excessive
 system load.
 
-## What's new in 1.5
+## What's new in 1.6
+
+- Server-owned projects and a grouped Raize thread browser, with global title
+  search, archived-only viewing and commands on the selected row's context menu.
+- A separate modeless conversation-content search window with excerpts and paging.
+- Thread, project and working directory are explicit and independent. Project
+  assignment does not move files; directory changes use app-server settings.
+- The browser opens at startup and expands the last-used project after its
+  list is ready and visible, without opening a thread automatically.
+  **Show Threads / Show Current** switches the left panel.
+- Find has an integrated search/clear button: Enter searches, Esc clears.
+  Editing or clearing restores the magnifier. Prompt shortcuts stay in the prompt editor.
+- **Project roots** manages the project's directory list and assigns a selected
+  root to the current thread. Roots in use cannot be removed. Assignment to a
+  project supports creating a new project and preserves the thread directory.
+- Windows date preferences are respected. Conversation caching can be disabled
+  in Config; Full Load is retained.
+- Runtime tool timing and an on-demand MCP/connector/background-terminal inventory.
+- Account Usage charts, Unicode formulas and an on-demand local image viewer
+  are included from the preceding Rolling work.
+
+See [release notes](RELEASE_NOTES.md) for limitations and verification.
+
+## Previous 1.5 highlights
 
 - A gear-button **Config** dialog exposes rolling limits, three conversation
   color presets and **Release/Rolling** update schedules. Checks/downloads run
@@ -76,7 +103,7 @@ See [Release Notes](RELEASE_NOTES.md) for development status and release history
 
 ## Download and installation
 
-1. Download [PromptLitePlus-1.5.9746.29740-Win64.zip](https://github.com/SbiriJJ/prompt-lite-plus/releases/download/v1.5/PromptLitePlus-1.5.9746.29740-Win64.zip).
+1. Open the [1.6 release](https://github.com/SbiriJJ/prompt-lite-plus/releases/tag/v1.6) and download its Win64 ZIP.
 2. Verify the archive against the published SHA-256 checksum.
 3. Extract the complete archive into a writable directory.
 4. Start `PromptLitePlus.exe`.
@@ -93,7 +120,7 @@ Do not run Prompt Lite+ directly from inside the ZIP archive.
 ## Requirements
 
 - 64-bit Windows;
-- Codex CLI 0.152.0 or later, installed and authenticated, or permission to
+- Codex CLI 0.157.1 or later, installed and authenticated, or permission to
   install/update it through **CLI Setup**;
 - an OpenAI account or subscription supported by Codex CLI.
 
@@ -114,8 +141,8 @@ included with Prompt Lite+.
 Prompt Lite+ depends on the `app-server` protocol exposed by the installed Codex
 CLI. A later Codex CLI release may require a corresponding Prompt Lite+ update.
 
-Prompt Lite+ 1.5 requires Codex CLI 0.152.0 or later. The protocol was checked
-against CLI 0.153.4. New asynchronous questions require a CLI/model that emits
+Prompt Lite+ 1.6 requires Codex CLI 0.157.1 or later. The protocol was checked
+against CLI 0.157.1. New asynchronous questions require a CLI/model that emits
 them; absent metadata is confirmed through the normal thread resume response.
 
 Prompt Lite+ can be used on the same computer as the ChatGPT desktop app, but

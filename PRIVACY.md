@@ -1,7 +1,7 @@
 # Prompt Lite+ Privacy Notice
 
-Version 1.5  
-Last updated: 7 September 2026
+Version 1.6  
+Last updated: 28 September 2026
 
 ## Summary
 

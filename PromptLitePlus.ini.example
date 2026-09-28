@@ -1,5 +1,6 @@
 [Session]
 ProjectDirectory=
+ProjectId=
 ThreadId=
 
 [UI]
@@ -11,6 +12,8 @@ AcceptedEulaFingerprint=
 
 [Conversation]
 RollingLineLimit=1000
+ResumeTurnLimit=30
+CacheEnabled=1
 
 [Activity]
 RollingRowLimit=200
