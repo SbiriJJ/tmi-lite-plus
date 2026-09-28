@@ -21,7 +21,11 @@ notices below for terms of use and responsibilities.
 Documentation version 1.6 — **stable release** (28 September 2026).
 Windows executable version: **1.6.9767.30081** (Release/Win64).
 
-Latest **Rolling**: **1.6.9767.40409** (Release/Win64). Adds the explicit
+Latest **Rolling**: **1.6.9767.41769** (Release/Win64). Adds automatic assignment
+when a project returns no active conversations: once per application launch,
+unassigned active threads are matched to unique project roots across all projects.
+Results and errors appear in Activity; empty projects are not deleted.
+Also includes the explicit
 **Assign unassigned threads to projects...** command, including archived main
 threads, with unique exact-root matching and a final report. Existing assignments,
 agents, working directories and files are left unchanged.

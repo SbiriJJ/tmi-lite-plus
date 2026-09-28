@@ -109,7 +109,13 @@ not an invented server project or a missing directory.
   already assigned threads are skipped; unmatched or ambiguous threads remain
   unassigned. No project is created and no working directory or file is changed.
   A final report lists successful assignments, unmatched/ambiguous counts and
-  any server errors. Startup and Repair never perform these assignments.
+  any server errors. Repair never performs these assignments.
+- If opening a project returns no active threads, the browser automatically
+  checks unassigned active threads and applies the same unique-root matching
+  across all projects. This automatic check runs at most once per application
+  launch, without a confirmation or modal report; results and errors appear in
+  Activity. Search results, archived-only views and virtual groups do not trigger
+  it. Empty projects are never deleted. The manual command also covers archives.
 - Opening reloads current server data. The same conversation cannot be opened
   by two TMI Lite+ instances at the same time.
 

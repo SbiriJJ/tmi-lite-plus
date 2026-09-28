@@ -11,6 +11,13 @@ Minimum/tested Codex CLI: 0.157.1
 ## Main changes
 
 ### Rolling 1.6.9767.40409 — 28 September 2026
+ 
+Superseded by **Rolling 1.6.9767.41769**: opening a project with no active
+conversations triggers an automatic check of unassigned active threads, at most
+once per application launch. Unique root matches are assigned across all
+projects. Search, archived-only views and virtual groups do not trigger it.
+Results and errors appear in Activity without a modal report. Empty projects
+are retained; the manual command below still includes archived threads.
 
 - Added **Assign unassigned threads to projects...** to the browser context menu.
   After confirmation, it scans active and archived main threads and assigns only
@@ -19,7 +26,8 @@ Minimum/tested Codex CLI: 0.157.1
   remain unassigned; no working directories or files are changed.
 - The scan completes before assignments begin. The final report shows assigned,
   unmatched, ambiguous and failed counts, including server error messages.
-- Startup and Repair remain read-only with respect to project assignments.
+- Repair remains read-only with respect to project assignments. Startup does not
+  scan unassigned threads unless an expanded project returns an empty list.
 - Verified Release/Win64 compilation, catalog protocol fixtures (pagination,
   archived threads, exclusions and errors) and main-form/UI regression checks.
 

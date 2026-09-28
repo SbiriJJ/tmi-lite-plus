@@ -10,6 +10,10 @@ preserved; the new package uses the separate v1.6-tmi release.
 
 ## Server-backed conversations and search
 
+Rolling 1.6.9767.41769 adds a once-per-process empty-project trigger for active-only
+assignment. The server query filters projectId=null; the existing assignment
+pipeline is reused. Active-only protocol fixture and Release/Win64 compile pass.
+
 Rolling 1.6.9767.40409 adds explicit bulk assignment in TThreadCatalog and the
 browser context menu. It collects candidates across active/archived pages before
 writing metadata, skips agents and assigned threads, and reports server failures.
