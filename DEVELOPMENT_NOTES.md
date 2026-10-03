@@ -1,12 +1,32 @@
-# TMI Lite+ for AI agents — 1.6 development changes
+# TMI Lite+ for AI agents — 1.7 development changes
 
-Protocol baseline and minimum: Codex CLI 0.157.1. Stable release: 28 September 2026.
-Local release build environment: Codex CLI 0.158.0.
+Protocol baseline and minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
+Local release build environment: Codex CLI 0.160.0; native queue minimum 0.159.0.
 
-Rebranding build: 1.6.9767.30081. Technical stem TMILitePlus; repository
+## Completed 1.7 work
+
+- Server-owned prompt queue, next-item preview and an on-demand editing panel;
+  no local queue scheduler or invented pause protocol.
+- Agent follow-up/file-citation markup, question links and case-insensitive
+  title search including Unassigned.
+- Manual assignment preview for the complete candidate list, with Windows-known
+  Documents/system exclusions and shared-path project reuse.
+- Automatic optional LaTeX preview insertion with stable native RichEdit offsets,
+  cached bitmap reuse and original-resolution clipboard copying in the viewer.
+- Fork requests retain project identity independently of cwd. Selective thread
+  settings preserve unrelated confirmed sandbox/permission data; rejection
+  restores confirmed UI values instead of resending rejected settings.
+- Native Computer Use with CLI 0.160.0 requires the ChatGPT desktop native host
+  in the tested setup. TMI 1.7 cannot bootstrap that host; standalone
+  `sky.list_windows()` reports a missing native pipe (OS error 2). An independent
+  Windows backend belongs to the TMI 2.0 plan and is not included in 1.7.
+
+The sections below retain earlier implementation and verification history.
+
+Earlier rebranding build: 1.6.9767.30081. Technical stem TMILitePlus; repository
 SbiriJJ/tmi-lite-plus. Runtime title/client metadata use uApplicationIdentity.
 Version components G.T remain compiler-generated. Old v1.6/rolling assets are
-preserved; the new package uses the separate v1.6-tmi release.
+preserved; that renamed package used the separate v1.6-tmi release.
 
 ## Server-backed conversations and search
 
@@ -66,9 +86,10 @@ CatalogStartupCheck covers these cases; ThreadUiCheck and Release/Win64 build pa
   Existing permanent-approval revocation remains behind Permanent approvals.
 - Browser integration can be supplied by a plugin such as cua_repl rather than
   a server named Chrome. Only inventory actually exposed to app-server is shown.
-- Prompt queue automation and generic plugin UI hosting remain deferred.
+- Client-side prompt automation and generic plugin UI hosting remain deferred.
+  Version 1.7 uses the server-owned queue, not a client scheduler.
 
-The Release executable is built in update and packaged separately as stable 1.6.
+The Release executable is built in update and packaged separately as stable 1.7.
 Existing published ZIPs and the current Rolling release are unchanged.
 
 ## Final 1.6 interface refinements
@@ -140,7 +161,10 @@ existing counters. A reply for a conversation no longer selected is discarded.
 - Click supported image links for an on-demand, non-modal image viewer.
   No image previews are generated while loading the conversation.
 - Graphical formulas are available only when a compatible external MicroTeX
-  renderer/resource tree is installed. See [MicroTeX setup](MICROTEX_SETUP.md).
+  renderer/resource tree is installed. Version 1.7 inserts previews automatically
+  for completed and rolling-loaded messages; the viewer reuses cached bitmaps
+  and provides Copy image. Full Load stays text-only.
+  See [MicroTeX setup](MICROTEX_SETUP.md).
   No third-party renderer or fonts are bundled with TMI Lite+.
 - Reloaded image attachments now have compact textual markers, including
   `fileId` references when the server supplies no directly viewable URL/path.

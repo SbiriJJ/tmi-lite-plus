@@ -1,6 +1,6 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 1.6
+Version 1.7
 
 Lightweight interface for AI agents.
 
@@ -11,7 +11,7 @@ or lookup of previous application names.
 Do not run Prompt Lite+ and TMI Lite+ together: cross-name instance coordination
 is not provided. Old caches and historical release ZIPs are not renamed.
 
-Version 1.6 includes a non-modal **Usage** statistics window (daily bars,
+Version 1.7 includes a non-modal **Usage** statistics window (daily bars,
 weekly comparisons and a calendar heatmap), Unicode formulas and a
 local image viewer. See [development notes](DEVELOPMENT_NOTES.md) for the exact
 scope and [optional MicroTeX setup](MICROTEX_SETUP.md) for graphical formulas.
@@ -53,7 +53,7 @@ the version or text of `EULA.md` changes, the disclaimer is displayed again.
 
 ## 3. Projects and conversations
 
-Version 1.6 uses the project IDs, names and roots supplied by Codex
+Version 1.7 uses the project IDs, names and roots supplied by Codex
 app-server. A project's roots and a conversation's working directory are
 different data: assigning a project does not move files or change the working
 directory. Unassigned conversations remain unassigned; browsing does not
@@ -67,7 +67,9 @@ not an invented server project or a missing directory.
   enabled and visible. No thread opens automatically.
 - Project and thread ordering is by recent activity, retaining pinned markers
   and compact dates. Expanding a project requests indexed metadata, not history.
-- **Find** searches titles across all projects and expands only matching groups.
+- **Find** searches titles and initial-message previews across all projects,
+  including Unassigned, without distinguishing uppercase and lowercase letters.
+  It expands only matching groups and reads metadata rather than conversation history.
   Its integrated button shows a magnifier while editing, then **×** after searching.
   With the field focused, Enter always searches and Esc always clears the text
   and filter. The magnifier returns after clearing. These keys never submit a prompt.
@@ -94,7 +96,13 @@ not an invented server project or a missing directory.
   including Unassigned; duplicate project names do not select the wrong project.
   **New** creates a named project in this dialog. Assignment always preserves
   the thread's working directory.
-- **Duplicate** requires its initial prompt and a target working directory.
+- **Duplicate (fork)** requires its initial prompt and a target working directory.
+  It creates a new conversation with copied history, preserving the source
+  project (or Unassigned) independently of the chosen directory. The source
+  conversation and its working directory are unchanged. There is no automatic
+  return to the old directory; use **Assign to project** to reassign the copy.
+  The first prompt is sent after the server confirms the copy and it is loaded.
+  Cancelling or a failed operation preserves the prompt for editing/retry.
   **Rename**, **Pin/Unpin**, and **Archive** operate on the clicked thread.
 - **Delete conversation** is permanent and includes spawned descendants.
   Confirmation shows the target identity and metadata. **Delete project** removes
@@ -103,16 +111,25 @@ not an invented server project or a missing directory.
 - **Refresh projects**, **Search contents**, and **Repair server index** are
   available from the context menu, including the empty browser background.
   Repair is an explicit scan/repair; ordinary browsing uses the server index.
-- **Assign unassigned threads to projects...** asks for confirmation, then scans
-  active and archived main threads. It assigns only threads without a project
-  whose working directory matches exactly one existing project root. Agents and
-  already assigned threads are skipped; unmatched or ambiguous threads remain
-  unassigned. No project is created and no working directory or file is changed.
-  A final report lists successful assignments, unmatched/ambiguous counts and
-  any server errors. Repair never performs these assignments.
+- **Assign unassigned threads to projects...** scans active and archived main
+  threads and prepares a preview for confirmation.
+  Before any change, a preview lists each thread, its working directory and the
+  destination project, marked as existing or new. **Accept entire list** applies
+  all proposed assignments; **Cancel** makes no changes. Missing projects are
+  created from each distinct working-directory path and named after its last
+  folder. Threads sharing a path share the same new project. Agents, already
+  assigned threads, threads without a working directory, and threads whose path
+  is exactly the current user's Windows Documents folder or the Windows system
+  directory (System32) are excluded. Windows
+  identifies that folder, including redirected/localized locations; subfolders
+  are not excluded. An untitled main thread is shown as **Untitled** with a prompt
+  excerpt, without renaming it on the server. It is not classified as an agent
+  merely because its title is missing. Ambiguous project roots remain unassigned. No working
+  directory or file is changed. A final report lists assignments, projects
+  created, exclusions and server errors. Repair never performs assignments.
 - If opening a project returns no active threads, the browser automatically
-  checks unassigned active threads and applies the same unique-root matching
-  across all projects. This automatic check runs at most once per application
+  checks unassigned active threads and applies unique-root matching across all
+  existing projects, without creating new ones. This automatic check runs at most once per application
   launch, without a confirmation or modal report; results and errors appear in
   Activity. Search results, archived-only views and virtual groups do not trigger
   it. Empty projects are never deleted. The manual command also covers archives.
@@ -172,6 +189,15 @@ model's context indicator until Codex supplies context usage for the new model.
 
 Different threads may use different models and reasoning levels.
 
+Model, reasoning and service-tier changes send only the relevant settings; they
+do not replace approval or sandbox settings. Approval/reviewer changes likewise
+leave filesystem permissions untouched. Changing network access preserves the
+complete confirmed workspace-write policy, including writable roots and read
+restrictions. An explicit sandbox-mode change applies the selected mode.
+If the server rejects an update, the controls return to confirmed server values;
+subsequent prompts do not silently resend rejected settings. New conversations
+still receive their explicit initial settings.
+
 ## 5. Permissions and safety
 
 The settings panel exposes the protocol settings directly.
@@ -212,9 +238,19 @@ changes automatically correct. Review important work and maintain backups.
 
 ## 6. Sending prompts
 
+**Instant interrupt: on/off**, in **CLI Setup**, enables Codex CLI's experimental
+`instant_interrupt` feature (CLI 0.159.0 or later). Green means enabled for the
+running server; the normal button color means inactive. Orange means the selected
+value differs from the running server: use **Restart** when convenient to apply it.
+Clicking the button never stops a task or restarts the server automatically.
+The preference is saved with shared settings in the Windows registry and defaults
+to off. Existing Steer/Append buttons and keyboard shortcuts are unchanged.
+When enabled, steering can preempt model responses and yield code-mode waits;
+it is not a replacement for cancelling a running command.
+
 - **Steer** is the default while a turn is active and redirects current work.
-- **Append** queues or sends a normal follow-up according to the current
-  server state.
+- **Append** sends a normal follow-up; **Steer** redirects an active turn.
+- **Enqueue** adds the prompt and its attachments to the server's persistent queue.
 - **Stop** interrupts the current turn.
 - **Files** attaches file mentions to the next prompt.
 - **Goal** creates, edits, pauses, resumes, or removes the persistent thread
@@ -228,7 +264,42 @@ elapsed time are shown beside the Activity title.
 altering the prompt text or leaving a key logically pressed. After sending, the
 empty prompt editor returns to its first line.
 
+### Prompt queue
+
+Agent follow-up suggestions (`codex-followup`) appear as clickable labels.
+Clicking pastes their prompt into the input without sending or enqueuing it.
+If the input contains text, confirm replacement or cancel to preserve the draft.
+Existing attachments are unchanged. The context menu also offers Copy prompt.
+File citations (`codex-file-citation`) show the file name and its supplied purpose
+as a link. Click to open; right-click offers the usual file commands. Hover to
+read the full path. Relative file paths resolve against the current thread's
+working directory; spaces inside quoted paths are preserved.
+Unknown directives and attributes remain visible for inspection.
+
+Requires Codex CLI 0.159.0 or later and an existing writable conversation.
+The next pending prompt appears on one line beside the prompt area. **Queue (n)**
+opens a panel over the conversation. Select an entry to read it, edit its text,
+remove it, move it up/down, or start it when the server is idle. Editing preserves
+its other input parts and attachments. **Refresh** reads the current server queue;
+notifications normally refresh it automatically. Closing the panel does not stop execution.
+
+The prompt editor is cleared only after the server acknowledges **Enqueue**.
+Pending entries leave the list when execution starts, not when the task succeeds.
+The server can start a newly queued prompt immediately when idle and continue
+with subsequent entries automatically. There is no pause-after-current switch.
+**Stop** interrupts current work; it is not a permanent pause setting for the queue.
+Pending entries are stored by Codex and can start again on thread resume.
+Execution requires a running server; persistence does not imply cloud execution
+while TMI and its server are closed.
+
+The queue uses the thread's effective settings, with no per-entry models,
+schedules or approval overrides. This server version allows 100 pending entries.
+Ordinary source file mentions remain path references, not frozen copies.
+
 ### Asynchronous agent questions
+
+Click the linked word **Question** in a structured question to open the same
+question-management window as **Questions (n)** beside the prompt.
 
 When the model sends structured questions, they appear in the conversation with
 their suggested answers. **Questions (n)** beside the prompt opens a non-modal
@@ -255,6 +326,15 @@ speaker information, and text search.
 
 Conversation rendering is recalculated when the window is resized so block
 backgrounds continue to match the current text width.
+
+With the [optional MicroTeX renderer](MICROTEX_SETUP.md), version 1.7
+automatically inserts static LaTeX previews when a message is completed
+or loaded in the rolling conversation. **Open formula** opens the cached bitmap
+in the separate zoomable viewer. Resize and reopening reuse the bitmap.
+The viewer's **Copy image** command copies the graphic to the clipboard at its
+original resolution, for both formulas and images. Previews are local and are
+not saved to the server. Full Load remains text-only. Mermaid and interactive
+Visualize rendering are not implemented yet.
 
 Manual scrolling disables automatic transcript scrolling. Use the down-arrow
 button to return to the bottom and re-enable auto-scroll.
@@ -292,11 +372,16 @@ information supplied by the server. Context is shown as used tokens over total
 capacity. Available account-limit percentages are shown as compact remaining
 capacity bars; a bar is omitted when the server does not supply that window.
 When the server supplies more than the usual account-limit buckets, the title
-changes to **Limits+**. Click the limits to open a persistent information menu;
-the hint reads **Click for info**. When supplied by Codex, reset credits appear
-on one line with their count and earliest reported expiry. **Use one reset credit...**
-opens a confirmation showing at most 10 credit details and the number remaining.
-No credit is consumed merely by opening the menu or confirmation.
+changes to **Limits+**. The limits hint shows the available windows, reset times,
+and the total reset-credit count with its earliest reported expiry. This longer
+hint remains visible for up to 20 seconds.
+
+When credits are available, a **Token** badge warns of expiration: orange when
+the earliest credit expires before the end of the second day after the next
+automatic reset, red within 12 hours. Otherwise it is green when an account
+window is exhausted; expiry warnings take precedence. Click **Token** to open
+the reset confirmation, which shows at most 10 credit details and the number
+remaining. No credit is consumed merely by opening the confirmation.
 
 **Idle polling** requests rate information at a low frequency while no turn is
 running. Token events received during work update the displayed counters
@@ -319,8 +404,19 @@ all TMI Lite+ instances/app-server processes to be disconnected.
 
 CLI maintenance output is streamed into its dialog so progress remains visible.
 
-Development builds require Codex CLI 0.157.1 or later. Older versions cannot start
-the app-server from TMI Lite+. Version 1.6 preview requires Codex CLI 0.157.1 or later and was checked against 0.157.1.
+Version 1.7 requires Codex CLI 0.157.1 or later and was tested with 0.160.0.
+Older versions cannot start the app-server from TMI Lite+. Native prompt queue
+operations require CLI 0.159.0 or later.
+
+### Native Computer Use limitation
+
+With Codex CLI 0.160.0, native OpenAI Computer Use is unavailable from standalone
+TMI Lite+ 1.x. The tested backend requires the native host started by the ChatGPT
+desktop app. An enabled Computer Use plugin does not start that host, and Full
+Access is not a remedy. TMI 1.7 does not include its own Windows Computer Use
+backend. Normal CLI development and independent MCP tools remain separate from
+this limitation. See the release notes and
+[official Computer Use documentation](https://learn.chatgpt.com/use-cases/use-your-computer-with-codex).
 
 ## 11. TMI Lite+ application updates
 

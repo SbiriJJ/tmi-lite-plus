@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 1.6  
-Last updated: 28 September 2026
+Version 1.7  
+Last updated: 3 October 2026
 
 ## Summary
 
