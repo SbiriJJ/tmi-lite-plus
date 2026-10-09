@@ -1,14 +1,9 @@
-[Session]
-ProjectDirectory=
-ProjectId=
-ThreadId=
+; TMI Lite+ 2.0 public preference defaults.
+; Codex installation and shared permissions are managed by TMIHost.
+; Local session details and EULA acceptance are written after use.
 
 [UI]
 IdleRateLimitPolling=1
-
-[Legal]
-AcceptedEulaVersion=
-AcceptedEulaFingerprint=
 
 [Conversation]
 RollingLineLimit=1000
@@ -25,12 +20,7 @@ Final=$002B3523
 Report=$002A3038
 Error=$002A233E
 
-[Links]
-DownloadDirectory=
-
 [Updates]
 Channel=release
 ReleaseFrequency=daily
 RollingFrequency=startup
-LastReleaseCheck=0
-LastRollingCheck=0

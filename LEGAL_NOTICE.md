@@ -1,7 +1,7 @@
 # TMI Lite+ Legal and Copyright Notice
 
-Document version 1.7  
-Last updated: 3 October 2026
+Document version 2.0  
+Last updated: 9 October 2026
 
 ## Copyright
 
@@ -13,11 +13,12 @@ third-party material identified separately.
 
 ## Independent project
 
-TMI Lite+ is an independent, unofficial interface for Codex CLI. It is not
+TMI Lite+ is an independent, unofficial interface for Codex CLI, with its own resident backend and optional local tmi_desktop tools.
+It is not
 affiliated with, endorsed by, sponsored by, certified by, or supported by
 OpenAI.
 
-The application name refers to compatibility with Codex CLI. No ownership of
+Compatibility references describe interoperability with Codex CLI. No ownership of
 OpenAI names, products, services, or trademarks is claimed, and no OpenAI logo
 is part of TMI Lite+ branding.
 

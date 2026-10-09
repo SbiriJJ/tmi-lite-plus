@@ -1,9 +1,119 @@
-# TMI Lite+ for AI agents — 1.7 development changes
+# TMI Lite+ for AI agents — Development Notes
 
-Protocol baseline and minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
-Local release build environment: Codex CLI 0.160.0; native queue minimum 0.159.0.
+Document version 2.0  
+Stable release: 9 October 2026  
+Tested Codex CLI: 0.162.0  
+Local IPC protocol: 14
+
+## Version 2.0 architecture
+
+The resident TMIHost owns independent Codex app-server processes for catalog
+and conversation work. Frontend detachment does not stop work; reattachment
+reuses its writer. Native approvals/questions are routed to the owning GUI,
+not shown or automatically answered by the host. All four matching binaries
+must be installed together. Version components G.T remain compiler-generated.
+
+Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
+Rolling reads `rolling-2`. No 2.x Rolling has been published yet. Generic GitHub
+Latest/legacy `rolling` remain unchanged for 1.x, and 2.0 does not become generic
+Latest. The direct versioned release links to the full bundle ZIP, named
+`TMILitePlusBundle-2.0.G.T-Win64.zip`. The old single-EXE package recognizer does
+not accept this bundle. The 2.x extractor stages all four matching EXEs and
+the package's approved runtime/documentation files; personal INI is excluded.
+Fixture validation of extraction/staging is distinct from a live network update.
+
+TMIMaintenance is loaded only on demand and can run independently. The host
+suspends idle Codex connections while maintenance is open and reconnects them
+afterwards without prompt replay. Working/opening/waiting sessions block this
+operation. Initial CLI setup is host-owned and precedes native connections.
+
+tmi_desktop uses native control observations/window messages by default for
+minor/background operations. Semantic UIA mutations and physical input are
+explicit alternatives with foreground requirements; uncertain input is not
+silently retried. Read/control consent, bounded observations, visible blue/red
+indicators and per-operation physical ESC cancellation are separate from Codex
+approval policy. ESC does not permanently disable the next request.
+
+Visualize initializes WebView2 only on request. Its sandboxed HTML viewer
+provides an inline bitmap, zoom and clipboard copying without rebuilding the
+conversation on close. WebView2 Runtime is separate; MicroTeX remains external.
+Full Load, Usage, diffs, attachments, Questions and native queues remain available.
+
+Focused tests and installed-bundle use covered reattachment, multi-frontend
+operation, desktop actions and dual-monitor warnings, maintenance boundaries,
+Windows shutdown, Full Load, Usage and attachments. Pinned/Archived and shared
+list refresh have passed practical multi-frontend use. The one-off tray AV has
+not recurred, but its original occurrence was not reproduced. This is not an
+exhaustive certification of every Windows app or future CLI build.
+
+## Version 2.0 browser compatibility — CLI 0.162.0
+
+The following records current implementation details. Historical release ZIPs
+are unchanged. See Release Notes and User Guide for public operational guidance.
+
+- Browser group identity is separate from server project identity. Pinned and
+  Archived are presentation scopes, not projects created in Codex or in local
+  settings. One canonical thread ID backs its project row and any Pinned alias;
+  updates are reflected in all representations without duplicate resume/writers.
+- Group order is Pinned, real projects in their normal order, Unassigned,
+  Documents, Archived. Pinned is initially open per frontend and thereafter
+  changes only through user/search actions, not work-state expansion logic.
+  Special groups remain available when empty; Show Archived is removed.
+- The installed 0.162.0 schema uses `threadSection/list`, `threadSection/create`,
+  `thread/section/move`, and paginated `thread/list` with `sectionId` and
+  `sortKey: section_position`. No `isPinned` protocol is invented. Pinned active
+  queries use `sortDirection: asc`, `archived: false` and
+  `useStateDbOnly: true`; Archived metadata
+  uses `archived: true` and is loaded on expansion. No rollout/history scan or
+  new polling is added. The shared section is created only on an explicit Pin.
+  The ascending section order is confirmed by the
+  [0.162.0 thread-list implementation](https://github.com/openai/codex/blob/rust-v0.162.0/codex-rs/app-server/src/request_processors/thread_processor.rs):
+  `SectionPosition` defaults to ascending, while timestamp keys default to
+  descending. The [shared-pinning change](https://github.com/openai/codex/pull/51500)
+  uses this same section order. This source check is not an end-to-end live test.
+- Archived selection never resumes a writer. Its row menu is restricted to
+  Unarchive/Delete; deletion keeps the existing explicit confirmation. Search
+  still includes archives and does not change the ordinary project membership.
+- New preparation no longer uses a folder-to-project creation path. Global New
+  and special-group New prepare an unassigned thread; New in a real project
+  retains that project ID. The chosen actual cwd is preserved, and thread/start
+  remains deferred until the first prompt. Project creation remains explicit in
+  Assign to project / New or in the accepted manual assignment preview.
+- Documents comparison uses the normalized Windows-known folder and all its
+  descendants with a directory-boundary match, not a literal folder name.
+  Documents presentation takes precedence over a stale project ID without
+  replacing the actual cwd or clearing that ID. Both assignment modes exclude
+  these paths. Empty-project automatic assignment remains once per frontend:
+  only explicit expansion of a real project requests the check, and only its
+  server response with zero active threads triggers it,
+  not a count reduced by agent, Documents or other presentation filtering.
+  It reuses existing unique roots and never creates projects. No automatic
+  project deletion or metadata repair is added.
+- Tray JSON ownership follows produce-then-swap: a failed snapshot producer
+  leaves the previous valid snapshot intact. The tray is published after
+  dependencies/snapshots are ready, and closing-state callbacks do not route
+  new UI work. This addresses a code-level lifetime risk, not a reproduced AV.
+- Resident JSON transport already clones whole messages. `partial_answer`
+  completes a text block, not a turn; only the terminal turn notification
+  changes the work to finished. Consolidated `aggregatedOutput` remains intact,
+  without reviving obsolete per-item stdout/stderr consumers or adding noisy
+  command output to Activity. Extra server metadata remains opaque.
+- The isolated HostReattachCheck fixture now exercises partial answer, command,
+  commentary and final-answer items before the terminal turn. It checks retained
+  phases/text, multiline command output, continued Working state and terminal
+  cleanup. Existing settings/profile, host-only maintenance stream, native
+  writer, early OAuth and new-thread token-baseline assertions also pass.
+  No real user thread is modified by this check.
+
+Normal bounded resume and Full Load retain their existing contract and limits.
+This work does not add historical tool payloads, estimate tool token costs,
+change conversation counters or assume new model-step RPCs.
 
 ## Completed 1.7 work
+
+Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
+Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
+The following historical notes do not describe missing features in current 2.0.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

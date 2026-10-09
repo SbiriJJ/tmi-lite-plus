@@ -1,4 +1,6 @@
-# Optional local formula rendering — TMI Lite+ 1.7
+# Optional local formula rendering — TMI Lite+ 2.0
+
+Document version 2.0
 
 Unicode formula display and the PNG/JPEG/BMP/GIF image viewer work without
 MicroTeX. Graphical formula viewing is optional and entirely local: no AI or
@@ -31,7 +33,7 @@ MicroTeX DLL is not interchangeable: upstream MicroTeX exposes a C++ API.
    ```
 
 3. Keep the resource tree intact, including its upstream license files.
-4. Restart TMI Lite+. In the current development build, formula blocks render
+4. Restart TMI Lite+. Formula blocks render
    automatically in completed messages and in the rolling conversation on load.
    **Open formula** opens the cached image in the separate viewer with
    fit/original size, zoom and **Copy image** clipboard controls.

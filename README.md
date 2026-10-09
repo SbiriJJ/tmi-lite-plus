@@ -2,183 +2,113 @@
 
 **Lightweight interface for AI agents**
 
-TMI Lite+ is an independent Windows x64 desktop interface for Codex CLI,
-designed to keep AI-assisted development practical on computers with limited
-performance. It provides project and conversation management, working-directory
-selection, model and reasoning controls, approvals, tool activity, file access,
-diff viewing, and token/usage information in a compact, low-overhead interface.
+TMI Lite+ is an independent Windows x64 interface for Codex CLI, designed to
+keep AI-assisted development practical on computers with limited performance.
+It provides projects and conversations, working directories, model/reasoning
+controls, approvals, activity, files, diffs and token/usage information without
+heavy conversation rendering.
 
-Each application instance runs its own Codex CLI app-server, allowing independent
-conversations to be used side by side. The interface avoids animations and heavy
-conversation rendering, while additional views such as full history, usage
-charts, images and diffs are available when requested.
+Version **2.0** is a **stable release** (9 October 2026).
+Windows executable version: **2.0.9778.29506** (Release/Win64).
+Tested with Codex CLI **0.162.0**. Compatibility with every later CLI build is
+not guaranteed.
 
-TMI Lite+ is the interface, not the AI engine: Codex CLI performs agent operations
-and provides the connection to models and services. The application is
-hobby-developed, free of charge, and independent of OpenAI. See the license and
-notices below for terms of use and responsibilities.
-
-Documentation version 1.7 — **stable release** (3 October 2026).
-Windows executable version: **1.7.9772.42474** (Release/Win64).
-
-Latest **Rolling**: **1.6.9770.20904** (Release/Win64, 1 October 2026).
-The manual **Assign unassigned threads to projects...** command previews all
-proposed assignments and new projects before accepting or cancelling the entire
-list. Shared paths reuse one project; Windows Documents and System32 are
-identified by Windows and excluded. Untitled main threads display a prompt excerpt.
-The automatic assignment to existing roots remains unchanged.
-Also adds the native prompt queue, clickable follow-up/file-citation directives
-and question links. Queue operations require Codex CLI **0.159.0** or later;
-this rolling was tested with **0.159.3**. Existing assignments, files and working
-directories are not changed by the assignment scan or its cancellation.
-[Download Rolling](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling).
-
-Formerly Prompt Lite+. Install TMI Lite+ manually when
-switching from the old application. Do not run old and new names concurrently:
-they use separate instance-coordination namespaces.
-
-Requires Codex CLI **0.157.1** or later. Version 1.7 is available through the
-Release update channel. Rolling is a separate opt-in update channel.
-See [release notes](RELEASE_NOTES.md).
-
-[![Release](https://img.shields.io/github/v/release/SbiriJJ/tmi-lite-plus?style=flat-square&label=release&color=blue)](https://github.com/SbiriJJ/tmi-lite-plus/releases/latest)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.0-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.0)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.160.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.162.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## Screenshot
+## What's new in 2.0
 
-![TMI Lite+ running on Windows](assets/tmi-lite-plus-demo.png)
+- **Resident backend:** one tray host owns an independent Codex app-server
+  process for each work. Closing or switching a frontend detaches it, without
+  stopping the work. Reattach later or use multiple frontends side by side.
+- **Sessions and tray:** inspect resident works, open the thread needing a
+  reply, and distinguish working, waiting and error states. Approvals/questions
+  are handled in the owning frontend, never silently answered by the host.
+- **TMI Computer Use:** local `tmi_desktop` tools discover and read Windows
+  windows, capture images and operate controls. Native window messages support
+  background interactions without TMI changing focus; UIA and physical input
+  remain explicit alternatives. Separate read/control permissions, visible
+  blue/red warnings and physical ESC interruption are included.
+- **On-demand maintenance:** CLI Setup runs in `TMIMaintenance.exe`, not a
+  permanently loaded setup form. The host suspends idle Codex connections while
+  maintenance is open and reconnects them afterwards; active work blocks it.
+- **Version-family updates:** 2.x Release and Rolling download the complete
+  matching binary/assets/documentation bundle through their own endpoints.
+  Existing 1.x installations do not receive a 2.x package automatically.
+- **Projects and threads:** server-backed search, shared Pinned entries and a
+  permanent Archived group. Documents includes the current user's Windows-known
+  Documents folder and all subfolders. Working directory and project are
+  independent; selecting a folder no longer creates a project implicitly.
+- **Compact controls and graphics:** colored toggle buttons; an optional
+  WebView2 Visualize viewer with a local inline preview, zoom and image copy.
+- **Existing tools retained:** bounded conversation loading, Full Load/search,
+  diffs, Changed Files, Usage charts, Questions, attachments, native prompt
+  queue, Goal, Unicode formulas and optional local LaTeX rendering.
 
-TMI Lite+ is not affiliated with, endorsed by, sponsored by, or supported by
-OpenAI. Agent operations are performed by Codex CLI under the permissions
-selected by the user. The user is responsible for reviewing and authorizing
-those operations and their consequences.
-
-TMI Lite+ is hobby-developed software provided free of charge and may be
-used for any lawful personal or professional purpose. It is not designed,
-certified, supported, or warranted for professional, production,
-safety-critical, or business-continuity use. Any such use is at the user’s
-discretion and risk.
-
-It is designed as a lightweight interface for computers with limited
-performance, particularly where the ChatGPT desktop app causes excessive
-system load.
-
-## What's new in 1.7
-
-- Native server-owned prompt queue: Enqueue, next-prompt preview and an on-demand
-  panel for editing, removing, reordering and starting queued work. Requires
-  Codex CLI 0.159.0 or later; there is no client-side pause scheduler.
-- Clickable agent follow-ups paste into the prompt editor, with confirmation
-  before replacing a draft. File citations open the normal file actions;
-  Question links open the reply window. Title search is case-insensitive and
-  includes Unassigned.
-- Manual bulk assignment previews all proposed thread/project assignments before
-  accepting the entire list. Projects with a shared directory are reused;
-  agents and Windows system/Documents roots are excluded.
-- Optional automatic inline LaTeX previews, cached across resizing, with a
-  zoomable viewer and Copy image. MicroTeX remains an external optional renderer;
-  formulas and images can be copied without changing server history.
-- Duplicate (fork) preserves the source project independently of the new working
-  directory. Settings changes preserve unrelated server permissions; rejected
-  changes restore the confirmed UI values.
-- **Computer Use limitation:** native OpenAI Computer Use is unavailable in
-  standalone TMI 1.x with Codex CLI 0.160.0. See the compatibility note below.
-
-This release closes the current 1.x development work. The planned TMI 2.0
-desktop backend is not included. Previous stable ZIPs and Rolling remain unchanged.
-
-## Previous 1.6 highlights
-
-- Server-owned projects and a grouped Raize thread browser, with global title
-  search, archived-only viewing and commands on the selected row's context menu.
-- A separate modeless conversation-content search window with excerpts and paging.
-- Thread, project and working directory are explicit and independent. Project
-  assignment does not move files; directory changes use app-server settings.
-- The browser opens at startup and expands the last-used project after its
-  list is ready and visible, without opening a thread automatically.
-  **Show Threads / Show Current** switches the left panel.
-- Find has an integrated search/clear button: Enter searches, Esc clears.
-  Editing or clearing restores the magnifier. Prompt shortcuts stay in the prompt editor.
-- **Project roots** manages the project's directory list and assigns a selected
-  root to the current thread. Roots in use cannot be removed. Assignment to a
-  project supports creating a new project and preserves the thread directory.
-- Windows date preferences are respected. Conversation caching can be disabled
-  in Config; Full Load is retained.
-- Runtime tool timing and an on-demand MCP/connector/background-terminal inventory.
-- Account Usage charts, Unicode formulas and an on-demand local image viewer
-  are included from the preceding Rolling work.
-
-See [release notes](RELEASE_NOTES.md) for limitations and verification.
-
-## Previous 1.5 highlights
-
-- A gear-button **Config** dialog exposes rolling limits, three conversation
-  color presets and **Release/Rolling** update schedules. Checks/downloads run
-  in the background; installation still requires an explicit restart.
-- Structured asynchronous agent questions are displayed in the conversation.
-  **Questions (n)** opens a non-modal reply window with suggested answers and
-  free text. Replies can reach an active task without interrupting it.
-- Reply drafts remain available until the server accepts the submission.
-  Questions and replies are associated with their original conversation.
-- Model and reasoning selectors use thread metadata during opening, followed
-  by the current server settings. List refreshes do not overwrite local choices.
-- Codex CLI 0.153.4 schemas were checked; token accounting remains unchanged.
-
-## Previous 1.4 highlights
-
-- Prompt submission is more reliable, including fast `Ctrl+Enter`, prompt
-  clearing, cursor placement, and separation of the first agent response from
-  the submitted prompt.
-- Conversation block backgrounds are recalculated after window resizing and
-  the prompt area expands correctly when no Goal panel is visible.
-- Full Load identifies the speaker beside each timestamp, and local file paths
-  can be revealed reliably with **Show in Explorer**.
-- Additional server rate-limit buckets are preserved under **Limits+** and
-  exposed in the existing hint without expanding the interface.
-- Pinned conversations remain visible in their normal project list while also
-  being placed at the top for quick access.
-- Large conversations use summarized cursor-paginated history and a local
-  rolling-window cache. The cached view is shown immediately; if server
-  metadata has changed, TMI Lite+ refreshes it in the background. Historical
-  tool output and diffs are not downloaded by the normal reload. Full Load uses
-  large message-only pages,
-  reports progress, and can retain a partial transcript when stopped.
-- Project conversations use a compact dropdown and open immediately when
-  selected.
-- Compatibility has been verified with Codex CLI 0.152.0; its sub-agent and
-  spawn-agent protocol structures remain compatible with the current lists.
-
-See [Release Notes](RELEASE_NOTES.md) for development status and release history.
+See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Open the [TMI Lite+ 1.7 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v1.7) and download its Win64 ZIP.
-2. Verify the archive against the published SHA-256 checksum.
-3. Extract the complete archive into a writable directory.
-4. Start `TMILitePlus.exe`.
-5. Read and accept the displayed disclaimer.
-6. Use **CLI Setup** to detect, install, or update Codex CLI.
-7. Complete Codex CLI authentication when requested.
+1. Open the [TMI Lite+ 2.0 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.0) and download its Win64 ZIP.
+2. Check the archive against its published SHA-256 checksum.
+3. Extract the **complete** archive into a writable directory.
+4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
+5. Use **CLI Setup** if Codex CLI needs installing/updating, then complete Codex CLI authentication.
 
-The archive includes a neutral `TMILitePlus.ini`. It contains no project
-path, thread identifier, download directory, or accepted EULA identity. TMI
-Lite+ updates it locally as the application is used.
+Keep `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
+`TMIMaintenance.exe`, the supplied documentation and viewer assets together.
+Install matching binaries from one bundle; local IPC protocol **14** rejects
+incompatible peers. Do not run from inside the ZIP or replace a running host by
+copying only one executable.
 
-Do not run TMI Lite+ directly from inside the ZIP archive.
+The neutral INI contains no personal project/thread paths, credentials,
+accepted EULA or internal switches. Local preferences remain beside the
+frontend. Common defaults and desktop grants use the current user's registry.
+
+When upgrading from 1.x, finish existing work, exit all old frontends and exit
+any running TMI host before extracting the complete 2.0 bundle. Retain backups
+of your settings and Codex data. Earlier published ZIPs remain available.
 
 ## Requirements
 
-- 64-bit Windows;
-- Codex CLI 0.157.1 or later, installed and authenticated, or permission to
-  install/update it through **CLI Setup**;
-- an OpenAI account or subscription supported by Codex CLI.
+- 64-bit Windows.
+- Separately installed and authenticated Codex CLI; this release was tested
+  with **0.162.0**.
+- An account/service supported by Codex CLI.
+- For Visualize only: Microsoft Edge WebView2 Runtime, installed separately.
+- For graphical LaTeX only: the optional renderer described in
+  [MicroTeX Setup](MICROTEX_SETUP.md). MicroTeX binaries/fonts are not included.
 
-Codex CLI, OpenAI accounts, models, subscriptions, and services are not
-included with TMI Lite+.
+No AI model, account, subscription, Codex CLI, WebView2 Runtime or cloud Work
+service is supplied by TMI Lite+. Optional viewers initialize only when needed.
+Mermaid and generic MCP Apps rendering are not included.
+
+## Screenshot
+
+![TMI Lite+ interface on Windows](assets/tmi-lite-plus-demo.png)
+
+This screenshot shows the earlier 1.x interface; it is not a screenshot of the
+2.0 backend, Computer Use or current thread browser.
+
+## Responsibility and independence
+
+TMI Lite+ is hobby-developed software provided free of charge and may be used
+for any lawful personal or professional purpose. It is not designed, certified,
+supported or warranted for professional, production, safety-critical or
+business-continuity use. Such use is entirely at the user's discretion and risk.
+
+Codex CLI performs agent operations. TMI also performs its own local client and
+Computer Use operations under the permissions selected by the user. Review
+commands, output, file changes and grants; maintain backups.
+
+TMI Lite+ is not affiliated with, endorsed by, sponsored by or supported by
+OpenAI. It can coexist with the **ChatGPT desktop app**, but **do not use both
+applications on the same project at the same time**. TMI provides no
+cross-client coordination with that app.
 
 ## Documentation
 
@@ -188,31 +118,20 @@ included with TMI Lite+.
 - [Third-Party Notices](THIRD_PARTY_NOTICES.md)
 - [User Guide](USER_GUIDE.md)
 - [Release Notes](RELEASE_NOTES.md)
+- [Optional MicroTeX Setup](MICROTEX_SETUP.md)
+- [Development Notes](DEVELOPMENT_NOTES.md)
 
-## Protocol compatibility
+The **2.0 ZIP is linked directly above**. GitHub's generic Latest release is
+deliberately kept on 1.x for legacy installations; it is not the 2.x download.
+The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
+No 2.x Rolling package has been published yet, so that channel reports no
+available update until its first package exists. Legacy 1.x continues using
+its existing Latest/`rolling` channels and may receive separate 1.x updates.
 
-TMI Lite+ depends on the `app-server` protocol exposed by the installed Codex
-CLI. A later Codex CLI release may require a corresponding TMI Lite+ update.
-
-TMI Lite+ 1.7 requires Codex CLI 0.157.1 or later and was tested with CLI
-0.160.0. Native queue operations require 0.159.0 or later.
-New asynchronous questions require a CLI/model that emits
-them; absent metadata is confirmed through the normal thread resume response.
-
-### Computer Use with Codex CLI 0.160.0
-
-Native OpenAI Computer Use cannot be used from standalone TMI Lite+ 1.x with
-CLI **0.160.0**. In the tested setup it needs the native host started by the
-ChatGPT desktop app; enabling the plugin alone does not create that host.
-TMI 1.7 does not provide its own Windows Computer Use backend. Changing the
-shell sandbox or selecting Full Access does not resolve the missing host.
-This limitation does not disable ordinary Codex CLI development or independent
-MCP tools. It is not a statement that Computer Use is unavailable in the
-ChatGPT desktop app. See the
-[official Computer Use documentation](https://learn.chatgpt.com/use-cases/use-your-computer-with-codex).
-
-TMI Lite+ can be used on the same computer as the ChatGPT desktop app, but
-do not use both applications on the same project at the same time.
-
-Official Codex documentation:
+The visible Release/Rolling choices and check schedules remain unchanged.
+Remote 2.x packages stage all four executables plus supplied runtime assets
+and documentation; personal INI settings are never overwritten. Package names
+use `TMILitePlusBundle-2.0.G.T-Win64.zip`, which the legacy updater does not
+recognize. Upgrade from 1.x remains a manual full-ZIP installation.
+See the User Guide for coordinated local/remote updates. Official Codex documentation:
 [developers.openai.com/codex](https://developers.openai.com/codex/).

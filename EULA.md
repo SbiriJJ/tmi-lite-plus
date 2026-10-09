@@ -1,7 +1,7 @@
 # TMI Lite+ End User License Agreement
 
-Version 1.7  
-Effective date: 3 October 2026
+Version 2.0  
+Effective date: 9 October 2026
 Copyright © 2026 Giacomo Boffa Sandalina. All rights reserved.
 
 ## 1. Acceptance
@@ -51,7 +51,12 @@ and licenses.
 TMI Lite+ can instruct Codex CLI to operate on files, execute commands, use
 tools and MCP servers, access networks, and perform other development actions.
 Those agent operations are performed by Codex CLI under settings and approvals
-selected by the User.
+selected by the User. TMI Lite+ also implements its own local tmi_desktop tools.
+After separate read/control consent, these tools can read window text and
+screenshots, launch applications, send supported control/window messages and
+deliver keyboard/mouse input. Desktop
+observations returned to Codex may be sent to the configured AI service and
+retained in its history. Codex approvals and desktop consent are separate.
 
 The User is solely responsible for:
 
@@ -75,6 +80,13 @@ for software versions, and applying a staged TMI Lite+ update.
 The User is responsible for selecting correct source and target paths and for
 reviewing the result of those client functions.
 
+Version 2.0 includes a resident background host and isolated desktop workers.
+Closing a frontend window or changing the selected conversation does not stop
+resident Codex work. The User must inspect Sessions and explicitly close work
+or exit the host when desired. Interrupt Computer Use with physical ESC while
+it is active; inspect and revoke permanent app
+grants in Computer Use. These controls do not undo already completed actions.
+
 ## 6. Updates and compatibility
 
 TMI Lite+, Codex CLI, Codex app-server, OpenAI services, Windows, 
@@ -97,7 +109,7 @@ The User must not use TMI Lite+ to:
 
 ## 8. No warranty
 
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, PROMPT LITE+ AND ITS
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, TMI LITE+ AND ITS
 DOCUMENTATION ARE PROVIDED “AS IS” AND “AS AVAILABLE”, WITHOUT EXPRESS,
 IMPLIED, OR STATUTORY WARRANTIES, INCLUDING WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, COMPATIBILITY,
@@ -112,7 +124,7 @@ suitable for any particular purpose.
 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR SHALL NOT BE
 LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR
 PUNITIVE DAMAGES, OR FOR LOSS OF DATA, SOURCE CODE, PROFITS, BUSINESS,
-REPUTATION, OR COMPUTER AVAILABILITY, ARISING FROM OR RELATED TO PROMPT LITE+.
+REPUTATION, OR COMPUTER AVAILABILITY, ARISING FROM OR RELATED TO TMI LITE+.
 
 Where liability cannot legally be excluded, it is limited to the minimum
 amount required by applicable law. Mandatory consumer protections remain
@@ -121,7 +133,7 @@ unaffected.
 ## 10. Termination
 
 The license terminates automatically if the User materially breaches this
-Agreement. On termination, the User must stop using and distributing Prompt
+Agreement. On termination, the User must stop using and distributing TMI
 Lite+, subject to any mandatory legal rights.
 
 ## 11. Changes
