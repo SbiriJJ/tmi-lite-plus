@@ -23,9 +23,13 @@ the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
 
 TMIMaintenance is loaded only on demand and can run independently. The host
-suspends idle Codex connections while maintenance is open and reconnects them
-afterwards without prompt replay. Working/opening/waiting sessions block this
-operation. Initial CLI setup is host-owned and precedes native connections.
+suspends idle Codex connections while maintenance is open and afterwards restores
+only thread sessions currently owned by frontends, without prompt replay. Other
+idle work and catalogs restore on demand. Restoration is bounded and reports a
+terminal error per work, rather than leaving the host globally offline.
+Frontend Connect/Disconnect attaches/detaches only the selected conversation.
+Working/opening/waiting sessions block maintenance. Initial CLI setup is
+host-owned and precedes native connections.
 
 tmi_desktop uses native control observations/window messages by default for
 minor/background operations. Semantic UIA mutations and physical input are
@@ -158,8 +162,8 @@ CatalogStartupCheck covers these cases; ThreadUiCheck and Release/Win64 build pa
   browsing uses the state index, not a rollout scan. Unassigned threads stay
   unassigned until explicitly assigned. No second local project database.
 - The Threads overlay now uses Raize GroupBar: distinctive collapsible project
-  headers and thread items, global title search, clear search, archived-only
-  mode and row-targeted context commands. The last-used project expands after its
+  headers and thread items, persistent Show Threads/New/Sessions/Search
+  commands and row-targeted context actions. The last-used project expands after its
   list is ready and visible, with no automatic thread resume. Expansion loads
   metadata only. Full Load is unchanged.
 - Active thread name, project and effective working directory are displayed
@@ -173,11 +177,21 @@ CatalogStartupCheck covers these cases; ThreadUiCheck and Release/Win64 build pa
 - New and Duplicate use real server project IDs and an explicit working
   directory. Duplicate retains its first-prompt requirement. Unassigned and
   Documents remain available; Assign changes membership without moving files.
-- Content search has its own modeless window, explicit paging and Stop,
-  matching-message excerpts and read-only turn previews. Opening uses the same
-  instance lock/unsubscribe/resume path as the browser. No per-thread history
-  download is used to implement global search.
-- Server search covers user/final assistant messages. Full Load retains its
+- Dedicated Search appends paginated title matches before content results;
+  title filtering is case-insensitive on DB-only metadata, including Unassigned.
+  Content candidates receive one anchored excerpt per thread, disclosed in status.
+  Stop/new-query generations consume late responses without inserting stale rows.
+  No history is prefetched. Clicking an excerpt fetches one inclusive-cursor turn
+  with full items, retaining partial assistant answers, in a separate modeless
+  historical view. Exact UTF-16 snippet offsets are preserved; ambiguous/missing
+  message context is explicit. Full Load has independent state and requests.
+- Agent discovery reads only the current owner's spawned descendants from DB
+  metadata after resume/New or concrete agent events. Rows survive metadata
+  refresh; duplicate IDs are merged, old-owner replies ignored and concurrent
+  refreshes coalesced without polling. Runtime IDs appear immediately, with
+  nickname/role filled later. Live Subagents preserves its turn lifecycle and
+  existing tool/model/message details when names change.
+- Server occurrences cover user and partial/final assistant messages. Full Load retains its
   previous message-summary retrieval, local text search, memory bound and partial stop.
 
 ## Item timing and runtime tools
@@ -208,8 +222,11 @@ Existing published ZIPs and the current Rolling release are unchanged.
   removing used roots, and assigns a selected root only to the current thread.
 - Assign to project supports New without changing the working directory.
 - Config exposes the history-cache toggle; defaults remain enabled.
-- The search edit uses the Raize button and 20-pixel glyphs. Enter/magnifier share
-  the search operation; Esc/clear share clearing. Clear restores the magnifier.
+- The embedded title-search edit and its obsolete scope-search state are removed.
+  The persistent magnifier opens the designer-owned Search form. The Show Threads
+  crossed-out toggle reflects every browser visibility change. Conversation and
+  Activity titles are bold; the fixed-width Activity title shares resident work
+  colors with the browser and leaves the rest of the header for live activity.
 - Windows-localized dates, longer path hints, and a 60-second Usage tooltip.
 - No new timers for initial browser expansion. Cosmetic focused-button styling
   remains subject to Raize's rendering.

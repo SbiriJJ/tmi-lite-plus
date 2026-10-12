@@ -8,19 +8,40 @@ It provides projects and conversations, working directories, model/reasoning
 controls, approvals, activity, files, diffs and token/usage information without
 heavy conversation rendering.
 
-Version **2.0** is a **stable release** (9 October 2026).
-Windows executable version: **2.0.9778.29506** (Release/Win64).
+Version **2.0** is a **stable release** (9 October 2026), with an independent
+**2.x Rolling** channel for subsequent updates.
+Stable Windows executable version: **2.0.9778.29506** (Release/Win64).
+Current Rolling Windows executable version: **2.0.9781.32598**
+(Release/Win64, 12 October 2026).
 Tested with Codex CLI **0.162.0**. Compatibility with every later CLI build is
 not guaranteed.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.0-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.0)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.0.9781.32598-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.162.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in 2.0
+## Latest Rolling 2.x changes
+
+- **Worktime statistics:** the host sums resident Working time per 1% drop of
+  the shared subscription limit. Click the text for Current / Past / All graphs;
+  previous reset cycles persist in the registry. This is an approximate local
+  statistic, not billing data.
+- **Changed Files and diffs:** file access stays enabled without sending a prompt.
+  Diff is the first menu command, Open the second, and double-click opens the
+  file. Ctrl/Shift selects multiple diffs; opening the viewer selects the latest
+  edit and all edits with the same timestamp to the second.
+- **Agent snapshots while working:** inspect an agent's conversation through
+  its parent's process without resuming it or changing the parent writer.
+
+The rolling ZIP is `TMILitePlusBundle-2.0.9781.32598-Win64.zip` in the
+[2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
+The stable v2.0 ZIP and legacy 1.x releases are unchanged.
+
+## What's new in stable 2.0
 
 - **Resident backend:** one tray host owns an independent Codex app-server
   process for each work. Closing or switching a frontend detaches it, without
@@ -124,9 +145,10 @@ cross-client coordination with that app.
 The **2.0 ZIP is linked directly above**. GitHub's generic Latest release is
 deliberately kept on 1.x for legacy installations; it is not the 2.x download.
 The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
-No 2.x Rolling package has been published yet, so that channel reports no
-available update until its first package exists. Legacy 1.x continues using
-its existing Latest/`rolling` channels and may receive separate 1.x updates.
+The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+contains the current rolling bundle, separately from stable v2.0. Legacy 1.x
+continues using its existing Latest/`rolling` channels and may receive separate
+1.x updates.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets

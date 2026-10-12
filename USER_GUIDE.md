@@ -1,6 +1,7 @@
 # TMI Lite+ for AI agents — User Guide
 
 Version 2.0  
+Current Rolling Windows executable version: 2.0.9781.32598  
 Stable release: 9 October 2026  
 Tested Codex CLI: 0.162.0
 
@@ -34,8 +35,10 @@ frontend waits for host availability and cannot submit prompts.
 
 ## 2. Projects, threads and working directories
 
-**Show Threads / Show Current** switches the grouped browser over the left
-sidebar. Click a project to expand/collapse it and a thread to open it. Project,
+The **Show Threads** toggle switches the grouped browser over the left sidebar;
+its crossed-out state shows the current thread's agents and changed files.
+**New**, **Sessions** and the search-icon button remain visible in the same
+command row. Click a project to expand/collapse it and a thread to open it. Project,
 thread title and working directory are shown separately. Project assignment
 does not move files or change a thread's working directory.
 
@@ -55,13 +58,18 @@ order, then **Unassigned**, **Documents** and **Archived**.
   metadata. Selecting an archived row shows information without resuming it;
   its context menu offers **Unarchive** and **Delete**, with confirmation.
 
-Find searches titles case-insensitively, including special groups and archives.
-With Find focused, Enter searches and Escape clears. The built-in button
-alternates between Search and Clear. Search expands matching groups. The
-separate content-search window searches conversation text and presents excerpts.
-Neither title search nor metadata list refresh loads full history.
+The search icon opens a modeless **Search** window. Enter a query and press Enter
+or Search: title matches arrive first, followed by single-line message excerpts.
+All projects and Unassigned are searched; Include archived also searches archives.
+Title matching is case-insensitive. Stop keeps results already received.
+There is one excerpt per matching thread. Click a title to open its thread; click
+an excerpt to open that thread and a separate historical view at the match.
+Only the selected historical turn is fetched. If the original text is unavailable
+or ambiguous, the exact server excerpt is shown with an explicit context note.
+Full Load remains available and unchanged. Thread rows show titles without pin/date
+prefixes; last-activity date and time are in their tooltip, formatted by Windows.
 
-Right-click actions apply to the row actually clicked. **New Conversation**
+Right-click actions apply to the row actually clicked. **New**
 chooses a directory and waits for the first prompt before creating a thread.
 Global/special-group New prepares an unassigned thread; New in a real project
 keeps that project ID. Choosing a directory does not create a project.
@@ -69,11 +77,26 @@ keeps that project ID. Choosing a directory does not create a project.
 working directory and requires an initial prompt. Rename and project assignment
 are server-backed operations. Named project creation is explicit.
 
-**Project roots**, opened with the working-directory `...` button, lists roots
+**Project Roots**, opened with the working-directory **Project Roots** button, lists roots
 and refreshes them from project threads. Add a root using the edit/folder dialog,
 remove unused roots, or assign the selected root to the current thread.
 A used root cannot be removed. Changing cwd does not invent a replacement
 project or change the thread's project ID.
+
+**Spawn agents** shows saved descendants of the open thread, including nested
+agents, with nickname and role when supplied by Codex. It is independent of the
+browser's selected row. **Subagents** shows live agent activity and clears when
+the current turn finishes; an empty live list does not mean there are no saved
+agent threads. Agent metadata is loaded only for the open thread, without polling
+or a full-history scan.
+
+Double-click an agent in either list to open its conversation snapshot in a
+separate read-only window with text search. TMI sends `thread/read` through the
+parent's running Codex process; it does not resume the agent, detach the parent
+thread, or switch the parent writer.
+Inspection is also available while the parent is working. The window shows the
+history received for that request, not a continuously updated live transcript.
+Stop or close the window to cancel local preparation; late replies are ignored.
 
 Only after an explicit expansion of a real project returns zero active threads
 does TMI scan unassigned threads for automatic assignment, at most once per
@@ -124,6 +147,12 @@ On startup/reconnect, a frontend can reattach to an available resident work,
 preferring the last-used thread. It does not take over a work attached elsewhere
 and does not create a second native resume/writer. Threads attached to another
 TMI frontend cannot be opened for conflicting work.
+
+The frontend **Connect / Disconnect** button affects only its selected
+conversation. Disconnect detaches the window without stopping resident work or
+discarding its unsent prompt. Connect reattaches through the host and refreshes
+only that conversation. It does not restart the host or other works; while the
+host is in maintenance the frontend waits for its authoritative ready state.
 
 **Sessions** shows resident title, project, cwd, state, ownership and pending
 requests. Closing Sessions does not stop work. Explicit **Close work** requires
@@ -225,13 +254,23 @@ optional cache does not replace server readiness. The full-history **Full Load**
 window is retained, including search, speaker/timestamp data and partial output
 when its loading is stopped.
 
+With **Use conversation history cache** disabled, persisted history is requested
+from Codex, without reading or writing the frontend history cache. The Host's
+in-memory live replay is separate and still restores the running turn on reattach.
+Reload date/token-baseline lines wait until restoration finishes and are omitted
+when the turn is still active; normal completed-task summaries are unchanged.
+
 The live conversation follows new output until manual scrolling/navigation
 disables autoscroll. Its down-arrow returns to the end and re-enables it.
 
-Changed Files and compact Activity diff markers provide file access. Open the
-nonmodal diff viewer on request; its list is scoped to the conversation and
-ordered by task/session/day. File links support default open, Show in Explorer
-and Download; Download remembers its chosen location.
+Changed Files remains enabled without sending a prompt, including while
+disconnected. Its context menu starts with Diff, then Open; double-click opens
+the file normally. Changed Files and compact Activity diff markers open the
+same nonmodal diff viewer, scoped to the conversation and ordered by
+task/session/day. Opening it selects the latest edit automatically, including
+all edits with the same timestamp to the second. Select several diffs with
+Ctrl/Shift to view them together. File links support default open, Show in
+Explorer and Download; Download remembers its chosen location.
 
 Context and account limits are native readings. Limits+ keeps additional
 buckets in the hint. Reset-credit count/earliest expiry appear only when supplied;
@@ -245,6 +284,22 @@ Monday-first calendar heatmap. Missing days count as zero in weekday averages.
 The source date range, selectable start date, navigation arrows and hover
 token values support visual analysis. Statistics are not proof of model quality
 or exact billing cost.
+
+**Worktime last (1%) / current**, above Refresh and Usage beside Poll, is a local
+approximate statistic calculated by the host. Working time is summed across all
+resident threads, including detached threads; approval/input waits do not count.
+Two threads working for one minute therefore contribute two minutes. Each whole
+percentage decrease of the shared main subscription limit records a time sample.
+A multi-point decrease is split equally between its points. This is not a token
+price or billing estimate and does not measure use on other computers or online.
+
+Click the Worktime text to open a nonmodal graph, created only on request.
+Current, Past and All select the retained quota-reset cycles; each cycle keeps
+100 percentage rows, with unobserved bands distinct from measured zero time.
+Any increase in remaining percentage begins a new cycle, even below 100%.
+The current cycle and earlier cycles are saved by the host in the shared Windows
+registry, separately from UI preferences. Existing Usage and Thread usage data
+remain unchanged. Click the Worktime text again to read a fresh graph snapshot.
 
 ## 8. Optional graphics
 
@@ -289,9 +344,12 @@ The host owns Codex detection and startup/six-hour version checks, even without
 a frontend. Frontends use its shared cached status; Recheck requests a fresh
 check. **CLI Setup** asks the host to open on-demand `TMIMaintenance.exe`.
 While Maintenance is open, idle catalog/work processes are disconnected and
-frontend drafts remain intact. Closing it reconnects the same works without
-replaying prompts. Working/opening/waiting work prevents maintenance. Failure
-leaves a visible disconnected state for recovery.
+frontend drafts remain intact. After closing it, the host restores only thread
+sessions currently attached to frontends, without replaying prompts. Detached
+idle work and catalog connections remain suspended until actually requested.
+Each restoration concludes success/error with a bounded wait; one failed
+thread does not leave other threads offline. Working/opening/waiting work
+prevents maintenance. A failed selected connection can be retried with Connect.
 
 Maintenance can also run alone, without host/frontend. It enforces a single
 maintenance window and refuses unsafe connected-operation conditions. Internal
@@ -301,8 +359,9 @@ Release and Rolling are independent opt-in channels in Configuration.
 Checks use the selected channel/schedule and run in the background; installing
 an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
-`rolling-2`**, separate from legacy 1.x Latest/`rolling`. No 2.x Rolling package
-has been published yet; its absence means no available update, not an error.
+`rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
+[2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+contains the current 2.x rolling bundle; the stable 2.0 ZIP is unchanged.
 GitHub's generic Latest link deliberately remains on the legacy release;
 use the direct [2.0 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.0)
 for the initial installation. Future 1.x updates can still use legacy channels.
