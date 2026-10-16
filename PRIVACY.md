@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.0  
-Last updated: 9 October 2026
+Version 2.1  
+Last updated: 16 October 2026
 
 ## Summary
 
@@ -31,6 +31,11 @@ Depending on use, TMI Lite+ stores:
 - permanent desktop read/control grants, keyed by executable path, in
   `HKCU\Software\TMILitePlus\DesktopAccess` and its `Control` subkey;
 - the explicit revocable global-read setting (`ReadAllWindows`) in DesktopAccess;
+- host-owned Worktime measurements and quota-reset metadata in the current
+  user's TMI registry settings;
+- scheduled prompt text, target thread/project and directory, timing rules,
+  enabled state, delivery state and bounded execution logs in
+  `%LOCALAPPDATA%\TMILitePlus\schedules.json`;
 - user-selected downloaded files at paths chosen by the User.
 
 The session log is overwritten when the first TMI Lite+ instance starts.
@@ -55,6 +60,10 @@ user/session. It has no public network listener. It keeps live work metadata,
 pending native Codex requests and a bounded event replay in memory. These
 remain available while the host runs, even after a frontend closes. Unsent
 request reply drafts are not written to local preferences.
+
+Local schedules can continue while the host is running with no frontend open.
+At activation their prompt and selected target/settings are sent to Codex CLI.
+They are local host schedules, not a TMI cloud service or ChatGPT cloud Work.
 
 TMI's tmi_desktop tools can enumerate windows and, after separate read/control
 consent, read accessible text, capture a screenshot, launch an executable and
@@ -141,6 +150,11 @@ logs separately if required. Remove any local rolling-history cache files and
 the WebView2 profile at %LOCALAPPDATA%\TMILitePlus\Visualization separately
 when removing the corresponding local data. This does not delete Codex/OpenAI
 conversation history or previous tool responses.
+
+Delete schedules in their editor, or remove
+`%LOCALAPPDATA%\TMILitePlus\schedules.json` after exiting the host to remove
+all locally saved schedules and their logs. Removing Worktime registry data
+does not change native Codex/account statistics.
 
 ## Changes
 

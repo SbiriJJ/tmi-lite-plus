@@ -1,11 +1,11 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.0  
-Stable release: 9 October 2026  
-Tested Codex CLI: 0.162.0  
-Local IPC protocol: 14
+Document version 2.1  
+Stable release: 16 October 2026  
+Tested Codex CLI: 0.163.0  
+Local IPC protocol: 16
 
-## Version 2.0 architecture
+## Version 2.1 architecture
 
 The resident TMIHost owns independent Codex app-server processes for catalog
 and conversation work. Frontend detachment does not stop work; reattachment
@@ -14,13 +14,22 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. No 2.x Rolling has been published yet. Generic GitHub
-Latest/legacy `rolling` remain unchanged for 1.x, and 2.0 does not become generic
+Rolling reads `rolling-2`. Stable 2.1 advances only `stable-2`; the independently
+published 2.x Rolling package stays unchanged. Generic GitHub
+Latest/legacy `rolling` remain unchanged for 1.x, and 2.1 does not become generic
 Latest. The direct versioned release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.0.G.T-Win64.zip`. The old single-EXE package recognizer does
+`TMILitePlusBundle-2.1.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
+
+Local scheduled prompts are persisted separately in
+`%LOCALAPPDATA%\TMILitePlus\schedules.json` and dispatched by the host's
+event/deadline worker, without a frontend dependency. Startup/maintenance
+delivery waits for readiness and loading to settle, then 20 seconds of quiet;
+intentional waiting does not mark due occurrences missed. Lists stay readable.
+The current protocol validates sequenced `host/schedules` events; an unexpected
+stream-sender failure closes its pipe so a subscriber cannot wait indefinitely.
 
 TMIMaintenance is loaded only on demand and can run independently. The host
 suspends idle Codex connections while maintenance is open and afterwards restores
@@ -49,6 +58,48 @@ Windows shutdown, Full Load, Usage and attachments. Pinned/Archived and shared
 list refresh have passed practical multi-frontend use. The one-off tray AV has
 not recurred, but its original occurrence was not reproduced. This is not an
 exhaustive certification of every Windows app or future CLI build.
+
+## Internal Thread Transfer — ZIP format 2
+
+Thread Transfer remains an internal, experimental maintenance operation. It
+uses short-lived local app-server connections for native project/thread
+metadata; it never sends a prompt or starts inference. TMI work connections
+remain suspended while Maintenance is open. File replacement remains offline.
+
+The new `tmi-thread-transfer` format, version 2, contains a manifest and one
+complete rollout. Older ZIP formats are rejected, without migration. The
+manifest records the current native title, working directory, source dates,
+model/reasoning and informational project name/roots. It does not transfer
+machine-specific project IDs or global permission settings, source files,
+local attachments, or agent conversations.
+
+Only the normalized first user prompt identifies an existing conversation.
+IDs and titles are not identity keys. Exact matches and overlapping names or
+prompts produce a warning with source/target dates; an overlap alone never
+selects an update target. New imports allow an edited name, an existing/new
+destination project and an existing destination working directory. An update
+defaults to the target's current values, including its model, reasoning and
+archived state, with name/project/directory editable explicitly.
+
+Confirmed updates may replace a divergent or newer local history. An exact
+backup is retained and replacement is atomic; there is no automatic merge.
+Native metadata is then restored through app-server. If that separate step
+fails, the UI reports possible partial completion and retains the backup,
+original ZIP and staged history. This is not a transactional cross-computer
+sync mechanism.
+
+New imports are durably staged for the next frontend connection. Project
+creation uses a stable idempotency key; the host records the new thread ID
+before completion. Retrying a partially completed import resumes that ID
+instead of forking again. Native project/settings/name confirmation precedes
+removal of the pending entry and staged file. Fork requests exclude history
+from the response and defer automatic Goal continuation. Working-directory
+changes use native thread settings and never infer or create a new project.
+
+Focused verification includes ZIP/integrity/backup fixtures, a fake app-server,
+a real DFM form fixture, pending-import contract checks and read-only metadata
+queries against the installed CLI. Import/replacement of real user threads is
+deliberately excluded from automated verification.
 
 ## Version 2.0 browser compatibility — CLI 0.162.0
 
@@ -117,7 +168,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.0.
+The following historical notes do not describe missing features in current 2.1.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

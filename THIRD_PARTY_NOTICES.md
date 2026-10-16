@@ -1,7 +1,7 @@
 # TMI Lite+ Third-Party Notices
 
-Document version 2.0  
-Last updated: 9 October 2026
+Document version 2.1  
+Last updated: 16 October 2026
 
 TMI Lite+ interoperates with or is built using third-party products. Those
 products remain governed by their own licenses and terms.

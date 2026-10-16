@@ -1,6 +1,6 @@
-# Optional local formula rendering — TMI Lite+ 2.0
+# Optional local formula rendering — TMI Lite+ 2.1
 
-Document version 2.0
+Document version 2.1
 
 Unicode formula display and the PNG/JPEG/BMP/GIF image viewer work without
 MicroTeX. Graphical formula viewing is optional and entirely local: no AI or
