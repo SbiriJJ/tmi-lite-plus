@@ -1,11 +1,11 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.1  
-Stable release: 16 October 2026  
+Document version 2.2  
+Stable release: 19 October 2026  
 Tested Codex CLI: 0.163.0  
 Local IPC protocol: 16
 
-## Version 2.1 architecture
+## Version 2.2 architecture
 
 The resident TMIHost owns independent Codex app-server processes for catalog
 and conversation work. Frontend detachment does not stop work; reattachment
@@ -14,11 +14,11 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.1 advances only `stable-2`; the independently
-published 2.x Rolling package stays unchanged. Generic GitHub
-Latest/legacy `rolling` remain unchanged for 1.x, and 2.1 does not become generic
-Latest. The direct versioned release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.1.G.T-Win64.zip`. The old single-EXE package recognizer does
+Rolling reads `rolling-2`. Stable 2.2 advances `stable-2` and is GitHub's Latest
+numbered release; the independently published 2.x Rolling package, legacy 1.x
+assets and legacy `rolling` endpoint stay unchanged. The direct versioned
+release links to the full bundle ZIP, named
+`TMILitePlusBundle-2.2.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
@@ -47,10 +47,24 @@ silently retried. Read/control consent, bounded observations, visible blue/red
 indicators and per-operation physical ESC cancellation are separate from Codex
 approval policy. ESC does not permanently disable the next request.
 
-Visualize initializes WebView2 only on request. Its sandboxed HTML viewer
-provides an inline bitmap, zoom and clipboard copying without rebuilding the
-conversation on close. WebView2 Runtime is separate; MicroTeX remains external.
+Visualize and Mermaid initialize WebView2 only when a preview or viewer is
+needed. Reload budgets are computed before rendering: the newest 3 graphic
+occurrences share one configurable budget across LaTeX, Mermaid and Visualize;
+0 skips automatic history graphics. Older occurrences remain text with manual
+links, including repeated sources that share a cached bitmap. Resize retains
+the same selection; live messages remain unrestricted. A shared source reader
+keeps counting, formatting and preview queue positions aligned.
+
+The sandboxed HTML viewer provides inline bitmaps, zoom and clipboard copying
+without rebuilding the conversation on close. Mermaid uses a pinned local
+runtime with network access disabled. WebView2 Runtime is separate; MicroTeX remains external.
 Full Load, Usage, diffs, attachments, Questions and native queues remain available.
+
+Configuration groups preferences separately from update settings/commands and
+uses descriptive selectors. Cross-frontend thread events update local recency
+ordering without extra history reads. Questions handles Ctrl+Enter through the
+same reply action while suppressing the generated newline. Frontend startup
+presents its visible window before beginning host connection/startup.
 
 Focused tests and installed-bundle use covered reattachment, multi-frontend
 operation, desktop actions and dual-monitor warnings, maintenance boundaries,
@@ -168,7 +182,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.1.
+The following historical notes do not describe missing features in current 2.2.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

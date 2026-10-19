@@ -1,7 +1,7 @@
 # TMI Lite+ Third-Party Notices
 
-Document version 2.1  
-Last updated: 16 October 2026
+Document version 2.2  
+Last updated: 19 October 2026
 
 TMI Lite+ interoperates with or is built using third-party products. Those
 products remain governed by their own licenses and terms.
@@ -50,6 +50,24 @@ visualize-host.css and visualize-host.js are TMI's local host implementation.
 OpenAI's Visualize skill runtime/assets are not redistributed. A fragment may
 load approved external libraries on request; their licenses and terms are
 separate from TMI and from these notices.
+
+## Mermaid diagrams
+
+Mermaid 12.2.0 is included as an unmodified local JavaScript runtime. The
+Mermaid project uses the MIT license; its standalone bundle also includes
+third-party components under MIT, ISC, BSD, Apache-2.0 and EPL-2.0 terms.
+`mermaid-LICENSE.txt` beside the executable contains the identified component
+versions, copyright notices, applicable license texts and source locations.
+`mermaid-host.js` is TMI's local rendering adapter, not an OpenAI component.
+
+Source information:
+
+- [Mermaid 12.2.0](https://github.com/mermaid-js/mermaid/releases/tag/mermaid%4012.2.0)
+- [ELKjs 0.9.3 source and build instructions](https://github.com/kieler/elkjs/tree/v0.9.3)
+- [Eclipse Layout Kernel source](https://github.com/eclipse-elk/elk)
+
+These component licenses do not replace TMI Lite+'s own license. Mermaid
+diagrams are rendered locally; no online rendering service is required.
 
 ## User-installed tools
 

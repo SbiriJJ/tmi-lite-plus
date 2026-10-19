@@ -1,4 +1,4 @@
-; TMI Lite+ 2.1 public preference defaults.
+; TMI Lite+ 2.2 public preference defaults.
 ; Codex installation and shared permissions are managed by TMIHost.
 ; Local session details and EULA acceptance are written after use.
 
@@ -8,6 +8,7 @@ IdleRateLimitPolling=1
 [Conversation]
 RollingLineLimit=1000
 ResumeTurnLimit=30
+HistoryGraphicPreviewLimit=3
 CacheEnabled=1
 
 [Activity]

@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.1  
-Last updated: 16 October 2026
+Version 2.2  
+Last updated: 19 October 2026
 
 ## Summary
 
@@ -103,8 +103,8 @@ TMI Lite+ may initiate network activity when:
 - the Codex CLI maintenance feature checks package/version information or
   performs an installation/update selected by the User;
 - the User chooses Download for an HTTP or HTTPS transcript link;
-- the User opens a Visualize fragment whose static scripts, styles, images or
-  fonts use allowed external CDN providers;
+- a Visualize fragment is rendered for an inline preview or opened by the User,
+  and its static scripts, styles, images or fonts use allowed external CDNs;
 - scheduled or manual Release/Rolling checks contact the public GitHub
   repository and download an available application update.
 
@@ -118,15 +118,20 @@ are separate from legacy 1.x Latest/`rolling`. A 2.x package includes matching
 executables, supplied runtime assets and documentation. Local staged executable
 checks remain supported.
 
-Visualize fragments are read and executed locally only on request in WebView2.
-Approved static CDNs can receive ordinary HTTPS request information, including
-the requested resource URL and IP address. Fragment authors control resource
+Visualize fragments are read and executed locally in WebView2 for automatic
+inline previews or when opened by the User. History previews are limited to
+the configured newest graphic occurrences (default 3 across all formats;
+0 disables automatic history previews). New live messages retain automatic
+previews. Approved static CDNs can receive ordinary HTTPS request information,
+including the requested resource URL and IP address. Fragment authors control resource
 URLs; review untrusted content before opening it. No native commands, browser
 permissions, arbitrary file resources or fetch/XHR are granted to a widget.
 WebView2 browser cache/profile data is stored under
 %LOCALAPPDATA%\TMILitePlus\Visualization. Preview bitmaps and widget state are
-held in frontend memory only. Copy image writes the Windows clipboard; a
-follow-up changes the prompt only after confirmation and is not submitted.
+held in frontend memory only. Mermaid uses its supplied local runtime without
+network access; optional LaTeX rendering is local too. Copy image writes the
+Windows clipboard; a follow-up changes the prompt only after confirmation and
+is not submitted.
 
 ## Personal and confidential data
 

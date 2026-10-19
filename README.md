@@ -13,15 +13,15 @@ cache writes, output, reasoning tokens and elapsed time. On-demand Usage charts
 and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
-Version **2.1** is a **stable release** (16 October 2026), with an independent
+Version **2.2** is a **stable release** (19 October 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
-Stable Windows executable version: **2.1.9785.30281** (Release/Win64).
+Stable Windows executable version: **2.2.9788.27938** (Release/Win64).
 Current Rolling Windows executable version: **2.0.9781.32598**
 (Release/Win64, 12 October 2026).
 Tested with Codex CLI **0.163.0**. Compatibility with every later CLI build is
 not guaranteed.
 
-[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.1-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.1)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.2-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2)
 [![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.0.9781.32598-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.163.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
@@ -29,7 +29,25 @@ not guaranteed.
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in stable 2.1
+## What's new in stable 2.2
+
+- **Inline graphics completed:** Visualize widgets, Mermaid diagrams and
+  optional local LaTeX render inside the conversation. Open a separate nonmodal
+  viewer for interaction, zoom and image copying; resize reuses cached images.
+- **Lightweight history:** reload automatically renders only the newest **3**
+  graphic occurrences across all three formats. Older elements remain textual
+  and open on request. Configure the shared limit, including **0** for no
+  automatic history graphics; new live messages keep their normal previews.
+- **Clearer Configuration:** separate preferences and update groups, descriptive
+  selectors, and the new history-preview limit alongside existing options.
+- **Multi-frontend polish:** thread activity reorders the lists in the other
+  frontends too. Questions supports Ctrl+Enter for replies, without inserting
+  a newline into the submitted answer.
+- **Startup presentation:** the frontend shows and requests the foreground
+  before connecting to or launching the host, instead of appearing behind
+  existing windows.
+
+Version 2.2 also retains these stable 2.1 improvements:
 
 - **Worktime statistics:** the host sums resident Working time per 1% drop of
   the shared subscription limit. The latest 200 measurements are normalized per
@@ -59,8 +77,9 @@ not guaranteed.
 
 The independent Rolling channel still contains `TMILitePlusBundle-2.0.9781.32598-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
-Publishing stable 2.1 does not replace that Rolling package, the frozen v2.0 ZIP
-or legacy 1.x releases.
+Publishing stable 2.2 advances `stable-2` and GitHub's Latest numbered release.
+It does not replace that Rolling package, frozen earlier ZIPs or legacy 1.x
+assets/endpoints.
 
 ## Core 2.x features
 
@@ -85,8 +104,9 @@ or legacy 1.x releases.
   permanent Archived group. Documents includes the current user's Windows-known
   Documents folder and all subfolders. Working directory and project are
   independent; selecting a folder no longer creates a project implicitly.
-- **Compact controls and graphics:** colored toggle buttons; an optional
-  WebView2 Visualize viewer with a local inline preview, zoom and image copy.
+- **Compact controls and graphics:** colored toggle buttons; inline Visualize,
+  Mermaid and optional LaTeX previews, with separate on-demand viewers for
+  interaction, zoom and image copy. History previews have a configurable limit.
 - **Existing tools retained:** bounded conversation loading, Full Load/search,
   diffs, Changed Files, Usage charts, Questions, attachments, native prompt
   queue, Goal, Unicode formulas and optional local LaTeX rendering.
@@ -95,7 +115,7 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Open the [TMI Lite+ 2.1 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.1) and download its Win64 ZIP.
+1. Open the [TMI Lite+ 2.2 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2) and download its Win64 ZIP.
 2. Check the archive against its published SHA-256 checksum.
 3. Extract the **complete** archive into a writable directory.
 4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
@@ -112,7 +132,7 @@ accepted EULA or internal switches. Local preferences remain beside the
 frontend. Common defaults and desktop grants use the current user's registry.
 
 When upgrading from 1.x, finish existing work, exit all old frontends and exit
-any running TMI host before extracting the complete 2.1 bundle. Retain backups
+any running TMI host before extracting the complete 2.2 bundle. Retain backups
 of your settings and Codex data. Earlier published ZIPs remain available.
 
 ## Requirements
@@ -121,13 +141,14 @@ of your settings and Codex data. Earlier published ZIPs remain available.
 - Separately installed and authenticated Codex CLI; this release was tested
   with **0.163.0**.
 - An account/service supported by Codex CLI.
-- For Visualize only: Microsoft Edge WebView2 Runtime, installed separately.
+- For Visualize and Mermaid: Microsoft Edge WebView2 Runtime, installed separately.
 - For graphical LaTeX only: the optional renderer described in
   [MicroTeX Setup](MICROTEX_SETUP.md). MicroTeX binaries/fonts are not included.
 
 No AI model, account, subscription, Codex CLI, WebView2 Runtime or cloud Work
 service is supplied by TMI Lite+. Optional viewers initialize only when needed.
-Mermaid and generic MCP Apps rendering are not included.
+Mermaid's local library and required license notices are included. Generic MCP
+Apps rendering is not included.
 
 ## Screenshot
 
@@ -163,18 +184,18 @@ cross-client coordination with that app.
 - [Optional MicroTeX Setup](MICROTEX_SETUP.md)
 - [Development Notes](DEVELOPMENT_NOTES.md)
 
-The **2.1 ZIP is linked directly above**. GitHub's generic Latest release is
-deliberately kept on 1.x for legacy installations; it is not the 2.x download.
+The **2.2 ZIP is linked directly above**, and v2.2 is GitHub's Latest numbered
+release. Use the complete 2.x bundle, not an old single-EXE update package.
 The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
 The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the current rolling bundle, separately from stable v2.1. Legacy 1.x
-continues using its existing Latest/`rolling` channels and may receive separate
-1.x updates.
+contains the current rolling bundle, separately from stable v2.2. Legacy 1.x
+assets and its `rolling` endpoint are preserved and may receive separate 1.x
+updates; the old updater does not recognize 2.x bundle filenames.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets
 and documentation; personal INI settings are never overwritten. Package names
-use `TMILitePlusBundle-2.1.G.T-Win64.zip` for this release, which the legacy updater does not
+use `TMILitePlusBundle-2.2.G.T-Win64.zip` for this release, which the legacy updater does not
 recognize. Upgrade from 1.x remains a manual full-ZIP installation.
 See the User Guide for coordinated local/remote updates. Official Codex documentation:
 [developers.openai.com/codex](https://developers.openai.com/codex/).

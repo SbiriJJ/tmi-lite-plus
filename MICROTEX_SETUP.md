@@ -1,6 +1,6 @@
-# Optional local formula rendering — TMI Lite+ 2.1
+# Optional local formula rendering — TMI Lite+ 2.2
 
-Document version 2.1
+Document version 2.2
 
 Unicode formula display and the PNG/JPEG/BMP/GIF image viewer work without
 MicroTeX. Graphical formula viewing is optional and entirely local: no AI or
@@ -33,8 +33,13 @@ MicroTeX DLL is not interchangeable: upstream MicroTeX exposes a C++ API.
    ```
 
 3. Keep the resource tree intact, including its upstream license files.
-4. Restart TMI Lite+. Formula blocks render
-   automatically in completed messages and in the rolling conversation on load.
+4. Restart TMI Lite+. Completed new live formula blocks render automatically.
+   Reload previews only the newest 3 graphic occurrences across LaTeX, Mermaid
+   and Visualize by default. Change **Graphic previews at reload** in
+   Configuration, or `[Conversation] HistoryGraphicPreviewLimit` in the local
+   INI; 0 disables automatic history graphics. Older formulas remain readable
+   as text and can be rendered manually. The limit applies at the next reload,
+   not to new live messages.
    **Open formula** opens the cached image in the separate viewer with
    fit/original size, zoom and **Copy image** clipboard controls.
    The module is loaded when a formula first needs rendering, not just because
@@ -68,7 +73,7 @@ required at runtime.
 
 ## Viewer behavior
 
-The non-modal viewer offers Fit, 100%, zoom in and zoom out. It owns its image
+The non-modal viewer offers Fit, 100%, zoom in, zoom out and Copy image. It owns its image
 and closing it does not refresh the conversation. Image data is read only on
 click; network images are downloaded only then, with a 64 MB encoded-file
 limit. Other image formats still use the Windows default application.

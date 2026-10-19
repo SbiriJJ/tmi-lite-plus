@@ -1,7 +1,7 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.1  
-Stable release: 16 October 2026  
+Version 2.2  
+Stable release: 19 October 2026  
 Tested Codex CLI: 0.163.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
@@ -24,7 +24,7 @@ CLI Setup before enabling Codex connections. Use the displayed install/update
 commands or run them manually, then authenticate using Codex CLI.
 
 For **1.x to 2.x**, upgrade manually: finish work, close old frontend instances,
-exit any running host, back up settings/Codex data and extract the full 2.1 ZIP.
+exit any running host, back up settings/Codex data and extract the full 2.2 ZIP.
 The old single-executable updater is not a four-binary 2.x installer. Do not
 overwrite an executable while it is running.
 
@@ -257,6 +257,8 @@ Conversation Questions can be answered from their window or dismissed when
 already answered by an ordinary prompt. Dismissal is session-local. When all
 answers have been submitted, the Questions window closes. A question does not
 always mean the agent is waiting or that the task must be interrupted.
+Press Ctrl+Enter in the Questions window to send the selected or written reply.
+The shortcut does not insert a newline; ordinary Enter keeps its normal behavior.
 
 ## 6. Computer Use and permissions
 
@@ -415,23 +417,47 @@ are not distributed. Once available, completed formula blocks render locally.
 Open formula opens the cached image with fit/original size, zoom and Copy image.
 The image viewer uses the same clipboard action. Full Load remains text-only.
 
-A Visualize reference appears as **View visualization**. Click to initialize the
-nonmodal WebView2 viewer; an inline bitmap preview is inserted after rendering.
-Resizing reuses that bitmap, not the running widget. Update preview copies the
-current viewport; Copy image places it on the clipboard. Closing the viewer
-does not rebuild history. Preview/widget state are memory-only.
+Reloading a conversation automatically renders only its newest 3 graphic
+occurrences in total (available LaTeX, Mermaid and Visualize). Older graphics
+stay textual and can be opened on request, without starting their renderers
+during loading. Resize keeps this selection, even for repeated identical
+diagrams. New live messages retain normal automatic previews.
+
+Change **Graphic previews at reload** in Configuration, or set
+`HistoryGraphicPreviewLimit` under `[Conversation]` in the local INI. The default
+is 3; 0 disables automatic graphics on reload. Changes apply at the next reload.
+
+A completed Visualize reference receives an automatic inline bitmap preview.
+Click **Open visualization** (or **View visualization** before capture) to open
+the nonmodal interactive WebView2 viewer. Resizing reuses the cached bitmap,
+not the running widget. Update preview copies the current viewport; Copy image
+places it on the clipboard. Closing the viewer does not rebuild history.
+Preview/widget state are memory-only.
 
 Visualize requires the separately installed Microsoft Edge WebView2 Runtime
 and the supplied loader/assets. Its UTF-8 fragment must exist locally and be
-at most 1 MB. Missing dependencies are reported on use; no browser initializes
-during normal conversation loading.
+at most 1 MB. Missing dependencies are reported on use; the browser initializes
+only when there is graphic content to render, including retained rolling history.
 
 Widgets run in an opaque-origin sandbox. Native objects/commands, arbitrary
 navigation, downloads, browser permissions, arbitrary file resources and
 fetch/XHR are blocked. Allowed static CDN resources may make HTTPS requests.
 Follow-ups ask before replacing a draft and never submit it automatically.
 Basic styles/icons/tabs/tooltips/state/follow-up APIs are supported; host-only
-Tweak/calendar, generic MCP Apps and Mermaid rendering are not included.
+Tweak/calendar and generic MCP Apps are not included.
+
+Completed assistant code blocks marked `mermaid` render automatically as inline
+diagrams. Incomplete streaming blocks and ordinary code examples remain text.
+**Open diagram** opens the separate viewer for zoom, scrolling and Copy image;
+opening it does not replace the complete inline preview with a cropped viewport.
+Resize uses the cached bitmap, while Full Load keeps the original source text.
+If rendering fails, the fenced source remains visible with an explanatory link.
+
+Mermaid uses the supplied local library and adapter, plus WebView2. It does not
+contact an online renderer or load CDN resources. Diagrams run in strict mode
+without native commands, network access or graph click actions. Source is
+limited to 50,000 characters and 500 edges, with a 15-second automatic rendering
+deadline. See [Third-Party Notices](THIRD_PARTY_NOTICES.md) for component licenses.
 
 ## 9. Preferences, maintenance and updates
 
@@ -439,7 +465,11 @@ UI preferences are local in `TMILitePlus.ini`: rolling/activity/resume limits,
 cache, conversation colors, update channel/schedule, polling, last selection,
 download destination and EULA acceptance. Defaults initialize first; missing
 INI entries use their documented defaults, while read errors are reported.
-Configuration exposes only the intended subset.
+Configuration separates conversation/interface preferences from application
+updates and their commands. Descriptive selectors control cached-history use
+and whether to hide the thread list after selection. It also exposes the graphic
+preview limit at reload, alongside the rolling-line, activity-row and resume-turn
+limits, color presets and update-channel/check-frequency selectors.
 
 The host writes common defaults in `HKCU\Software\TMILitePlus`, including
 Codex path and common permission defaults. Frontends submit changes rather than
@@ -467,13 +497,14 @@ an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
 `rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle and is not replaced by stable 2.1.
-GitHub's generic Latest link deliberately remains on the legacy release;
-use the direct [2.1 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.1)
-for the initial installation. Earlier versioned ZIPs remain unchanged; future
-1.x updates can still use legacy channels.
+contains the independent rolling bundle and is not replaced by stable 2.2.
+GitHub's Latest numbered release is v2.2; the direct
+[2.2 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2)
+also provides the full bundle for initial installation. Earlier versioned ZIPs,
+legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
+single-EXE updater does not recognize 2.x bundle filenames.
 
-This release uses `TMILitePlusBundle-2.1.G.T-Win64.zip`; remote 2.x ZIPs stage the four
+This release uses `TMILitePlusBundle-2.2.G.T-Win64.zip`; remote 2.x ZIPs stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching
