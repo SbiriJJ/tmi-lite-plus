@@ -82,6 +82,72 @@ remove unused roots, or assign the selected root to the current thread.
 A used root cannot be removed. Changing cwd does not invent a replacement
 project or change the thread's project ID.
 
+### Project notes — local development after 2.2
+
+The **Notes** button to the right of the project name opens a right-hand panel.
+It starts at the thread sidebar's preset width. Drag its splitter to resize it;
+closing and reopening preserves that width in the current frontend only. The
+width is not written to the INI and resets on the next frontend startup.
+
+Notes are local TMI files, not Codex messages or server project metadata. The
+project view combines its roots with the working directories of all its active
+and archived threads, deduplicates the paths, loads their notes and sorts them
+**oldest first**. Loading this directory metadata does not load conversation
+history or change roots, project assignments or working directories. A selected
+note shows its text and originating directory. Completed and Priority do not
+change chronological order.
+
+The same Memo is used to read and write notes. It starts as **New** when the
+frontend opens, the project changes or the notes list is rebuilt. Above it, an
+information line describes its state and a path line shows the note's directory
+or the target directory for a new note. A leading `*` on that path means there
+are unsaved changes.
+
+- **<Prompt** appends the Memo text to any existing prompt, separated by a blank
+  line. It does not send the prompt.
+- **New** starts an empty note in the **currently selected working directory**,
+  not the first project root or the directory of a previously selected note.
+- Selecting an existing note makes the Memo readonly. **Edit** enables changes
+  to its original file, including notes from another working directory, and
+  places the cursor at the end. Editing remains enabled after a save or a
+  change of focus; it does not require another Edit click for each change.
+
+Changes are saved automatically when leaving the Memo and before leaving the
+current note or closing the frontend. A successful save clears the `*` and
+updates only the affected list entry. A new note containing only spaces or
+other non-graphic characters is not saved. Clearing an existing note asks for
+confirmation to delete it; declining restores its saved text.
+
+If saving fails, including when another frontend or editor changed the file,
+TMI does not silently overwrite it. The Memo becomes readonly with its unsaved
+text preserved, the information line reports the error in red, and **Edit**
+becomes a yellow **Save** button for retrying. **New** remains available and asks
+for confirmation before discarding that text. The original file is unchanged
+when a conflict or write failure prevents saving.
+
+Local notes also work while disconnected, using the project directories
+already known to the frontend and the selected CWD. Use **Refresh** to reread
+notes and, when connected, refresh the project's directory metadata. There is
+no background polling or automatic filesystem monitoring.
+
+Right-click any listed note to mark **Completed/pending**, switch
+**Priority/Normal**, or **Delete** it. These actions operate on that note's
+original file, even when its directory differs from the currently selected CWD.
+Delete asks for confirmation showing the note and its file path; it permanently
+deletes the file. Missing/inaccessible directories, invalid files and concurrent
+changes are reported rather than silently replaced or overwritten.
+
+Each working directory stores one UTF-8 Markdown file per note directly inside
+`.tmi-notes`. Files have four frontmatter fields (`id`, `created`, `completed`,
+`priority`) followed by the note text. You can edit the text with an external
+editor; preserve the frontmatter and use Refresh afterwards. Concurrent edits
+are detected before saving rather than merged. Moving the working
+directory together with `.tmi-notes` carries its notes with it. Notes are not
+automatically included in thread-transfer ZIPs, synchronized between computers,
+or inserted into an AI prompt without choosing **<Prompt**.
+
+### Agents and project assignment
+
 **Spawn agents** shows saved descendants of the open thread, including nested
 agents, with nickname and role when supplied by Codex. It is independent of the
 browser's selected row. **Subagents** shows live agent activity and clears when
@@ -148,11 +214,24 @@ Manual changes send only their relevant settings, preserving unrelated
 permissions. Rejected changes restore confirmed values. An acknowledgement is
 not a promise that a model/reasoning change has affected an already-running step.
 
-Fast, Auto-review, Network access and Poll use compact toggle buttons.
+Fast, Auto-review, Network access, Auto switch and Poll use compact toggle buttons.
 On uses the active color; Off uses the normal background with a thin diagonal
 red slash and readable text. Poll is idle limit polling; its hint shows the
 configured interval. Fast reflects Codex's available service tier, not a
 guarantee of speed or model availability.
+
+**Auto switch**, beside Network access, is host-owned and changes all frontends
+until the host restarts. After an accepted prompt it activates an already-open,
+non-minimized frontend, prioritizing input requests, permissions, then idle
+threads; ties use most recent activity. It focuses the prompt without changing
+its draft. Threads with errors, detached threads and unavailable windows are
+not selected. If another frontend is working but none is ready, a modal **Close**
+dialog marks deferred switching. Closing it or leaving the frontend cancels the
+wait. No periodic check or new frontend is started.
+
+Task completion, input/permission requests and new errors also request native
+Windows taskbar flashing, including minimized windows. This attention signal
+is independent of Auto switch and never restores a minimized window.
 
 **Schedules**, beside Goal, manages local scheduled prompts owned by TMI Host.
 It turns green when at least one schedule is active. It opens the schedules
@@ -211,11 +290,15 @@ asks you to close it there before trying again.
 
 The frontend **Connect / Disconnect** button affects only its selected
 conversation. Disconnect closes its resident work and releases the Codex writer,
-then shows thread selection. An idle work closes directly; a running task requires
+while retaining the selected thread, displayed conversation, project and working
+directory. **Connect** reopens that same thread without searching the list.
+An idle work closes directly; a running task requires
 confirmation because closing interrupts it. The frontend stays connected to the
 host: projects, search and Sessions remain available. The unsent prompt and its
 attachments are preserved. The closed conversation can be archived or deleted;
-selecting it again opens a new resident work. Switching threads or closing a
+selecting it again also opens a new resident work. If the connection fails before
+closure is confirmed, TMI reports the uncertainty and enables Connect to reattach;
+it does not assume that the host released the writer. Switching threads or closing a
 frontend still only detaches its view and leaves resident work running.
 The button does not restart the host or other works; while the host is in
 maintenance the frontend waits for its authoritative ready state.
@@ -236,6 +319,35 @@ frontend. Pending-request menu entries and notifications open their exact
 owning thread. Working/error indicators remain visible even with a frontend
 in the foreground; duplicate attention notifications are avoided for that
 frontend.
+
+### Response status — local development after 2.2
+
+The host tray icon combines independent indicators, so one condition does not
+hide another:
+
+- **Green, bottom right:** at least one resident task is Working without a
+  response blockage.
+- **Red, bottom left:** Codex has reported a response blockage or retry condition.
+- **Yellow, top right:** a question, approval or other pending Codex request needs
+  user intervention.
+- **Red outline:** a local TMI work/process/communication failure, distinct from
+  a Codex response problem.
+
+The indicators are drawn on the existing tray icon when its state or DPI
+changes. They do not add icons or animations. Different works can keep the
+Working, response-warning and pending-request indicators visible together; a
+local error does not suppress the other indicators either.
+
+Taskbar prefixes distinguish **[Model busy]**, **[Retrying]**, **[Server blocked]**
+and **[Codex blocked]** from **[E]** for a local work failure. An unclassified
+Codex response error is not automatically described as a remote-server outage.
+Activity and work hints retain the full reported reason, including available
+Codex error details; the short caption is only a summary.
+
+Response warnings survive reattaching a frontend through the host's resident
+snapshot. They clear when Codex reports a new turn or actual response progress,
+not after a guessed delay. TMI does not add a retry loop, disconnect the work or
+change Working-time accounting merely because Codex reports such a warning.
 
 Use **Exit TMI host** to stop the backend and its Codex processes. Idle exit
 does not require confirmation; active work may require it. Shutdown has a
@@ -330,14 +442,52 @@ Reload date/token-baseline lines wait until restoration finishes and are omitted
 when the turn is still active; normal completed-task summaries are unchanged.
 
 The live conversation follows new output until manual scrolling/navigation
-disables autoscroll. Its down-arrow returns to the end and re-enables it.
+disables autoscroll. Its red down-arrow, near the lower-right corner, returns
+to the end and re-enables it. Down on the final line also resumes following.
+Opening/reloading a conversation starts with autoscroll enabled.
+
+### Temporary Sample responses (local development, Codex CLI 0.164+)
+
+**Sample** asks a temporary question using the loaded conversation context.
+It requires an idle, persistent main thread with at least one finished,
+failed or interrupted turn, and no attachments. The prompt remains in the
+input editor. Activity shows preparation, generation and completion, with an
+independent elapsed time. While pending, the green **Cancel Sample** button
+cancels only that temporary request. The question, answer and available Sample
+token counts appear in the normal conversation view, with its usual copying,
+links and local rendering. An unavailable token count is shown as a dash.
+
+The counter below Attach shows the prompt's **UTF-8 bytes, not tokens**. Sample
+accepts at most **4,000 bytes**; accented characters and emoji can occupy more
+than one byte. Exceeding that limit disables Sample only, not ordinary sending.
+The click handler checks the limit again before submitting the request.
+
+The server allows **30 seconds** for a Sample. No tools are executed: an attempted
+tool call may yield no text. Sampling still consumes model tokens. Results are
+temporary and disappear when the conversation reloads. They are not added to
+Codex history, its local history cache, Full Load or the existing conversation/
+task counters. Resizing the view preserves them. Cancel addresses only
+the Sample, never the main task. A changed source turn or connection invalidates
+the result; TMI does not automatically retry it or pause scheduled prompts.
+
+### Native Codex diagnostic ZIP (local development, Codex CLI 0.164+)
+
+Open **Configuration → Export Codex diagnostics…** while connected to Codex.
+Explicitly choose whether to include logs and/or the current conversation;
+both options start off. These files may contain private information. Choose
+a new ZIP file name: an existing file is never overwritten. Codex constructs
+the diagnostic archive locally; **nothing is uploaded**. It is not a Thread
+Transfer backup. TMI reports the server-returned saved path or the actual error.
+If the connection ends before the reply, check the chosen destination before
+exporting again: Codex may already have written it.
 
 MCP tools that send progress messages update the current Activity status in
-place, without adding a log row for each message. **Retrying...** means Codex
-reported a recoverable error and intends to retry; **Error** identifies an error
-without that recovery indication. A displayed retry count is not a guarantee
-that Codex has finished recovering. Retry notices stay in Activity/status,
-without interrupting a streaming message. TMI does not add its own retry loop.
+place, without adding a log row for each message. **Retrying** means Codex
+reported a recoverable error and intends to retry. A displayed retry count is
+not a guarantee that Codex has finished recovering. Response warnings retain
+their reason in Activity/status without interrupting a streaming message; see
+the response-status indicators above for their distinction from local failures.
+TMI does not add its own retry loop.
 
 Changed Files remains enabled without sending a prompt, including while
 disconnected. Its context menu starts with Diff, then Open; double-click opens
@@ -379,6 +529,11 @@ approximate statistic calculated by the host. Working time is summed across all
 resident threads, including detached threads; approval/input waits do not count.
 Two threads working for one minute therefore contribute two minutes. Each whole
 percentage decrease of the shared main subscription limit records a time sample.
+Only native Limits updates received by a resident thread during an active turn
+feed this statistic. Idle Polling and explicit account-limit reads update the
+Limits indicator only; they do not select a Worktime baseline, create samples
+or start quota-reset cycles. The most recently started turn selects the tracked
+subscription group; concurrent threads sharing that group still contribute.
 A multi-point decrease remains one sample; its time is divided by the number
 of percentage points, so every displayed value is an average per 1%. This is not a token
 price or billing estimate and does not measure use on other computers or online.
@@ -427,12 +582,18 @@ Change **Graphic previews at reload** in Configuration, or set
 `HistoryGraphicPreviewLimit` under `[Conversation]` in the local INI. The default
 is 3; 0 disables automatic graphics on reload. Changes apply at the next reload.
 
-A completed Visualize reference receives an automatic inline bitmap preview.
-Click **Open visualization** (or **View visualization** before capture) to open
-the nonmodal interactive WebView2 viewer. Resizing reuses the cached bitmap,
-not the running widget. Update preview copies the current viewport; Copy image
-places it on the clipboard. Closing the viewer does not rebuild history.
-Preview/widget state are memory-only.
+A completed Visualize reference opens an interactive HTML view directly in the
+conversation. Its buttons, tabs, tooltips and expandable source receipts work
+in place; the conversation reserves space and adjusts it when content expands
+or collapses. Repeated occurrences keep independent widget state. Views outside
+the conversation viewport are suspended and resume with their state when shown
+again; there is no background refresh timer.
+
+Click **Open visualization** for the separate nonmodal viewer, with zoom,
+**Reload** and **Copy image**. Older deferred graphics can be opened inline on
+request. Closing the separate viewer does not rebuild history. Widget state is
+memory-only. Views share the WebView profile and browser process rather than
+launching a separate full desktop client for each view.
 
 Visualize requires the separately installed Microsoft Edge WebView2 Runtime
 and the supplied loader/assets. Its UTF-8 fragment must exist locally and be
@@ -448,9 +609,10 @@ Tweak/calendar and generic MCP Apps are not included.
 
 Completed assistant code blocks marked `mermaid` render automatically as inline
 diagrams. Incomplete streaming blocks and ordinary code examples remain text.
-**Open diagram** opens the separate viewer for zoom, scrolling and Copy image;
-opening it does not replace the complete inline preview with a cropped viewport.
-Resize uses the cached bitmap, while Full Load keeps the original source text.
+Inline diagrams include local zoom/reset controls, drag-to-pan, Ctrl+wheel zoom
+and double-click reset. **Open diagram** opens the separate viewer for zoom,
+scrolling and Copy image. Conversation resize repositions the live diagram,
+while Full Load keeps the original source text.
 If rendering fails, the fenced source remains visible with an explanatory link.
 
 Mermaid uses the supplied local library and adapter, plus WebView2. It does not
@@ -471,14 +633,38 @@ and whether to hide the thread list after selection. It also exposes the graphic
 preview limit at reload, alongside the rolling-line, activity-row and resume-turn
 limits, color presets and update-channel/check-frequency selectors.
 
+**Auto switch at host startup** selects Enabled/Disabled for the next host start.
+The host saves this choice as `[Host] AutoSwitchEnabled` in `TMIHost.ini`
+beside `TMIHost.exe`; an absent setting means Disabled. This preference does not
+change the running host toggle immediately, and a frontend restart does not
+reset that global toggle.
+
 The host writes common defaults in `HKCU\Software\TMILitePlus`, including
 Codex path and common permission defaults. Frontends submit changes rather than
 rewriting stale values. Model/reasoning and native thread metadata remain
 Codex-owned, not duplicated common defaults.
 
+Local development after 2.2: **OpenAI browser tools (Codex startup)** is a shared
+host setting, disabled by default. Disabled prevents TMI-started Codex sessions
+from automatically launching the OpenAI browser/Node runtimes. Enabled follows
+your normal Codex configuration. The choice is stored as
+`OpenAIBrowserToolsEnabled` in `HKCU\Software\TMILitePlus`, not in the UI INI or
+Codex `config.toml`; it does not alter the ChatGPT desktop app. It applies to new
+Codex sessions: close and reopen idle work, or restart the host when convenient.
+Changing the selector does not restart a working thread or terminate existing
+Node processes. TMI Computer Use (`tmi_desktop`), HTML/Mermaid and LaTeX viewers
+are unaffected. OpenAI browser tools are unavailable in sessions started with
+the setting disabled.
+
 The host owns Codex detection and startup/six-hour version checks, even without
 a frontend. Frontends use its shared cached status; Recheck requests a fresh
 check. **CLI Setup** asks the host to open on-demand `TMIMaintenance.exe`.
+With Codex CLI 0.164+, the host also validates the startup configuration once
+per host lifetime, before making Codex available. This background check has
+a 15-second deadline and is cancelled on host shutdown. A configuration error
+remains visible: correct it, then restart the host. Ordinary reconnects,
+additional frontends and periodic version checks do not repeat validation.
+Earlier supported CLI versions explicitly report this capability unavailable.
 While Maintenance is open, idle catalog/work processes are disconnected and
 frontend drafts remain intact. After closing it, the host restores only thread
 sessions currently attached to frontends, without replaying prompts. Detached

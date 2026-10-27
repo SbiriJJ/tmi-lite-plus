@@ -16,15 +16,15 @@ to calculate subscription billing costs.
 Version **2.2** is a **stable release** (19 October 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
 Stable Windows executable version: **2.2.9788.27938** (Release/Win64).
-Current Rolling Windows executable version: **2.0.9781.32598**
-(Release/Win64, 12 October 2026).
-Tested with Codex CLI **0.163.0**. Compatibility with every later CLI build is
-not guaranteed.
+Current Rolling Windows executable version: **2.2.9796.17082**
+(Release/Win64, 27 October 2026).
+Stable 2.2 was tested with Codex CLI **0.163.0**; the current Rolling build with
+**0.164.0**. Compatibility with every later CLI build is not guaranteed.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.2-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2)
-[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.0.9781.32598-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.2.9796.17082-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.163.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.164.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
@@ -75,11 +75,10 @@ Version 2.2 also retains these stable 2.1 improvements:
 - **Agent snapshots while working:** inspect an agent's conversation through
   its parent's process without resuming it or changing the parent writer.
 
-The independent Rolling channel still contains `TMILitePlusBundle-2.0.9781.32598-Win64.zip` in the
+The independent Rolling channel contains `TMILitePlusBundle-2.2.9796.17082-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
-Publishing stable 2.2 advances `stable-2` and GitHub's Latest numbered release.
-It does not replace that Rolling package, frozen earlier ZIPs or legacy 1.x
-assets/endpoints.
+Stable v2.2, `stable-2`, frozen earlier ZIPs and legacy 1.x assets/endpoints
+remain unchanged by this Rolling update.
 
 ## Core 2.x features
 
