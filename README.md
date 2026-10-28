@@ -13,23 +13,53 @@ cache writes, output, reasoning tokens and elapsed time. On-demand Usage charts
 and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
-Version **2.2** is a **stable release** (19 October 2026), with an independent
+Version **2.3** is a **stable release** (28 October 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
-Stable Windows executable version: **2.2.9788.27938** (Release/Win64).
+Stable Windows executable version: **2.3.9797.42811** (Release/Win64).
 Current Rolling Windows executable version: **2.2.9796.17082**
 (Release/Win64, 27 October 2026).
-Stable 2.2 was tested with Codex CLI **0.163.0**; the current Rolling build with
-**0.164.0**. Compatibility with every later CLI build is not guaranteed.
+Stable 2.3 was primarily tested with Codex CLI **0.164.0**; installed-version
+selection and focused compatibility checks also covered **0.165.0**. This is
+not a guarantee for every capability or later CLI build.
 
-[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.2-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.3-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3)
 [![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.2.9796.17082-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.164.0-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.164%20%2F%200.165-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in stable 2.2
+## What's new in stable 2.3
+
+- **Interactive inline graphics:** Visualize widgets and Mermaid diagrams work
+  directly in the conversation. Offscreen views suspend without losing their
+  state; the existing history-preview budget keeps large reloads lightweight.
+- **Local project notes:** one Markdown note per file in each working
+  directory's `.tmi-notes` folder, project-wide chronological listing,
+  priority/completed flags, explicit editing and conflict-aware autosave.
+- **Auto switch and clearer activity:** optional host-owned switching between
+  existing frontends, native taskbar attention, and independent tray badges for
+  Working, Codex response warnings and user decisions.
+- **Sample, diagnostics and Memories:** temporary tool-free answers use the
+  conversation renderer; diagnostic ZIPs are explicitly requested and stay
+  local. A nonmodal Memory viewer and native Memories configuration expose the
+  shared Codex summary, not the active model context.
+- **Live IDE Bridge diffs:** compatible Bridge operations populate Changed
+  Files and compact Activity summaries; immutable patches load only on request.
+- **Faster, bounded CLI maintenance:** publish local readiness before optional
+  background checks, select an already installed CLI, and control previous-minor
+  and release-age retention. Update indicators compare against the newest
+  installed version, so selecting a rollback does not offer it again.
+- **Recovery fixes:** a valid manual model choice reopens the same older thread;
+  obsolete saved/default models resolve from the advertised catalog. Accepting
+  an authoritative CLI path no longer creates a false shared-settings conflict.
+- **More reliable Worktime:** only active-thread Limits events feed statistics;
+  sub-minute reset-time jitter no longer splits cycles at 99% or 100%.
+
+See [Release Notes](RELEASE_NOTES.md) for details and limitations.
+
+## Stable 2.2 improvements retained
 
 - **Inline graphics completed:** Visualize widgets, Mermaid diagrams and
   optional local LaTeX render inside the conversation. Open a separate nonmodal
@@ -77,8 +107,9 @@ Version 2.2 also retains these stable 2.1 improvements:
 
 The independent Rolling channel contains `TMILitePlusBundle-2.2.9796.17082-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
-Stable v2.2, `stable-2`, frozen earlier ZIPs and legacy 1.x assets/endpoints
-remain unchanged by this Rolling update.
+Publishing stable 2.3 advances `stable-2` and GitHub's Latest numbered release.
+It does not replace the independent Rolling package, frozen earlier ZIPs or
+legacy 1.x assets/endpoints.
 
 ## Core 2.x features
 
@@ -114,11 +145,11 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Open the [TMI Lite+ 2.2 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2) and download its Win64 ZIP.
+1. Open the [TMI Lite+ 2.3 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3) and download its Win64 ZIP.
 2. Check the archive against its published SHA-256 checksum.
 3. Extract the **complete** archive into a writable directory.
 4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
-5. Use **CLI Setup** if Codex CLI needs installing/updating, then complete Codex CLI authentication.
+5. Use **CLI Setup** if Codex CLI needs installing/updating, then authenticate separately with `codex login` if needed. TMI does not yet provide a native login screen.
 
 Keep `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, the supplied documentation and viewer assets together.
@@ -131,14 +162,14 @@ accepted EULA or internal switches. Local preferences remain beside the
 frontend. Common defaults and desktop grants use the current user's registry.
 
 When upgrading from 1.x, finish existing work, exit all old frontends and exit
-any running TMI host before extracting the complete 2.2 bundle. Retain backups
+any running TMI host before extracting the complete 2.3 bundle. Retain backups
 of your settings and Codex data. Earlier published ZIPs remain available.
 
 ## Requirements
 
 - 64-bit Windows.
 - Separately installed and authenticated Codex CLI; this release was tested
-  with **0.163.0**.
+  primarily with **0.164.0**, with focused **0.165.0** checks.
 - An account/service supported by Codex CLI.
 - For Visualize and Mermaid: Microsoft Edge WebView2 Runtime, installed separately.
 - For graphical LaTeX only: the optional renderer described in
@@ -183,18 +214,18 @@ cross-client coordination with that app.
 - [Optional MicroTeX Setup](MICROTEX_SETUP.md)
 - [Development Notes](DEVELOPMENT_NOTES.md)
 
-The **2.2 ZIP is linked directly above**, and v2.2 is GitHub's Latest numbered
+The **2.3 ZIP is linked directly above**, and v2.3 is GitHub's Latest numbered
 release. Use the complete 2.x bundle, not an old single-EXE update package.
 The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
 The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the current rolling bundle, separately from stable v2.2. Legacy 1.x
+contains the current rolling bundle, separately from stable v2.3. Legacy 1.x
 assets and its `rolling` endpoint are preserved and may receive separate 1.x
 updates; the old updater does not recognize 2.x bundle filenames.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets
 and documentation; personal INI settings are never overwritten. Package names
-use `TMILitePlusBundle-2.2.G.T-Win64.zip` for this release, which the legacy updater does not
+use `TMILitePlusBundle-2.3.G.T-Win64.zip` for this release, which the legacy updater does not
 recognize. Upgrade from 1.x remains a manual full-ZIP installation.
 See the User Guide for coordinated local/remote updates. Official Codex documentation:
 [developers.openai.com/codex](https://developers.openai.com/codex/).

@@ -1,8 +1,8 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.2  
-Stable release: 19 October 2026  
-Tested Codex CLI: 0.163.0
+Version 2.3  
+Stable release: 28 October 2026  
+Tested Codex CLI: primarily 0.164.0; installed-version selection and focused checks also covered 0.165.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
 not provide an AI model, account or subscription. It is hobby-developed and
@@ -21,10 +21,11 @@ SHA-256 fingerprint; a changed EULA version or text asks for acceptance again.
 
 Codex CLI and its authentication are separate. If it is missing, the host opens
 CLI Setup before enabling Codex connections. Use the displayed install/update
-commands or run them manually, then authenticate using Codex CLI.
+commands or run them manually, then authenticate separately with `codex login`.
+TMI does not yet provide a native login screen.
 
 For **1.x to 2.x**, upgrade manually: finish work, close old frontend instances,
-exit any running host, back up settings/Codex data and extract the full 2.2 ZIP.
+exit any running host, back up settings/Codex data and extract the full 2.3 ZIP.
 The old single-executable updater is not a four-binary 2.x installer. Do not
 overwrite an executable while it is running.
 
@@ -82,7 +83,7 @@ remove unused roots, or assign the selected root to the current thread.
 A used root cannot be removed. Changing cwd does not invent a replacement
 project or change the thread's project ID.
 
-### Project notes — local development after 2.2
+### Project notes
 
 The **Notes** button to the right of the project name opens a right-hand panel.
 It starts at the thread sidebar's preset width. Drag its splitter to resize it;
@@ -213,6 +214,13 @@ Model/reasoning and confirmed settings come from native thread metadata.
 Manual changes send only their relevant settings, preserving unrelated
 permissions. Rejected changes restore confirmed values. An acknowledgement is
 not a promise that a model/reasoning change has affected an already-running step.
+If a saved thread model is unavailable, TMI uses a valid configured default.
+If that default is also unavailable, it selects the newest numeric model version
+advertised by the server, retaining catalog order for equal versions. This does
+not modify `config.toml`. A supported manual model/reasoning selection can also
+retry an interrupted model-resolution step and reopen the same existing thread.
+Buttons become available after the server has actually opened the thread; TMI
+does not bypass that connection requirement.
 
 Fast, Auto-review, Network access, Auto switch and Poll use compact toggle buttons.
 On uses the active color; Off uses the normal background with a thin diagonal
@@ -320,7 +328,7 @@ owning thread. Working/error indicators remain visible even with a frontend
 in the foreground; duplicate attention notifications are avoided for that
 frontend.
 
-### Response status — local development after 2.2
+### Response status
 
 The host tray icon combines independent indicators, so one condition does not
 hide another:
@@ -446,7 +454,30 @@ disables autoscroll. Its red down-arrow, near the lower-right corner, returns
 to the end and re-enables it. Down on the final line also resumes following.
 Opening/reloading a conversation starts with autoscroll enabled.
 
-### Temporary Sample responses (local development, Codex CLI 0.164+)
+**Memory**, next to Full Load, opens a nonmodal, read-only view of the native
+Codex memory summary selected by the loaded thread. This is shared, versioned
+memory, not the conversation transcript or the context-compaction summary.
+Relevant thread events refresh the open view without polling. Lock freezes
+automatic updates; Refresh still requests a manual read. Search supports Enter
+and previous/next buttons; right-click copies selected text immediately.
+If Codex returns no summary, memory use may be disabled or its selected summary
+file may be missing, unreadable or blank. Refresh does not generate memory,
+and TMI does not enable memory generation or use automatically.
+
+In **Configuration > Memories**, **Enable Memories** controls the native feature.
+The **Use memories** selector permits or prevents shared-memory use in new Codex
+sessions; **Generate memories** is a separate checkbox permitting automatic
+background generation from eligible conversations, not a "generate now" command.
+Disabling the feature disables these two inputs without erasing their selections
+or deleting the stored memories. Changes are saved with **Save** to Codex's user
+or selected-profile configuration, not TMI's INI. Existing sessions are unchanged.
+The current global values are read whenever Configuration opens. If another
+frontend or application changes the same config file before Save, TMI reports
+the conflict rather than overwriting it: close and reopen Configuration to retry.
+These native controls are unavailable while Codex is disconnected; local
+preferences and application-update commands remain available.
+
+### Temporary Sample responses (Codex CLI 0.164+)
 
 **Sample** asks a temporary question using the loaded conversation context.
 It requires an idle, persistent main thread with at least one finished,
@@ -470,7 +501,7 @@ task counters. Resizing the view preserves them. Cancel addresses only
 the Sample, never the main task. A changed source turn or connection invalidates
 the result; TMI does not automatically retry it or pause scheduled prompts.
 
-### Native Codex diagnostic ZIP (local development, Codex CLI 0.164+)
+### Native Codex diagnostic ZIP (Codex CLI 0.164+)
 
 Open **Configuration → Export Codex diagnostics…** while connected to Codex.
 Explicitly choose whether to include logs and/or the current conversation;
@@ -497,6 +528,17 @@ task/session/day. Opening it selects the latest edit automatically, including
 all edits with the same timestamp to the second. Select several diffs with
 Ctrl/Shift to view them together. File links support default open, Show in
 Explorer and Download; Download remembers its chosen location.
+
+IDE Bridge edits also populate Changed Files during live activity, with compact
+counts and an Activity `[diff]` marker. Unknown line counts remain `?`; totals
+sum operations rather than reconstructing a net diff. Save-only reports update
+saved/dirty information without counting edits twice or removing earlier diffs.
+Bridge patches are read only when their diff blocks are selected, from the
+immutable artifact captured by the operation, with size and SHA-256 validation.
+Missing, changed or unavailable patches show an explicit reason. No source
+files are reread to reconstruct an old patch, and patch text is not sent back
+to the agent. Bridge file metadata and diffs are not restored on history reload
+or retained by TMI across restarts.
 
 Context and account limits are native readings. Limits+ keeps additional
 buckets in the hint. Reset-credit count/earliest expiry appear only when supplied;
@@ -544,9 +586,9 @@ observed decreases are retained across cycles, one row per sample, newest first.
 Measured zero time remains a real observation. Older per-point data is retained
 as one-point samples when the saved format is upgraded.
 The next automatic-reset timestamp identifies a quota cycle approximately:
-differences below 60 seconds are treated as estimation/rounding unless the
-remaining quota increases to 99% or 100%, indicating a reset. An unchanged
-deadline or a stable/decreasing quota does not trigger that small-change reset.
+differences below 60 seconds are treated as estimation/rounding, even when the
+remaining quota rises to 99% or 100%. A percentage increase alone does not prove
+a reset; an unchanged deadline does not start a new cycle.
 A different deadline can start a cycle in either direction; a shorter
 new deadline is valid. Snapshots matching a known earlier cycle are ignored.
 Within a cycle the host keeps the lowest observed
@@ -561,7 +603,7 @@ Pending time at a reset stays separate from completed samples. Reset metadata
 and these residues are bounded to 201 retained cycles; completed samples keep
 their independent 200-value allowance even if many empty resets occur.
 The current cycle and earlier cycles are saved by the host in the shared Windows
-registry, separately from UI preferences. Existing Usage and Thread usage data
+registry, separately from UI preferences. Existing Usage and token counters
 remain unchanged. Click the Worktime text again to read a fresh graph snapshot.
 
 ## 8. Optional graphics
@@ -644,7 +686,7 @@ Codex path and common permission defaults. Frontends submit changes rather than
 rewriting stale values. Model/reasoning and native thread metadata remain
 Codex-owned, not duplicated common defaults.
 
-Local development after 2.2: **OpenAI browser tools (Codex startup)** is a shared
+**OpenAI browser tools (Codex startup)** is a shared
 host setting, disabled by default. Disabled prevents TMI-started Codex sessions
 from automatically launching the OpenAI browser/Node runtimes. Enabled follows
 your normal Codex configuration. The choice is stored as
@@ -656,15 +698,55 @@ Node processes. TMI Computer Use (`tmi_desktop`), HTML/Mermaid and LaTeX viewers
 are unaffected. OpenAI browser tools are unavailable in sessions started with
 the setting disabled.
 
+The **Browser Tools** toggle in the main window changes this choice temporarily
+for the current thread. It is available only when that thread is idle; TMI
+disconnects/reopens that work to apply the selection. The host owns the per-thread
+choice until its lifetime ends. Configuration remains the saved default for new
+sessions; toggling the button does not change it.
+
 The host owns Codex detection and startup/six-hour version checks, even without
 a frontend. Frontends use its shared cached status; Recheck requests a fresh
 check. **CLI Setup** asks the host to open on-demand `TMIMaintenance.exe`.
-With Codex CLI 0.164+, the host also validates the startup configuration once
-per host lifetime, before making Codex available. This background check has
-a 15-second deadline and is cancelled on host shutdown. A configuration error
-remains visible: correct it, then restart the host. Ordinary reconnects,
-additional frontends and periodic version checks do not repeat validation.
-Earlier supported CLI versions explicitly report this capability unavailable.
+Local availability is published as soon as the configured/current standalone
+executable is found. Historical release directories are not searched or launched.
+Version/help probes (3 seconds each, including output reads), GitHub checks
+(5-second connection / 8-second response timeouts), and the once-per-host
+startup-configuration inspection (15 seconds) are advisory background operations.
+Their failure does not keep the service offline: the actual app-server launch
+and initialization report any operational/configuration error on the connection.
+Ordinary reconnects and additional frontends do not repeat startup inspection.
+Earlier CLI versions explicitly report this inspection capability unavailable.
+In **CLI Setup**, **Codex version to use** lists installed standalone packages.
+Selecting an older version validates only that executable and saves it for TMI;
+it does not uninstall newer packages or change the system `codex` command.
+Maintenance already owns the disconnected-server state, so the selected version
+is used when the window closes. A successful install/update automatically selects
+the updated current installation, even if an older version was selected before.
+The Update button and CLI Setup update highlight compare the latest available
+release with the newest installed version, not the selected runtime version.
+Selecting an older installed CLI therefore does not advertise an update that is
+already installed. Version-check details distinguish the selected CLI, newest
+installed CLI, and latest available release.
+
+**Keep previous minor versions** defaults to 1; for example, `0.164.x` counts as
+one series, with its installed patches kept together. **Minimum release age
+(days)** defaults to 7. After a successful install/update, cleanup keeps the
+current minor, the requested previous minor series, any explicitly selected
+package, and any versions newer than installer/current. Other packages are
+deleted only when their age reaches the minimum; recent versions may therefore
+make the retained package count larger. A value of 0 disables the corresponding
+previous-series/age requirement, without removing the current or selected CLI.
+
+Codex does not record per-version installation dates in package metadata. Age
+uses GitHub release `published_at`, fetched in memory only during update cleanup;
+no installation-date ledger or extra timestamp file is written. Unavailable dates
+(including releases outside the returned recent-release page) keep those packages
+and produce a warning. Cleanup never touches conversations/configuration, does
+not terminate processes, and reports locked or unknown files as warnings.
+Retention preferences live in the local INI under `[CodexCLI]`:
+`KeepPreviousMinorVersions` and `MinimumReleaseAgeDays`. Saving them does not
+overwrite another frontend's UI/session preferences. The selected executable
+remains a shared Windows-registry setting, like the existing CLI path.
 While Maintenance is open, idle catalog/work processes are disconnected and
 frontend drafts remain intact. After closing it, the host restores only thread
 sessions currently attached to frontends, without replaying prompts. Detached
@@ -683,14 +765,14 @@ an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
 `rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle and is not replaced by stable 2.2.
-GitHub's Latest numbered release is v2.2; the direct
-[2.2 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.2)
+contains the independent rolling bundle and is not replaced by stable 2.3.
+GitHub's Latest numbered release is v2.3; the direct
+[2.3 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3)
 also provides the full bundle for initial installation. Earlier versioned ZIPs,
 legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
 single-EXE updater does not recognize 2.x bundle filenames.
 
-This release uses `TMILitePlusBundle-2.2.G.T-Win64.zip`; remote 2.x ZIPs stage the four
+This release uses `TMILitePlusBundle-2.3.G.T-Win64.zip`; remote 2.x ZIPs stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching

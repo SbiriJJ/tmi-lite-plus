@@ -1,11 +1,57 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.2  
-Stable release: 19 October 2026  
-Tested Codex CLI: 0.163.0  
+Document version 2.3  
+Stable release: 28 October 2026  
+Tested Codex CLI: primarily 0.164.0; installed-version selection and focused checks also covered 0.165.0  
 Local IPC protocol: 16
 
-## Version 2.2 architecture
+## Version 2.3 architecture
+
+CLI discovery publishes local path readiness before optional version/help,
+network and startup-configuration inspection. Probes and pipe reads are bounded;
+a descendant holding stdout open cannot defeat the probe deadline. Optional
+inspection failures remain advisory. Only an actual app-server launch or
+initialization failure blocks that native connection. Native startup inspection
+runs once per host; its structured `appServerVersion`/`configRequirements`
+reply is retained in CLI status with a 15-second cancelled-process deadline.
+
+Installed-version selection reads package metadata, validates only the chosen
+executable, and commits only its shared path. Successful installation selects
+installer/current automatically. Update availability compares the remote release
+with the newest installed version, not the runtime selection. Configurable
+previous-minor/age cleanup uses publication dates supplied in memory; unknown
+dates keep the affected package and produce a warning. No per-install ledger is
+created and no unrelated settings, processes or Codex data are deleted.
+
+Host-ready executable notifications update both the observed frontend value and
+that one shared baseline field, rather than fabricating an unsaved frontend edit.
+Real conflicts on other changed fields remain guarded. An obsolete thread and
+obsolete configured model resolve only against advertised models; numeric
+versions rank newest first and equal versions retain catalog order. A valid
+manual choice can resume the failed target, not create an unintended new thread.
+Configuration and `config.toml` defaults are not rewritten by this recovery.
+
+`feedback/save` runs on the catalog connection, with explicit log/thread consent
+and an unused absolute ZIP destination. Codex owns archive creation. A disconnect
+does not imply the archive was not written; no automatic resend is made.
+
+`thread/sample` runs on the selected work's connection. Its nonvisual request state
+first reads only the latest turn metadata (descending, limit 1, no items), then
+supplies `expectedTurnId`. Cancellation translates the UI request ID to the native
+ID on that same connection, including cancellation requested before acceptance.
+Results are consumed before normal turn handling; source change, Maintenance,
+disconnect or frontend closure cancels/invalidates them. Activity shows its phases
+and independent elapsed time; the main conversation renderer receives its local
+question/answer/usage blocks. These survive resize but not a history reload.
+Cache serialization and Full Load read server pages, never those display blocks.
+Normal token baselines and the existing global Working-time counter are unchanged.
+The prompt byte counter is display-only outside the Sample limit guard.
+
+Native startup output and Sample inference were checked with installed Codex
+0.164; selecting installed 0.164/0.165 executables and focused native contracts
+were also checked. This is not exhaustive certification of every 0.165 feature.
+Fresh-install authentication is still a separate `codex login` step; TMI does
+not yet provide a native login screen.
 
 The resident TMIHost owns independent Codex app-server processes for catalog
 and conversation work. Frontend detachment does not stop work; reattachment
@@ -14,11 +60,11 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.2 advances `stable-2` and is GitHub's Latest
+Rolling reads `rolling-2`. Stable 2.3 advances `stable-2` and is GitHub's Latest
 numbered release; the independently published 2.x Rolling package, legacy 1.x
 assets and legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.2.G.T-Win64.zip`. The old single-EXE package recognizer does
+`TMILitePlusBundle-2.3.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
@@ -55,9 +101,13 @@ links, including repeated sources that share a cached bitmap. Resize retains
 the same selection; live messages remain unrestricted. A shared source reader
 keeps counting, formatting and preview queue positions aligned.
 
-The sandboxed HTML viewer provides inline bitmaps, zoom and clipboard copying
-without rebuilding the conversation on close. Mermaid uses a pinned local
-runtime with network access disabled. WebView2 Runtime is separate; MicroTeX remains external.
+The sandboxed HTML viewer hosts interactive inline Visualize content with
+DOM-height notifications, rather than a static screenshot. Each occurrence
+retains separate state; offscreen views suspend and resume. Mermaid provides
+local zoom/pan/reset with a pinned runtime and network access disabled.
+Independent viewers retain Reload, zoom and clipboard copying without
+rebuilding the conversation on close. WebView2 Runtime is separate; MicroTeX
+remains external.
 Full Load, Usage, diffs, attachments, Questions and native queues remain available.
 
 Configuration groups preferences separately from update settings/commands and
@@ -72,6 +122,26 @@ Windows shutdown, Full Load, Usage and attachments. Pinned/Archived and shared
 list refresh have passed practical multi-frontend use. The one-off tray AV has
 not recurred, but its original occurrence was not reproduced. This is not an
 exhaustive certification of every Windows app or future CLI build.
+
+### Added local/state flows
+
+- Notes keep their own Markdown files by working directory. The project-wide
+  directory discovery loads metadata, not transcript history, and changes no
+  Codex project assignments. Save validates external file changes; no polling.
+- Auto switch is host-owned and temporary until host restart. It selects existing
+  frontends with explicit priorities and excludes minimized/error candidates.
+  Native taskbar attention and independent tray badges share normal work events.
+- Working-time statistics consume active-thread Limits notifications only;
+  idle account polling remains indicator-only. Deadline changes below 60 seconds
+  do not start a cycle even when remaining quota rises to 99/100%.
+- Memory reads are native shared-summary reads, not context dumps. Configuration
+  uses native version-guarded config writes and verifies effective values. No
+  TMI memory-generation loop, separate memory store or assumed hot reload exists.
+- Live IDE Bridge `fileChanges` reports feed the existing Changed Files model.
+  Artifacts are immutable/lazy-read and size/hash checked. Save-only reports
+  preserve content edits; no history import, source reread or agent readback.
+- Codex capacity/retry warnings are retained as response state, distinct from
+  local worker failures. TMI does not add a retry loop or force-stop the turn.
 
 ## Internal Thread Transfer — ZIP format 2
 
@@ -182,7 +252,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.2.
+The following historical notes do not describe missing features in current 2.3.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

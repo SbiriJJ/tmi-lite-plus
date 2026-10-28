@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.2  
-Last updated: 19 October 2026
+Version 2.3  
+Last updated: 28 October 2026
 
 ## Summary
 
@@ -28,6 +28,10 @@ Depending on use, TMI Lite+ stores:
   `TMILitePlus.startup.log`;
 - a bounded local rolling-history cache when that preference is enabled;
 - working-directory overrides;
+- one UTF-8 Markdown file per local note in each selected working directory's
+  `.tmi-notes` folder, including priority/completed metadata;
+- local CLI retention preferences in the INI; the selected CLI executable is a
+  shared registry setting, not a separate installation-date ledger;
 - permanent desktop read/control grants, keyed by executable path, in
   `HKCU\Software\TMILitePlus\DesktopAccess` and its `Control` subkey;
 - the explicit revocable global-read setting (`ReadAllWindows`) in DesktopAccess;
@@ -47,6 +51,11 @@ memory for the current session. Unsent drafts are not written to the INI file.
 When the User sends a reply, it is forwarded to Codex CLI as conversation input.
 Questions included in conversation history may also be present in TMI Lite+'s
 local rolling-history cache and in Codex CLI's own persisted history.
+
+Local notes may be edited from another frontend or external editor. TMI checks
+for an external change before replacing a note. Notes are not automatically
+sent to the agent; **<Prompt** appends their text to the prompt, and normal
+prompt submission then sends it to Codex.
 
 ## Resident backend and local desktop tools
 
@@ -90,6 +99,22 @@ Codex CLI controls authentication, conversation persistence, OpenAI requests,
 model use, tools, commands, MCP servers, and its own logs or local storage.
 TMI Lite+ displays and forwards protocol data but does not replace Codex CLI’s
 terms or privacy behavior.
+
+The optional Memory viewer reads Codex's existing shared memory summary.
+Memories and their source artifacts remain Codex-managed data, separate from
+TMI's conversation cache. The native Memories controls change Codex's user or
+selected-profile configuration only after the User saves them; they do not
+expose the full active model context or generate a summary on Refresh.
+
+A requested Codex diagnostic ZIP can contain configuration, logs or conversation
+data according to the explicit choices shown before export. It is written to a
+new local destination. TMI does not upload the ZIP automatically.
+
+Compatible IDE Bridge operations can supply live file-change metadata and
+immutable diff-artifact references. TMI reads a selected artifact on request,
+validates its declared size/hash, and displays it locally. TMI does not restore
+these Bridge diffs on history reload, create a new permanent Bridge archive, or
+send the patch back to the agent merely to display it.
 
 Commands, MCP servers, network tools, browser tools, package managers, and
 other processes started through Codex CLI may independently read, transmit, or

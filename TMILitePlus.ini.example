@@ -1,4 +1,4 @@
-; TMI Lite+ 2.2 public preference defaults.
+; TMI Lite+ 2.3 public preference defaults.
 ; Codex installation and shared permissions are managed by TMIHost.
 ; Local session details and EULA acceptance are written after use.
 
@@ -25,3 +25,7 @@ Error=$002A233E
 Channel=release
 ReleaseFrequency=daily
 RollingFrequency=startup
+
+[CodexCLI]
+KeepPreviousMinorVersions=1
+MinimumReleaseAgeDays=7
