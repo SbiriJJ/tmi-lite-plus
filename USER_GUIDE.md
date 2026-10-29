@@ -1,8 +1,9 @@
 # TMI Lite+ for AI agents — User Guide
 
 Version 2.3  
-Stable release: 28 October 2026  
-Tested Codex CLI: primarily 0.164.0; installed-version selection and focused checks also covered 0.165.0
+Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
+Stable 2.3: 2.3.9797.42811 — 28 October 2026  
+Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
 not provide an AI model, account or subscription. It is hobby-developed and
@@ -189,6 +190,8 @@ prompt has a compact preview. The native queue has no pause control; local
 Schedules, described below, are separate.
 
 Attachments may be selected with Files or dropped on the prompt.
+If opening a work fails after **New**, the first prompt stays in the editor for
+an explicit retry; TMI does not silently discard or resend it.
 
 **Goal** submits the text currently in the prompt editor as a new active Goal;
 it does not change Append, Steer or Ctrl+Enter into a Goal command. Those actions
@@ -247,6 +250,7 @@ panel in the left-hand thread-list area, or opens **New schedule** directly
 when no schedules exist. The panel lists upcoming activations separately for
 repeating schedules. **Enable/Disable** and **Delete** on a row affect the
 entire schedule, not only that occurrence; deleting asks for confirmation.
+Disabling a schedule also prevents its already queued jobs from being dispatched.
 Disabling prevents future activations; it does not withdraw a prompt already
 claimed for delivery or accepted by Codex.
 
@@ -346,8 +350,9 @@ changes. They do not add icons or animations. Different works can keep the
 Working, response-warning and pending-request indicators visible together; a
 local error does not suppress the other indicators either.
 
-Taskbar prefixes distinguish **[Model busy]**, **[Retrying]**, **[Server blocked]**
-and **[Codex blocked]** from **[E]** for a local work failure. An unclassified
+Taskbar prefixes distinguish **[Model busy]**, **[Capacity unavailable]**,
+**[Retrying]**, **[Server blocked]** and **[Codex blocked]** from **[E]** for a local
+work failure. An unclassified
 Codex response error is not automatically described as a remote-server outage.
 Activity and work hints retain the full reported reason, including available
 Codex error details; the short caption is only a summary.
@@ -356,6 +361,10 @@ Response warnings survive reattaching a frontend through the host's resident
 snapshot. They clear when Codex reports a new turn or actual response progress,
 not after a guessed delay. TMI does not add a retry loop, disconnect the work or
 change Working-time accounting merely because Codex reports such a warning.
+While a thread is **Closing**, TMI does not reopen it or retry its resume request
+automatically. A dead Codex process or failed output reader is reported as a
+local failure; reconnect explicitly after addressing it. Pending requests from
+that process are invalidated, and prompts are not replayed.
 
 Use **Exit TMI host** to stop the backend and its Codex processes. Idle exit
 does not require confirmation; active work may require it. Shutdown has a
@@ -442,6 +451,11 @@ The rolling conversation limit and resume-turn count are configurable. A valid
 optional cache does not replace server readiness. The full-history **Full Load**
 window is retained, including search, speaker/timestamp data and partial output
 when its loading is stopped.
+With Codex CLI 0.166, Activity and Full Load use the optional item start/completion
+timestamps supplied by the server. Native tool durations take precedence over
+elapsed-time calculations. Live Activity can retain observed event times when
+server timestamps are absent; missing historical timing remains unknown. TMI
+does not invent historical timestamps or per-tool token costs.
 
 With **Use conversation history cache** disabled, persisted history is requested
 from Codex, without reading or writing the frontend history cache. The Host's
@@ -463,6 +477,9 @@ and previous/next buttons; right-click copies selected text immediately.
 If Codex returns no summary, memory use may be disabled or its selected summary
 file may be missing, unreadable or blank. Refresh does not generate memory,
 and TMI does not enable memory generation or use automatically.
+The CLI version displayed beside **Memory** belongs to the executable actually
+running the selected work, not the latest installed or available release. An
+unknown version is not replaced with a guessed value.
 
 In **Configuration > Memories**, **Enable Memories** controls the native feature.
 The **Use memories** selector permits or prevents shared-memory use in new Codex
@@ -528,6 +545,9 @@ task/session/day. Opening it selects the latest edit automatically, including
 all edits with the same timestamp to the second. Select several diffs with
 Ctrl/Shift to view them together. File links support default open, Show in
 Explorer and Download; Download remembers its chosen location.
+While a download runs, its context-menu command becomes **Cancel download**.
+Closing the frontend cancels the transfer within its bounded shutdown; failed
+or cancelled transfers preserve an existing destination and remove temporary files.
 
 IDE Bridge edits also populate Changed Files during live activity, with compact
 counts and an Activity `[diff]` marker. Unknown line counts remain `?`; totals
@@ -704,12 +724,17 @@ disconnects/reopens that work to apply the selection. The host owns the per-thre
 choice until its lifetime ends. Configuration remains the saved default for new
 sessions; toggling the button does not change it.
 
+For supported Codex startup, TMI disables the automatic marketplace recommendation
+prefetch. This is separate from **Browser Tools**: it does not disable installed
+browser/plugin tools or change the saved Browser Tools choice.
+
 The host owns Codex detection and startup/six-hour version checks, even without
 a frontend. Frontends use its shared cached status; Recheck requests a fresh
 check. **CLI Setup** asks the host to open on-demand `TMIMaintenance.exe`.
-Local availability is published as soon as the configured/current standalone
-executable is found. Historical release directories are not searched or launched.
-Version/help probes (3 seconds each, including output reads), GitHub checks
+The host resolves the configured/current standalone executable and performs a
+bounded local version probe before publishing local availability. An unknown
+version does not block app-server startup. Historical release directories are
+not searched or launched. Version/help probes (3 seconds each, including output reads), GitHub checks
 (5-second connection / 8-second response timeouts), and the once-per-host
 startup-configuration inspection (15 seconds) are advisory background operations.
 Their failure does not keep the service offline: the actual app-server launch
@@ -727,6 +752,17 @@ release with the newest installed version, not the selected runtime version.
 Selecting an older installed CLI therefore does not advertise an update that is
 already installed. Version-check details distinguish the selected CLI, newest
 installed CLI, and latest available release.
+Install and Update both use the official installer with the exact version shown
+from the official release channel, rather than resolving a changing `latest`
+target during installation. The installed executable must match that captured
+version before TMI changes the selection or removes older packages.
+
+**Network diagnostics** is available for the selected Codex CLI 0.166.0 or later.
+It runs only when clicked, using `doctor --network-only --no-color --ascii` and
+streaming its output into CLI Setup's existing output area. It checks network
+connectivity, not databases or MCP servers, and stops after a 60-second timeout.
+Other CLI operations are disabled while it runs. It does not install anything,
+change the selected CLI, save retention preferences or start an AI turn.
 
 **Keep previous minor versions** defaults to 1; for example, `0.164.x` counts as
 one series, with its installed patches kept together. **Minimum release age

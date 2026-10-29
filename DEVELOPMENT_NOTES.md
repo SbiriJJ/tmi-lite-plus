@@ -1,14 +1,18 @@
 # TMI Lite+ for AI agents — Development Notes
 
 Document version 2.3  
-Stable release: 28 October 2026  
-Tested Codex CLI: primarily 0.164.0; installed-version selection and focused checks also covered 0.165.0  
+Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
+Stable 2.3: 2.3.9797.42811 — 28 October 2026  
+Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0  
 Local IPC protocol: 16
 
 ## Version 2.3 architecture
 
-CLI discovery publishes local path readiness before optional version/help,
-network and startup-configuration inspection. Probes and pipe reads are bounded;
+The host captures the selected executable/version pair before publishing local
+readiness; an obsolete frontend path hint cannot select another CLI after
+Maintenance. Local version discovery is bounded to three seconds and an unknown
+version does not prevent app-server admission. Help, network and
+startup-configuration inspection remain advisory. Probes and pipe reads are bounded;
 a descendant holding stdout open cannot defeat the probe deadline. Optional
 inspection failures remain advisory. Only an actual app-server launch or
 initialization failure blocks that native connection. Native startup inspection
@@ -22,6 +26,17 @@ with the newest installed version, not the runtime selection. Configurable
 previous-minor/age cleanup uses publication dates supplied in memory; unknown
 dates keep the affected package and produce a warning. No per-install ledger is
 created and no unrelated settings, processes or Codex data are deleted.
+Install and Update resolve availability through the official release channel,
+capture the displayed version, and call the official installer with `-Release`
+set to that exact version. The resulting executable must match the captured
+target before selection persistence or retention cleanup.
+
+CLI Setup's designer-owned Network diagnostics action requires the selected
+CLI version to be at least 0.166.0 and an idle Maintenance reservation. Its
+existing worker launches only `doctor --network-only --no-color --ascii`,
+streams stdout/stderr into the existing output memo, and enforces a 60-second
+deadline. The diagnostics branch exits before update lookup, installed-package
+enumeration, selection persistence or retention. It never runs automatically.
 
 Host-ready executable notifications update both the observed frontend value and
 that one shared baseline field, rather than fabricating an unsaved frontend edit.
@@ -49,7 +64,10 @@ The prompt byte counter is display-only outside the Sample limit guard.
 
 Native startup output and Sample inference were checked with installed Codex
 0.164; selecting installed 0.164/0.165 executables and focused native contracts
-were also checked. This is not exhaustive certification of every 0.165 feature.
+were also checked. The 29 October rolling adds targeted Codex 0.166 integration
+checks and filtered Win64 Release builds. The diagnostics button, guards and
+command were tested offline; the network doctor was not run against the real
+account. This is not exhaustive certification of every Codex feature.
 Fresh-install authentication is still a separate `codex login` step; TMI does
 not yet provide a native login screen.
 
@@ -60,9 +78,9 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.3 advances `stable-2` and is GitHub's Latest
-numbered release; the independently published 2.x Rolling package, legacy 1.x
-assets and legacy `rolling` endpoint stay unchanged. The direct versioned
+Rolling reads `rolling-2`. Stable 2.3 uses `stable-2` and remains GitHub's Latest
+numbered release. This build advances only the independent 2.x Rolling package;
+Stable 2.3, legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
 `TMILitePlusBundle-2.3.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
@@ -76,6 +94,8 @@ delivery waits for readiness and loading to settle, then 20 seconds of quiet;
 intentional waiting does not mark due occurrences missed. Lists stay readable.
 The current protocol validates sequenced `host/schedules` events; an unexpected
 stream-sender failure closes its pipe so a subscriber cannot wait indefinitely.
+Disabling a schedule also prevents dispatch of its queued jobs while retaining
+coherent completion and log state.
 
 TMIMaintenance is loaded only on demand and can run independently. The host
 suspends idle Codex connections while maintenance is open and afterwards restores
@@ -137,11 +157,27 @@ exhaustive certification of every Windows app or future CLI build.
 - Memory reads are native shared-summary reads, not context dumps. Configuration
   uses native version-guarded config writes and verifies effective values. No
   TMI memory-generation loop, separate memory store or assumed hot reload exists.
+  The adjacent CLI label uses the executable/version pair of the selected active
+  work, not the newest installed or remotely available release.
 - Live IDE Bridge `fileChanges` reports feed the existing Changed Files model.
   Artifacts are immutable/lazy-read and size/hash checked. Save-only reports
   preserve content edits; no history import, source reread or agent readback.
 - Codex capacity/retry warnings are retained as response state, distinct from
   local worker failures. TMI does not add a retry loop or force-stop the turn.
+  `policyCapacityUnavailable` maps to **Capacity unavailable**; an explicit native
+  retry indication still takes precedence. Closing-thread resume rejection is
+  handled without a client retry loop or message-string matching.
+- Startup marketplace recommendation prefetch is disabled using the supported
+  CLI launch setting. This is independent of Browser Tools and does not remove
+  installed browser/plugin functionality or rewrite the saved browser policy.
+- Process/output-reader failure invalidates the dead session's turn and pending
+  requests, preserving diagnostics and permitting explicit reconnect without
+  prompt replay. A failed New-work opening retains its first frontend draft.
+- Downloads have explicit cancellation and callback ownership. The context-menu
+  action becomes **Cancel download** while busy; frontend closure cancels/joins
+  under its existing five-second deadline. Failed/cancelled downloads preserve
+  the destination and clean up temporary files. Tests used local/loopback input,
+  not external network access.
 
 ## Internal Thread Transfer — ZIP format 2
 
@@ -332,13 +368,17 @@ CatalogStartupCheck covers these cases; ThreadUiCheck and Release/Win64 build pa
 ## Item timing and runtime tools
 
 - Activity correlates tool start/completion by thread, turn and item identity.
-  Prefer server tool duration when present; otherwise label elapsed time between
-  server events. Missing start/completion timestamps do not produce a duration.
+  Optional CLI 0.166 `startedAtMs`/`completedAtMs` values supply item lifecycle
+  timestamps in live Activity and loaded history. Prefer native `durationMs`
+  when present; otherwise use complete start/end timing. Live Activity retains
+  observed event times when native timestamps are absent; missing historical
+  fields do not produce invented times or durations.
   Hints show local start/end times. No new timer or estimated per-tool token cost.
 - Full Load keeps thread/turns/list with summary items, existing turn timestamps
-  and cache format. The tested thread/items/list replacement repeatedly timed out
+  and optional per-item timing. The tested thread/items/list replacement repeatedly timed out
   on an older page; it has been removed, not retained as an automatic fallback.
-  Historical per-item timing is deferred. Normal bounded resume is unchanged.
+  The optional timing fields do not require that replacement or broader history
+  reads. Normal bounded resume is unchanged.
 - MCP opens a modeless runtime inventory: MCP servers, installed connectors and
   background terminals. Details are loaded on demand, pagination is followed,
   discovery errors stay visible, and cached tools are not described as connected.

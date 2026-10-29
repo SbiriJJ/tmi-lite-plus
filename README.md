@@ -16,19 +16,44 @@ to calculate subscription billing costs.
 Version **2.3** is a **stable release** (28 October 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
 Stable Windows executable version: **2.3.9797.42811** (Release/Win64).
-Current Rolling Windows executable version: **2.2.9796.17082**
-(Release/Win64, 27 October 2026).
+Current Rolling Windows executable version: **2.3.9798.40375**
+(Release/Win64, 29 October 2026).
 Stable 2.3 was primarily tested with Codex CLI **0.164.0**; installed-version
 selection and focused compatibility checks also covered **0.165.0**. This is
 not a guarantee for every capability or later CLI build.
+The current Rolling build adds focused Codex CLI **0.166.0** integration and
+regression checks; older installed CLI selections remain supported.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.3-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3)
-[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.2.9796.17082-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.3.9798.40375-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-tested%200.164%20%2F%200.165-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.164%20%2F%200.165%20%2F%200.166-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
+
+## What's new in Rolling 2.3.9798.40375
+
+- **Codex 0.166 integration:** Activity, historical entries and diffs use native
+  item timestamps when available. Native tool duration remains authoritative;
+  earlier CLI versions retain their existing timestamp behavior.
+- **Active CLI version:** the label beside Memory shows the version running
+  the selected work, not the latest installed version. The host owns executable
+  selection after Maintenance, including reconnects from older frontends.
+- **Safer CLI updates:** availability follows the official installer channel;
+  install/update pins the displayed release and verifies the resulting binary.
+  A mismatch does not replace the configured selection or prune older versions.
+- **On-demand network diagnostics:** CLI Setup streams a focused network report
+  with a bounded timeout, without automatic scans or configuration changes.
+- **Lightweight startup:** compatible CLI launches skip marketplace recommendation
+  prefetch, retaining installed plugins and the existing Browser Tools toggle.
+  Capacity-unavailable responses get a distinct status; Codex still owns retries.
+- **Recovery and UI fixes:** dead process state is invalidated coherently, New
+  retains its first prompt if opening fails, disabled schedules cannot dispatch
+  queued jobs, downloads can be cancelled, and CLI Setup inputs stay dark.
+
+This Rolling includes stable 2.3 below. It updates only `rolling-2`; stable 2.3,
+`stable-2` and legacy 1.x releases remain unchanged.
 
 ## What's new in stable 2.3
 
@@ -105,10 +130,10 @@ Version 2.2 also retains these stable 2.1 improvements:
 - **Agent snapshots while working:** inspect an agent's conversation through
   its parent's process without resuming it or changing the parent writer.
 
-The independent Rolling channel contains `TMILitePlusBundle-2.2.9796.17082-Win64.zip` in the
+The independent Rolling channel contains `TMILitePlusBundle-2.3.9798.40375-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
-Publishing stable 2.3 advances `stable-2` and GitHub's Latest numbered release.
-It does not replace the independent Rolling package, frozen earlier ZIPs or
+Stable 2.3 remains on `stable-2` and GitHub's Latest numbered release.
+Publishing Rolling does not replace that stable package, frozen earlier ZIPs or
 legacy 1.x assets/endpoints.
 
 ## Core 2.x features
