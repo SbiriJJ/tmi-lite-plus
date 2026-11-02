@@ -1,7 +1,7 @@
 # TMI Lite+ Legal and Copyright Notice
 
-Document version 2.3  
-Last updated: 28 October 2026
+Document version 2.4  
+Last updated: 2 November 2026
 
 ## Copyright
 
@@ -13,7 +13,8 @@ third-party material identified separately.
 
 ## Independent project
 
-TMI Lite+ is an independent, unofficial interface for Codex CLI, with its own resident backend and optional local tmi_desktop tools.
+TMI Lite+ is an independent, unofficial interface for Codex CLI, with its own resident backend,
+optional local tmi_desktop tools and separately deployed TMI Remote tools for trusted LANs.
 It is not
 affiliated with, endorsed by, sponsored by, certified by, or supported by
 OpenAI.

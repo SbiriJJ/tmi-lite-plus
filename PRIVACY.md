@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.3  
-Last updated: 28 October 2026
+Version 2.4  
+Last updated: 2 November 2026
 
 ## Summary
 
@@ -65,7 +65,8 @@ Maintenance can also run alone; it introduces no separate account, telemetry
 or remote service.
 
 The local TMIHost backend uses secured named pipes for the current Windows
-user/session. It has no public network listener. It keeps live work metadata,
+user/session. Ordinary local use does not start a Remote TCP listener; the
+optional Remote tools start the configured listener on demand. It keeps live work metadata,
 pending native Codex requests and a bounded event replay in memory. These
 remain available while the host runs, even after a frontend closes. Unsent
 request reply drafts are not written to local preferences.
@@ -92,6 +93,35 @@ delete previous tool responses or undo actions. Physical ESC interrupts
 Computer Use while active. Exit TMI host from the tray to end owned resident
 work; applications that were opened or controlled are not terminated merely
 because the host exits.
+
+## Optional TMI Remote
+
+TMI Remote connects a second computer to a configured TMI Host by IPv4 and TCP
+(default Host port 47931). The remote console displays the Host address and
+requests operator consent for RO or RW. `Permission=RO` permits a separately
+approved later RW upgrade; `Permission=RW` asks for both scopes initially.
+The INI contains the Host address, port, initial consent scope and retry delay,
+not an AI account or password.
+
+**The current transport is not encrypted. IP-based authorization is not
+cryptographic authentication.** Window metadata, text, PNG screenshots, action
+arguments and responses travel over that LAN connection in plaintext. Use only
+an operator-controlled trusted LAN; never expose the port to the Internet or
+use it on an untrusted network. Remote observations returned to the agent may
+also reach the configured AI provider and remain in Codex history.
+
+The Remote console retains approval in memory until it restarts or the operator
+revokes it with ESC. Normal task release ends access/borders but retains that
+grant. A fixed azure/red indicator stays on during an active task connection,
+including communication outages. ESC from any window then revokes access;
+after release, ESC is intercepted only in the focused Remote console.
+
+Stable request identities, outstanding results and revocation state are retained
+in runtime memory to recover a lost reply without repeating uncertain input.
+A network timeout does not silently expire the session. Remote does not create
+a separate screenshot/history archive or install a background service. Revoking
+or deleting Remote does not erase data already returned to the agent/provider.
+The operator configures firewall access; TMI does not change firewall rules.
 
 ## Data handled by Codex CLI and other tools
 
@@ -128,6 +158,8 @@ TMI Lite+ may initiate network activity when:
 - the Codex CLI maintenance feature checks package/version information or
   performs an installation/update selected by the User;
 - the User chooses Download for an HTTP or HTTPS transcript link;
+- the optional Remote console connects/reconnects to its configured Host, or
+  Host handles an explicitly requested Remote connection and tool call;
 - a Visualize fragment is rendered for an inline preview or opened by the User,
   and its static scripts, styles, images or fonts use allowed external CDNs;
 - scheduled or manual Release/Rolling checks contact the public GitHub
@@ -185,6 +217,12 @@ Delete schedules in their editor, or remove
 `%LOCALAPPDATA%\TMILitePlus\schedules.json` after exiting the host to remove
 all locally saved schedules and their logs. Removing Worktime registry data
 does not change native Codex/account statistics.
+
+To stop Remote and clear its in-memory approvals, exit its console. While a task
+connection is active, ESC from any window ends/revokes it; while idle, focus the
+console and press ESC to clear remembered approval. Remove the matching EXE/INI
+to remove its deployment settings. This does not undo completed remote actions
+or delete Codex/provider history.
 
 ## Changes
 

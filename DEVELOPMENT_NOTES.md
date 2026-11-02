@@ -1,12 +1,68 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.3  
+Document version 2.4  
 Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
-Stable 2.3: 2.3.9797.42811 — 28 October 2026  
+Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0  
 Local IPC protocol: 16
 
-## Version 2.3 architecture
+## Version 2.4 architecture
+
+TMI Remote adds target-scoped desktop tools without moving network ownership
+into a frontend. Host owns `remote_connect`/`remote_call`/`remote_status`/
+`remote_release`, a lazy TCP listener and work/task release. Each Remote
+initiates its connection to its configured Host IPv4/port (default 47931).
+The currently approved deployment is operator-controlled trusted LAN plaintext,
+not TLS or cryptographic IP authentication. No Internet relay is provided.
+
+The deployment is a separately downloaded Remote ZIP: modern Release Win64
+`TMIRemote64` and a separate Delphi 7 Win32 `TMIRemote86`, each with a matching
+INI. Remote has no Codex/account dependency, tray or service installation. The
+legacy provider uses native messages/GDI; it does not inherit modern mandatory
+UIA/WinRT imports. Remote is not part of the automatic frontend update payload.
+
+Shared wire state separates configured initial consent, remembered grant,
+confirmed task permission and a pending upgrade. Default RO can request an RW
+upgrade with separate console consent; denial preserves confirmed RO. Default
+RW requests both modes at first consent. Normal release clears only the active
+task; ESC/restart clears the grant. The visible lease retains its global ESC
+registration across network loss, before any provider/consent wait can proceed.
+Idle ESC is local to the focused Remote console, not a permanent global hotkey.
+
+The common console owns stdin in its main event loop. A correlated choice event
+wakes the approval worker; stale/held Y cannot approve another question. Layered
+border initialization and first show/repaint are checked before admitting access.
+RO uses azure RGB(35,145,235); RW/pending RW uses red RGB(220,45,45). Fixed
+indicators do not activate windows. A failed indicator cannot admit invisible
+remote access.
+
+Framed UTF-8 requests have stable IDs and retained execution/result state until
+acknowledgment. Lost communication reports an explicit deadline without expiring
+approval or replaying an uncertain write. Status recovers late replies; offline
+revocations survive until acknowledged. Provider work remains independently
+cancellable. Native shutdown release is bounded; an unreachable/crashed Host
+can intentionally leave the visible lease active until physical ESC.
+
+Isolated modern/legacy provider, wire, Host and private-console tests and the
+legacy PE/import audit passed. XP VM operator checks confirmed RO/RW consent,
+denial preserving RO, grant reuse, native Unicode writing/readback, full-window
+PNG, initial azure border and active/idle ESC behavior. Physical-LAN pending-
+result recovery, multiple Remote monitors, actual Remote64 deployment and
+Windows 2000 execution remain unverified. Do not equate a compatible import
+table with a tested operating system.
+
+The native Host account flow observes `account/read`, starts Codex ChatGPT
+browser login once when required and correlates completion/cancellation. OAuth
+URLs and credentials are not published in Host snapshots/logs. Submission gates
+retain drafts; login does not automatically resend uncertain submissions.
+New's optional directory/title/project draft is frozen with the selected first-
+prompt model/reasoning. A shared `DefaultSandboxMode = 'readOnly'` initializes
+both settings constructors before persisted explicit values are applied; no
+saved Workspace-write setting is silently migrated. Confirmed sandbox mismatch
+still prevents submission. Compaction state prevents unsupported Steer calls
+without changing normal append/queue handling.
+
+### Codex integration retained from 2.3 Rolling
 
 The host captures the selected executable/version pair before publishing local
 readiness; an obsolete frontend path hint cannot select another CLI after
@@ -68,8 +124,8 @@ were also checked. The 29 October rolling adds targeted Codex 0.166 integration
 checks and filtered Win64 Release builds. The diagnostics button, guards and
 command were tested offline; the network doctor was not run against the real
 account. This is not exhaustive certification of every Codex feature.
-Fresh-install authentication is still a separate `codex login` step; TMI does
-not yet provide a native login screen.
+Fresh-install ChatGPT authentication now uses the Host-coordinated native Codex
+browser login described above. Other supported authentication remains Codex-owned.
 
 The resident TMIHost owns independent Codex app-server processes for catalog
 and conversation work. Frontend detachment does not stop work; reattachment
@@ -78,11 +134,11 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.3 uses `stable-2` and remains GitHub's Latest
-numbered release. This build advances only the independent 2.x Rolling package;
-Stable 2.3, legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
+Rolling reads `rolling-2`. Stable 2.4 advances `stable-2` and is GitHub's Latest
+numbered release. The independent 2.x Rolling package remains 2.3.9798.40375;
+legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.3.G.T-Win64.zip`. The old single-EXE package recognizer does
+`TMILitePlusBundle-2.4.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
@@ -288,7 +344,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.3.
+The following historical notes do not describe missing features in current 2.4.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

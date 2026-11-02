@@ -1,7 +1,7 @@
 # TMI Lite+ Third-Party Notices
 
-Document version 2.3  
-Last updated: 28 October 2026
+Document version 2.4  
+Last updated: 2 November 2026
 
 TMI Lite+ interoperates with or is built using third-party products. Those
 products remain governed by their own licenses and terms.
@@ -30,8 +30,10 @@ rights beyond those licenses.
 
 ## Microsoft Windows
 
-TMI Lite+ uses Windows APIs and is distributed only as a 64-bit Windows
-application. Windows and related marks belong to Microsoft Corporation.
+TMI Lite+ uses Windows APIs. The main application/Host bundle is Windows x64;
+the optional, separately deployed TMI Remote package includes modern Win64 and
+legacy Win32 console implementations. Windows and related marks belong to
+Microsoft Corporation.
 
 ## Visualize viewer dependencies
 

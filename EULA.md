@@ -1,7 +1,7 @@
 # TMI Lite+ End User License Agreement
 
-Version 2.3  
-Effective date: 28 October 2026
+Version 2.4  
+Effective date: 2 November 2026
 Copyright © 2026 Giacomo Boffa Sandalina. All rights reserved.
 
 ## 1. Acceptance
@@ -80,12 +80,21 @@ for software versions, and applying a staged TMI Lite+ update.
 The User is responsible for selecting correct source and target paths and for
 reviewing the result of those client functions.
 
-Version 2.3 includes a resident background host and isolated desktop workers.
+Version 2.4 includes a resident background host and isolated desktop workers.
 Closing a frontend window or changing the selected conversation does not stop
 resident Codex work. The User must inspect Sessions and explicitly close work
 or exit the host when desired. Interrupt Computer Use with physical ESC while
 it is active; inspect and revoke permanent app
 grants in Computer Use. These controls do not undo already completed actions.
+
+Optional TMI Remote operates another computer over an operator-controlled
+trusted LAN, with consent on that computer. Its current transport is not
+encrypted; IP checks are not cryptographic authentication. The User is
+responsible for network exposure, authorization and the information/actions
+sent through those tools. Do not expose it to the Internet or use it on an
+untrusted network. During an active Remote connection, physical ESC on the
+target revokes access; normal task release retains consent only in memory
+until Remote restart or explicit revocation.
 
 ## 6. Updates and compatibility
 

@@ -1,6 +1,6 @@
 # TMI Lite+ for AI agents
 
-**Lightweight interface for AI agents**
+**Lightweight interface for AI agents, with local and remote computer control**
 
 TMI Lite+ is an independent Windows x64 interface for Codex CLI, designed to
 keep AI-assisted development practical on computers with limited performance.
@@ -8,23 +8,27 @@ It provides projects and conversations, working directories, model/reasoning
 controls, approvals, activity, files, diffs and token/usage information without
 heavy conversation rendering.
 
+With **TMI Remote**, an agent can also read and operate a second Windows computer
+over a trusted LAN, using a small console EXE and INI on that computer. Explicit
+operator consent, RO/RW access, visible borders and global ESC interruption keep
+remote access under the remote operator's control. No ChatGPT desktop app or
+Codex installation is required on the remote computer.
+
 Monitor consumption over time and inspect each task's input, cached input,
 cache writes, output, reasoning tokens and elapsed time. On-demand Usage charts
 and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
-Version **2.3** is a **stable release** (28 October 2026), with an independent
+Version **2.4** is a **stable release** (2 November 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
-Stable Windows executable version: **2.3.9797.42811** (Release/Win64).
+Stable Windows executable version: **2.4.9802.24179** (Release/Win64).
 Current Rolling Windows executable version: **2.3.9798.40375**
 (Release/Win64, 29 October 2026).
-Stable 2.3 was primarily tested with Codex CLI **0.164.0**; installed-version
-selection and focused compatibility checks also covered **0.165.0**. This is
-not a guarantee for every capability or later CLI build.
-The current Rolling build adds focused Codex CLI **0.166.0** integration and
-regression checks; older installed CLI selections remain supported.
+Codex CLI **0.166.0** integration and regression checks are included, with
+earlier installed-version and focused checks covering **0.164.0 / 0.165.0**.
+This is not a guarantee for every capability or later CLI build.
 
-[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.3-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.4-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
 [![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.3.9798.40375-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.164%20%2F%200.165%20%2F%200.166-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
@@ -32,7 +36,34 @@ regression checks; older installed CLI selections remain supported.
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in Rolling 2.3.9798.40375
+## What's new in stable 2.4
+
+- **Remote computer control:** connect by IPv4 to a Windows computer running
+  `TMIRemote64` or the separate legacy `TMIRemote86`. The matching EXE and INI
+  are sufficient; there is no Remote service, tray app or AI account to install.
+- **Operator-controlled access:** approve RO access, explicitly approve an RW
+  upgrade when needed, or authorize both modes at the first request. A fixed
+  azure/red border shows the active scope on the remote screen. ESC interrupts
+  from any window while connected, revokes the grant and requires fresh consent.
+- **Robust task connections:** normal release retains the in-memory grant;
+  Remote retries a lost link without a silent session expiry. Stable request
+  identities prevent replaying an uncertain action; inspect status after a timeout.
+- **Cleaner first use:** the host requests native Codex browser login when
+  required. New offers optional directory, title and existing/new project;
+  unspecified fields use normal Codex behavior. New settings preserve the chosen
+  model/reasoning, and an unset sandbox starts Read-only rather than Workspace-write.
+- **Focused reliability fixes:** conservative permission validation retains
+  drafts on failure, unsupported Steer during compaction is prevented, and the
+  Remote console paints its first border before admitting access. Fresh Y/N
+  input is required for each authorization.
+
+**Remote is for operator-controlled trusted LANs only. Its TCP traffic is not
+encrypted and IP authorization is not cryptographic authentication. Do not expose
+it to the Internet.** XP VM consent, Unicode writes, full-window PNG and ESC tests
+passed; physical-LAN outage tests, real Remote64 deployment and Windows 2000
+execution remain unverified. See [Remote computer control](#remote-computer-control).
+
+Version 2.4 also includes these improvements from Rolling 2.3.9798.40375:
 
 - **Codex 0.166 integration:** Activity, historical entries and diffs use native
   item timestamps when available. Native tool duration remains authoritative;
@@ -52,8 +83,9 @@ regression checks; older installed CLI selections remain supported.
   retains its first prompt if opening fails, disabled schedules cannot dispatch
   queued jobs, downloads can be cancelled, and CLI Setup inputs stay dark.
 
-This Rolling includes stable 2.3 below. It updates only `rolling-2`; stable 2.3,
-`stable-2` and legacy 1.x releases remain unchanged.
+The independent `rolling-2` package remains 2.3.9798.40375. Publishing stable
+2.4 advances `stable-2` and GitHub's Latest numbered release, not Rolling or
+legacy 1.x artifacts. The stable 2.3 improvements below are retained.
 
 ## What's new in stable 2.3
 
@@ -132,7 +164,7 @@ Version 2.2 also retains these stable 2.1 improvements:
 
 The independent Rolling channel contains `TMILitePlusBundle-2.3.9798.40375-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
-Stable 2.3 remains on `stable-2` and GitHub's Latest numbered release.
+Stable 2.4 is on `stable-2` and GitHub's Latest numbered release.
 Publishing Rolling does not replace that stable package, frozen earlier ZIPs or
 legacy 1.x assets/endpoints.
 
@@ -149,6 +181,9 @@ legacy 1.x assets/endpoints.
   background interactions without TMI changing focus; UIA and physical input
   remain explicit alternatives. Separate read/control permissions, visible
   blue/red warnings and physical ESC interruption are included.
+- **TMI Remote:** read and control another Windows computer through the same
+  agent, with a separately deployed console, IPv4 routing and operator consent.
+  Local tools remain available independently.
 - **On-demand maintenance:** CLI Setup runs in `TMIMaintenance.exe`, not a
   permanently loaded setup form. The host suspends idle Codex connections while
   maintenance is open and reconnects them afterwards; active work blocks it.
@@ -170,11 +205,11 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Open the [TMI Lite+ 2.3 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3) and download its Win64 ZIP.
+1. Open the [TMI Lite+ 2.4 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4) and download its Win64 ZIP.
 2. Check the archive against its published SHA-256 checksum.
 3. Extract the **complete** archive into a writable directory.
 4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
-5. Use **CLI Setup** if Codex CLI needs installing/updating, then authenticate separately with `codex login` if needed. TMI does not yet provide a native login screen.
+5. Use **CLI Setup** if Codex CLI needs installing/updating. When ChatGPT authentication is required, the host starts Codex's native browser login; complete it in the browser. TMI stores no OpenAI password or access token of its own.
 
 Keep `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, the supplied documentation and viewer assets together.
@@ -187,14 +222,14 @@ accepted EULA or internal switches. Local preferences remain beside the
 frontend. Common defaults and desktop grants use the current user's registry.
 
 When upgrading from 1.x, finish existing work, exit all old frontends and exit
-any running TMI host before extracting the complete 2.3 bundle. Retain backups
+any running TMI host before extracting the complete 2.4 bundle. Retain backups
 of your settings and Codex data. Earlier published ZIPs remain available.
 
 ## Requirements
 
 - 64-bit Windows.
-- Separately installed and authenticated Codex CLI; this release was tested
-  primarily with **0.164.0**, with focused **0.165.0** checks.
+- Separately installed and authenticated Codex CLI; focused checks cover
+  **0.164.0 / 0.165.0 / 0.166.0** as described above.
 - An account/service supported by Codex CLI.
 - For Visualize and Mermaid: Microsoft Edge WebView2 Runtime, installed separately.
 - For graphical LaTeX only: the optional renderer described in
@@ -204,6 +239,38 @@ No AI model, account, subscription, Codex CLI, WebView2 Runtime or cloud Work
 service is supplied by TMI Lite+. Optional viewers initialize only when needed.
 Mermaid's local library and required license notices are included. Generic MCP
 Apps rendering is not included.
+
+## Remote computer control
+
+The host/frontends still require 64-bit Windows. A **remote target** can use the
+modern Win64 console or the separate Win32 console tested on an XP VM:
+
+1. Download the separate **TMI Remote Windows ZIP** from the
+   [2.4 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4) and
+   verify its published SHA-256. Copy the matching `TMIRemote64.exe` +
+   `TMIRemote64.ini`, or `TMIRemote86.exe` + `TMIRemote86.ini`, to the target.
+2. Set `HostIP` in that INI to the actual IPv4 address of the TMI Host computer.
+   Remote initiates TCP to Host, default port **47931**; it does not listen for
+   unrestricted incoming clients. Allow that Host port manually if needed.
+3. Start the Remote console and ask the agent to connect to the **remote target's
+   IP**. The operator verifies the Host IP/scope and presses **Y** or **N**.
+4. The agent can inspect windows, read content or request supported actions.
+   `Permission=RO` requires separate approval for a later RW upgrade; denying
+   the upgrade keeps RO. `Permission=RW` asks for both modes at first consent.
+5. A fixed **azure RO / red RW** border stays visible throughout the task
+   connection, including outages. **ESC from any window** immediately revokes
+   it. A normal agent release ends the task connection but keeps consent in
+   memory until Remote restart or ESC in the idle Remote console.
+
+No installation, Codex, OpenAI login or extra deployment DLL is required on the
+target. Win32 uses native window messages/GDI, not UIA or physical input, and
+does not offer every Win64 operation. Windows 2000 and actual Remote64 deployment
+are not yet validated. Connection-loss/recovery has isolated regression coverage;
+its physical-LAN operator test remains pending. This is **not encrypted remote
+administration for untrusted networks**. Read the [User Guide](USER_GUIDE.md#tmi-remote-trusted-lan)
+and the README supplied in the Remote ZIP before enabling access. Remote is an
+optional, separately deployed package; normal frontend updates do not replace
+an EXE or INI on another computer.
 
 ## Screenshot
 
@@ -219,8 +286,8 @@ for any lawful personal or professional purpose. It is not designed, certified,
 supported or warranted for professional, production, safety-critical or
 business-continuity use. Such use is entirely at the user's discretion and risk.
 
-Codex CLI performs agent operations. TMI also performs its own local client and
-Computer Use operations under the permissions selected by the user. Review
+Codex CLI performs agent operations. TMI also performs its own client,
+local Computer Use and optional Remote operations under the permissions selected by the user. Review
 commands, output, file changes and grants; maintain backups.
 
 TMI Lite+ is not affiliated with, endorsed by, sponsored by or supported by
@@ -239,18 +306,18 @@ cross-client coordination with that app.
 - [Optional MicroTeX Setup](MICROTEX_SETUP.md)
 - [Development Notes](DEVELOPMENT_NOTES.md)
 
-The **2.3 ZIP is linked directly above**, and v2.3 is GitHub's Latest numbered
+The **2.4 ZIP is linked directly above**, and v2.4 is GitHub's Latest numbered
 release. Use the complete 2.x bundle, not an old single-EXE update package.
 The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
 The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the current rolling bundle, separately from stable v2.3. Legacy 1.x
+contains the current rolling bundle, separately from stable v2.4. Legacy 1.x
 assets and its `rolling` endpoint are preserved and may receive separate 1.x
 updates; the old updater does not recognize 2.x bundle filenames.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets
 and documentation; personal INI settings are never overwritten. Package names
-use `TMILitePlusBundle-2.3.G.T-Win64.zip` for this release, which the legacy updater does not
+use `TMILitePlusBundle-2.4.G.T-Win64.zip` for this release, which the legacy updater does not
 recognize. Upgrade from 1.x remains a manual full-ZIP installation.
 See the User Guide for coordinated local/remote updates. Official Codex documentation:
 [developers.openai.com/codex](https://developers.openai.com/codex/).

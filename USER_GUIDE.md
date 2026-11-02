@@ -1,8 +1,8 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.3  
+Version 2.4  
 Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
-Stable 2.3: 2.3.9797.42811 — 28 October 2026  
+Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
@@ -22,11 +22,14 @@ SHA-256 fingerprint; a changed EULA version or text asks for acceptance again.
 
 Codex CLI and its authentication are separate. If it is missing, the host opens
 CLI Setup before enabling Codex connections. Use the displayed install/update
-commands or run them manually, then authenticate separately with `codex login`.
-TMI does not yet provide a native login screen.
+commands or run them manually. When ChatGPT authentication is required, the host
+starts Codex's native browser login; finish it in the browser. TMI does not store
+an OpenAI password or token of its own. Other Codex-supported authentication
+continues to be handled by Codex. A failed/uncertain prompt is not resent after
+login automatically; review it and send it explicitly.
 
 For **1.x to 2.x**, upgrade manually: finish work, close old frontend instances,
-exit any running host, back up settings/Codex data and extract the full 2.3 ZIP.
+exit any running host, back up settings/Codex data and extract the full 2.4 ZIP.
 The old single-executable updater is not a four-binary 2.x installer. Do not
 overwrite an executable while it is running.
 
@@ -70,10 +73,13 @@ or ambiguous, the exact server excerpt is shown with an explicit context note.
 Full Load remains available and unchanged. Thread rows show titles without pin/date
 prefixes; last-activity date and time are in their tooltip, formatted by Windows.
 
-Right-click actions apply to the row actually clicked. **New**
-chooses a directory and waits for the first prompt before creating a thread.
-Global/special-group New prepares an unassigned thread; New in a real project
-keeps that project ID. Choosing a directory does not create a project.
+Right-click actions apply to the row actually clicked. **New** offers an optional
+working directory, title and project, then waits for the first prompt before
+creating a thread. Leave directory blank for native defaults and title blank for
+Codex to name the thread. Choose an existing project, explicitly create a named
+project, or leave it unassigned. Global/special-group New starts without a project;
+New in a real project preselects that project. Choosing a directory does not
+create a project. The first prompt keeps the model and reasoning selected for it.
 **Duplicate (fork)** retains the source project independently of the chosen
 working directory and requires an initial prompt. Rename and project assignment
 are server-backed operations. Named project creation is explicit.
@@ -183,6 +189,8 @@ turn. TMI does not expose/override Codex's experimental `instant_interrupt`.
 In CLI 0.163.0 that feature is enabled by default but remains experimental;
 Code Mode interruption is stable and enabled. Effectiveness is determined by
 Codex and its current operation, not by an extra TMI interrupt command.
+While the context is being compacted, Steer is unavailable and the draft is
+retained; wait until compaction ends. Normal append/queue handling is unchanged.
 
 **Enqueue** and **Queue (n)** use the persistent server-owned prompt queue.
 Its panel reads, edits, removes, reorders or starts queued prompts. The next
@@ -377,6 +385,12 @@ Thread approval/question forms belong to the owning frontend, not the host.
 If no frontend is attached, a pending native request stays pending; it is not
 silently accepted. Tray selection opens the appropriate frontend.
 
+When no sandbox preference has been saved, TMI initializes **Read-only** in both
+frontend and Host. An explicitly saved Workspace-write value is not overwritten
+by an upgrade. Select valid approval and sandbox choices before sending; a
+server-confirmed policy mismatch blocks the prompt rather than changing access
+silently. The unsent draft remains available.
+
 Choices are shown only when offered by Codex. Empty MCP forms do not need
 hand-written JSON. Suggested answers and free text are readable/selectable.
 Closing a frontend does not make a decision. Only one correlated response can
@@ -443,6 +457,112 @@ executables or other software.
 
 `TMIHost.exe --mcp-stdio` instances are adapters, not duplicate tray hosts.
 Temporary TMIDesktop workers isolate UIA/capture; they do not own target apps.
+
+### TMI Remote (trusted LAN)
+
+TMI Remote lets the agent read and operate another Windows computer by **IPv4**.
+The TMI Host computer still runs the normal x64 application and authenticated
+Codex. On each target, only a console EXE and its matching INI are needed; no
+Codex, ChatGPT desktop app, OpenAI login, tray app or service is installed there.
+
+**Use only on an operator-controlled trusted LAN. Traffic is not encrypted. IP
+authorization is not cryptographic authentication. Do not expose the Host port
+to the Internet or connect over an untrusted network.**
+
+#### Deploy and connect
+
+1. Download the separate **TMI Remote Windows ZIP** from the same 2.4 release
+   and verify it using its own published SHA-256 file. The normal Win64 bundle
+   and its automatic updater do not deploy Remote to another computer.
+2. Copy one matching pair to the target: `TMIRemote64.exe` + `TMIRemote64.ini`
+   for modern x64 Windows, or `TMIRemote86.exe` + `TMIRemote86.ini` for legacy
+   Win32. The two providers are separate implementations, not one modern binary
+   running unchanged on XP. Keep the EXE/INI basenames matching.
+3. In the target's INI, replace the loopback default with the actual IPv4 address
+   of the computer running **TMI Host**, and select the initial consent scope:
+
+   ```ini
+   [Remote]
+   HostIP=192.168.1.10
+   HostPort=47931
+   Permission=RO
+   RetryDelayMs=1000
+   ```
+
+   This IP is only an example. Remote connects out to this one Host; the agent
+   addresses Remote by the **target computer's** IP. Restart Remote after INI
+   changes. If required, manually allow inbound TCP port 47931 on the Host;
+   TMI never changes firewall rules or router forwarding automatically.
+4. Start the Remote console. Ask the agent to use `remote_connect` with the
+   target's IPv4 and `RO` or `RW`. The first Remote tool starts the Host listener;
+   ordinary local Computer Use does not start a network listener.
+5. At the target, verify the displayed Host IP and scope. Press **Y** to allow
+   or **N** to deny. No Enter is required and the key is not echoed. The console
+   prints the outcome; a question left in the console history is not proof that
+   it is still pending. Each question requires a fresh key press.
+
+`Permission=RO` asks initially for reading. A later `remote_connect` requesting
+RW asks for **additional operator consent** on the same task connection; until
+accepted no writes are allowed. Refusing preserves working RO access.
+`Permission=RW` asks for both modes at the first confirmation, even if the task
+starts in RO. Configuration never authorizes access without operator consent.
+
+#### Active scope, release and ESC
+
+During the entire task connection, each Remote monitor has a fixed **azure RO /
+red RW** border. Red may also warn of a pending RW request; it is not proof that
+the upgrade has already been approved. The border stays on through network
+interruptions and does not take focus or add a taskbar button.
+
+**While the border is visible, ESC from any window on the Remote computer
+interrupts the current operation, ends the task connection and revokes remembered
+authorization.** A subsequent task must ask again. This is different from local
+Computer Use's operation-only interruption.
+
+The agent uses `remote_call` with the desktop method/arguments, `remote_status`
+to inspect capability/state or retrieve a late result, and `remote_release` to
+end the task connection. Task completion also releases it. Normal release hides
+the border but retains approved scope **in Remote memory until ESC or restart**;
+a later task can reuse that scope without asking again.
+
+After normal release, global ESC is removed so it does not affect other programs.
+To revoke the remembered grant while idle, focus the Remote console and press
+ESC there. Restarting Remote also clears it. Revocation does not undo actions
+already performed or delete earlier observations from the agent's history.
+
+#### Recovery, capabilities and limits
+
+Remote retries a lost connection while preserving the task and its visible
+indicator. There is no silent session-expiration timer. Stable request IDs and
+retained results prevent replaying an action whose reply was lost. After a
+timeout, the agent must use `remote_status`, not blindly repeat a click/write.
+
+Optional Host settings in its normal INI are:
+
+```ini
+[Remote]
+ListenPort=47931
+ResponseTimeoutSeconds=30
+```
+
+The response deadline controls the agent's wait, not grant lifetime. Normal Host
+shutdown tries to release connections within a bounded budget. After a crash or
+unreachable Host, the border can remain on intentionally: use ESC on Remote.
+
+Win64 offers native window messages, semantic UIA and PNG capture, subject to
+the same Windows/provider limits as local tools. Native operations do not
+implicitly activate the target; UIA/physical actions retain their own constraints.
+Win32 provides native enumeration/text, Unicode native editing, supported direct
+clicks, wheel/key messages and full-window GDI PNG. It does not offer UIA,
+physical input, drag, application launching or activation, and rejects crop
+requests explicitly. Locked/protected desktops and Windows permissions are not
+bypassed. Neither provider grants hidden or unattended Internet access.
+
+XP VM operator tests passed for RO/RW consent, denied upgrades, grant reuse,
+native Unicode writing, full-window PNG, initial azure border and active/idle
+ESC behavior. **Physical-LAN outage tests, multiple Remote monitors, actual
+Remote64 deployment and Windows 2000 execution remain unverified.** Linux is
+not included. See the README in the Remote ZIP for deployment details.
 
 ## 7. History, files, tokens and Usage
 
@@ -801,14 +921,14 @@ an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
 `rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle and is not replaced by stable 2.3.
-GitHub's Latest numbered release is v2.3; the direct
-[2.3 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.3)
+contains the independent rolling bundle and is not replaced by stable 2.4.
+GitHub's Latest numbered release is v2.4; the direct
+[2.4 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
 also provides the full bundle for initial installation. Earlier versioned ZIPs,
 legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
 single-EXE updater does not recognize 2.x bundle filenames.
 
-This release uses `TMILitePlusBundle-2.3.G.T-Win64.zip`; remote 2.x ZIPs stage the four
+This release uses `TMILitePlusBundle-2.4.G.T-Win64.zip`; downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching
