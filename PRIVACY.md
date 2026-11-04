@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
 Version 2.4  
-Last updated: 2 November 2026
+Last updated: 4 November 2026
 
 ## Summary
 
@@ -45,6 +45,15 @@ Depending on use, TMI Lite+ stores:
 The session log is overwritten when the first TMI Lite+ instance starts.
 Additional concurrently running instances append synchronized entries to that
 same current-session log.
+
+Rolling 2.4 also offers optional host **Diagnostics**, separate from the session
+log. It is off at startup. When enabled, a 128-event buffer holds Worktime quota
+observations and accounting decisions in RAM only. Disabling diagnostics clears
+the buffer. It contains no prompt or reply text, credentials, file contents or
+raw Codex messages. The read-only `tmi_desktop.diagnostics_read` tool exposes
+only the authenticated calling work's records. As with other tool results,
+records returned to an agent can enter its context and be processed by the
+configured provider.
 
 Pending asynchronous questions and unsent reply drafts are held in application
 memory for the current session. Unsent drafts are not written to the INI file.

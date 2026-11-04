@@ -1,10 +1,42 @@
 # TMI Lite+ for AI agents — Development Notes
 
 Document version 2.4  
-Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
+Current 2.x Rolling build: 2.4.9804.24881 — 4 November 2026  
 Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0  
 Local IPC protocol: 16
+
+## Rolling 2.4 changes
+
+Source links resolve to a path, line and optional column separately. Only Open
+uses the position for navigation; Explorer and downloads operate on the path,
+and Copy link retains the original target. The local INI stores the editor preset and optional executable. No
+global association is changed. For `.pas` only, the independently installed
+IDE Bridge's `editor.openPascalSource` routes to an already-running Delphi
+source editor without project context or mutation. No running IDE permits
+normal editor opening; an ambiguous IDE or Bridge error is not silently
+treated as absence. Live Delphi navigation requires the matching Bridge CLI
+and IDE package; neither is part of this update bundle.
+
+Worktime only consumes native Limits updates from an active local turn. A
+quota change and a deadline shift of at least two minutes can close a cycle in
+either direction; an equal percentage with a moving deadline cannot. A known
+old deadline disqualifies increases, not decreases. The new cycle starts at
+the first observed quota, which can be below the previous one. Same-cycle drops
+divide measured time by the point count. At a true boundary, pending time is
+added undivided to the closing cycle's last measured point, splitting only that
+point out of a grouped sample if necessary. A cycle with no measured point
+retains closing duration without generating a synthetic drop. No statistics
+schema change or reconciliation cycle is introduced.
+
+The host tray **Diagnostics** toggle starts off. Its 128-entry RAM buffer
+keeps distinct Worktime receipts and accounting decisions and deduplicates
+unchanged data per work and stage. Disabling it clears the buffer and rejects
+records still in flight from the previous activation. Read-only
+`tmi_desktop.diagnostics_read` accepts category `worktime` and optional `limit`
+(20 default, 64 maximum) and scopes reads to the authenticated calling work.
+There is no additional polling, file logging, raw payload, prompt, response
+or credential capture. Returned records can be included in the agent context.
 
 ## Version 2.4 architecture
 
@@ -135,7 +167,7 @@ must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
 Rolling reads `rolling-2`. Stable 2.4 advances `stable-2` and is GitHub's Latest
-numbered release. The independent 2.x Rolling package remains 2.3.9798.40375;
+numbered release. The independent 2.x Rolling package is 2.4.9804.24881;
 legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
 `TMILitePlusBundle-2.4.G.T-Win64.zip`. The old single-EXE package recognizer does

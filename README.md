@@ -22,19 +22,34 @@ to calculate subscription billing costs.
 Version **2.4** is a **stable release** (2 November 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
 Stable Windows executable version: **2.4.9802.24179** (Release/Win64).
-Current Rolling Windows executable version: **2.3.9798.40375**
-(Release/Win64, 29 October 2026).
+Current Rolling Windows executable version: **2.4.9804.24881**
+(Release/Win64, 4 November 2026).
 Codex CLI **0.166.0** integration and regression checks are included, with
 earlier installed-version and focused checks covering **0.164.0 / 0.165.0**.
 This is not a guarantee for every capability or later CLI build.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.4-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
-[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.3.9798.40375-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.4.9804.24881-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.164%20%2F%200.165%20%2F%200.166-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
+
+## What's new in Rolling 2.4
+
+- **Open source references at their line:** choose Visual Studio Code, BowPad,
+  Notepad++ or the Windows default in Configuration. Pascal units (`.pas`)
+  take priority in an already-running Delphi IDE when the separately installed
+  IDE Bridge supports source navigation; no IDE is started and no project is changed.
+- **Copy reply:** right-click an agent reply to copy it. An existing text
+  selection is copied immediately instead; left-click behavior is unchanged.
+- **More reliable Worktime:** use quota and the next reset time together to
+  distinguish actual resets from a moving deadline. Ordinary drops still show
+  time per percentage point; pending time at a reset goes to the closing cycle.
+- **Opt-in host diagnostics:** enable **Diagnostics** in the host tray menu to
+  make recent Worktime decisions available to the agent for its own work.
+  The bounded buffer is in memory, off by default and cleared when disabled.
 
 ## What's new in stable 2.4
 
@@ -83,9 +98,9 @@ Version 2.4 also includes these improvements from Rolling 2.3.9798.40375:
   retains its first prompt if opening fails, disabled schedules cannot dispatch
   queued jobs, downloads can be cancelled, and CLI Setup inputs stay dark.
 
-The independent `rolling-2` package remains 2.3.9798.40375. Publishing stable
-2.4 advances `stable-2` and GitHub's Latest numbered release, not Rolling or
-legacy 1.x artifacts. The stable 2.3 improvements below are retained.
+The `stable-2` channel and GitHub's Latest numbered release remain on stable
+2.4. Rolling updates are published separately on `rolling-2`. The stable 2.3
+improvements below are retained.
 
 ## What's new in stable 2.3
 
@@ -162,7 +177,7 @@ Version 2.2 also retains these stable 2.1 improvements:
 - **Agent snapshots while working:** inspect an agent's conversation through
   its parent's process without resuming it or changing the parent writer.
 
-The independent Rolling channel contains `TMILitePlusBundle-2.3.9798.40375-Win64.zip` in the
+The independent Rolling channel contains `TMILitePlusBundle-2.4.9804.24881-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
 Stable 2.4 is on `stable-2` and GitHub's Latest numbered release.
 Publishing Rolling does not replace that stable package, frozen earlier ZIPs or

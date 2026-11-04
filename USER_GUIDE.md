@@ -1,7 +1,7 @@
 # TMI Lite+ for AI agents — User Guide
 
 Version 2.4  
-Current 2.x Rolling build: 2.3.9798.40375 — 29 October 2026  
+Current 2.x Rolling build: 2.4.9804.24881 — 4 November 2026  
 Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0
 
@@ -669,6 +669,26 @@ While a download runs, its context-menu command becomes **Cancel download**.
 Closing the frontend cancels the transfer within its bounded shutdown; failed
 or cancelled transfers preserve an existing destination and remove temporary files.
 
+In Rolling 2.4, a reference such as `path/to/file.pas:120:8` keeps its line and
+optional column separate from the filename. **Referenced file editor** in
+Configuration chooses **Windows default (no line jump)**, **Visual Studio Code**,
+**BowPad** or **Notepad++**. For a named editor, leave its executable blank to
+find an installed copy, or specify the executable manually. This does not
+change Windows file associations. Show in Explorer and Download use the real
+file path without the position suffix; **Copy link** preserves the reference.
+
+Pascal units (`.pas`, not `.dpr`) take priority in a running Delphi IDE via
+the separately installed IDE Bridge. Update the Bridge CLI and IDE package
+together to a version that supports `editor.openPascalSource`. TMI does not
+start Delphi or change the active project or its membership. If no IDE is
+running, normal editor opening applies. An ambiguous IDE or Bridge error is
+reported without guessing a target.
+
+Right-click a reply for **Copy reply**. If any conversation text is selected,
+right-click copies and clears the selection immediately instead, even if the
+click is outside it. Left-clicking the conversation or a link keeps its normal
+behavior.
+
 IDE Bridge edits also populate Changed Files during live activity, with compact
 counts and an Activity `[diff]` marker. Unknown line counts remain `?`; totals
 sum operations rather than reconstructing a net diff. Save-only reports update
@@ -725,26 +745,37 @@ Current, Past and All select the retained quota-reset cycles. The last 200
 observed decreases are retained across cycles, one row per sample, newest first.
 Measured zero time remains a real observation. Older per-point data is retained
 as one-point samples when the saved format is upgraded.
-The next automatic-reset timestamp identifies a quota cycle approximately:
-differences below 60 seconds are treated as estimation/rounding, even when the
-remaining quota rises to 99% or 100%. A percentage increase alone does not prove
-a reset; an unchanged deadline does not start a new cycle.
-A different deadline can start a cycle in either direction; a shorter
-new deadline is valid. Snapshots matching a known earlier cycle are ignored.
-Within a cycle the host keeps the lowest observed
-remaining percentage, so an outdated value from another thread cannot create
-a reset or count the same percentage decrease twice. Each resident thread has
-its own already-counted Working total; only new time is added to the shared
-accumulator. A missing reset timestamp does not prove a new cycle.
+In Rolling 2.4, the next automatic-reset timestamp identifies a quota cycle
+approximately. Changes of less than two minutes are treated as estimation or
+rounding. A new cycle requires both a meaningful deadline change (forward or
+backward) and a change in the remaining percentage. A moving deadline alone
+at 100% is not a reset. The first observed quota in a new cycle need not be
+100% or higher than the previous value: a reset can happen during a long task
+that finishes below the earlier quota. An increase matching a known earlier
+cycle is ignored. Within a cycle the host keeps the lowest observed remaining
+percentage so an out-of-date increase does not count the same decrease twice.
+Each resident thread has its own already-counted Working total; only new time
+is added to the shared accumulator. A missing reset timestamp does not prove a
+new cycle.
 After restart the host restores the known limit identity from saved statistics.
 If an update omits unchanged metadata, only already-known identity/window
 metadata is reused; a new usage percentage is still required.
-Pending time at a reset stays separate from completed samples. Reset metadata
-and these residues are bounded to 201 retained cycles; completed samples keep
-their independent 200-value allowance even if many empty resets occur.
+At a reset, pending time is added undivided to the last measured point of the
+closing cycle. If that point belonged to a multi-point drop, only the last
+point changes. When there was no measured point, the closing duration is
+retained without inventing a drop. No extra cycle is added. Reset metadata is
+bounded to 201 retained cycles; completed samples keep their independent
+200-value allowance even if many empty resets occur.
 The current cycle and earlier cycles are saved by the host in the shared Windows
 registry, separately from UI preferences. Existing Usage and token counters
 remain unchanged. Click the Worktime text again to read a fresh graph snapshot.
+
+For troubleshooting in Rolling 2.4, enable **Diagnostics** from the host tray.
+It starts off and clears its 128-event in-memory buffer when disabled. Ask the
+agent to call `tmi_desktop.diagnostics_read` with category `worktime` and, if
+needed, a `limit` (default 20, maximum 64). The tool only reads the calling
+authenticated work's records and does not require Computer Use consent. No
+diagnostic file is written; returned records can enter the agent's context.
 
 ## 8. Optional graphics
 
