@@ -22,14 +22,14 @@ to calculate subscription billing costs.
 Version **2.4** is a **stable release** (2 November 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
 Stable Windows executable version: **2.4.9802.24179** (Release/Win64).
-Current Rolling Windows executable version: **2.4.9804.24881**
-(Release/Win64, 4 November 2026).
+Current Rolling Windows executable version: **2.4.9805.29111**
+(Release/Win64, 5 November 2026).
 Codex CLI **0.166.0** integration and regression checks are included, with
 earlier installed-version and focused checks covering **0.164.0 / 0.165.0**.
 This is not a guarantee for every capability or later CLI build.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.4-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
-[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.4.9804.24881-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.4.9805.29111-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.164%20%2F%200.165%20%2F%200.166-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
@@ -38,6 +38,14 @@ This is not a guarantee for every capability or later CLI build.
 
 ## What's new in Rolling 2.4
 
+- **Answer Questions inline:** click a proposed answer in the conversation to
+  send it immediately, without replacing the prompt draft or sending duplicates.
+  The Questions window remains available for several questions and free-text
+  replies. Reloaded historical options stay plain text.
+- **Visible Remote notice:** each target monitor shows **Codex is using your
+  computer (ESC to disconnect)** throughout the connection, azure for RO and red
+  for RW. The native click-through notice takes no focus and has no taskbar
+  entry; neither Remote edition adds a graphical framework or runtime library.
 - **Open source references at their line:** choose Visual Studio Code, BowPad,
   Notepad++ or the Windows default in Configuration. Pascal units (`.pas`)
   take priority in an already-running Delphi IDE when the separately installed
@@ -177,8 +185,10 @@ Version 2.2 also retains these stable 2.1 improvements:
 - **Agent snapshots while working:** inspect an agent's conversation through
   its parent's process without resuming it or changing the parent writer.
 
-The independent Rolling channel contains `TMILitePlusBundle-2.4.9804.24881-Win64.zip` in the
+The independent Rolling channel contains `TMILitePlusBundle-2.4.9805.29111-Win64.zip` in the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
+Its separate `TMIRemote-2.4.9805.29111-Windows.zip` updates the two Remote
+editions; copy the selected EXE to the target manually and keep its existing INI.
 Stable 2.4 is on `stable-2` and GitHub's Latest numbered release.
 Publishing Rolling does not replace that stable package, frozen earlier ZIPs or
 legacy 1.x assets/endpoints.

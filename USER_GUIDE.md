@@ -1,7 +1,7 @@
 # TMI Lite+ for AI agents — User Guide
 
 Version 2.4  
-Current 2.x Rolling build: 2.4.9804.24881 — 4 November 2026  
+Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
 Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0
 
@@ -403,6 +403,14 @@ always mean the agent is waiting or that the task must be interrupted.
 Press Ctrl+Enter in the Questions window to send the selected or written reply.
 The shortcut does not insert a newline; ordinary Enter keeps its normal behavior.
 
+In the current Rolling build, proposed answers on newly received Questions are
+also clickable directly in the conversation. Clicking an answer sends it
+immediately; it does not paste over or clear text in the prompt. While sending,
+or after the question is answered or dismissed, another click cannot send a
+duplicate. **Question** still opens the form for managing several questions or
+writing a different reply. An already-open form reflects the inline choice.
+Reloading history displays old options as text rather than reactivating replies.
+
 ## 6. Computer Use and permissions
 
 TMI's local `tmi_desktop` MCP tools are independent of the ChatGPT desktop app's
@@ -471,7 +479,8 @@ to the Internet or connect over an untrusted network.**
 
 #### Deploy and connect
 
-1. Download the separate **TMI Remote Windows ZIP** from the same 2.4 release
+1. Download the separate **TMI Remote Windows ZIP** from the chosen stable 2.4
+   or `rolling-2` release
    and verify it using its own published SHA-256 file. The normal Win64 bundle
    and its automatic updater do not deploy Remote to another computer.
 2. Copy one matching pair to the target: `TMIRemote64.exe` + `TMIRemote64.ini`
@@ -513,6 +522,14 @@ During the entire task connection, each Remote monitor has a fixed **azure RO /
 red RW** border. Red may also warn of a pending RW request; it is not proof that
 the upgrade has already been approved. The border stays on through network
 interruptions and does not take focus or add a taskbar button.
+
+The Rolling Remote package additionally shows **Codex is using your computer
+(ESC to disconnect)** at the top of every monitor for the same connection
+lifetime and with the same azure/red scope. The notice is click-through,
+does not activate and disappears with the border when access is released.
+It is native WinAPI/GDI, with no graphical framework or runtime library added.
+To update a Remote already configured, replace its matching EXE with the new
+one from the separate Rolling Remote ZIP; retain the target's existing INI.
 
 **While the border is visible, ESC from any window on the Remote computer
 interrupts the current operation, ends the task connection and revokes remembered

@@ -1,12 +1,34 @@
 # TMI Lite+ for AI agents — Development Notes
 
 Document version 2.4  
-Current 2.x Rolling build: 2.4.9804.24881 — 4 November 2026  
+Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
 Stable 2.4 — 2 November 2026  
 Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0  
 Local IPC protocol: 16
 
 ## Rolling 2.4 changes
+
+Live Questions format proposed answers as transcript links identified by item,
+question ordinal and option ordinal. The inbox resolves only pending options
+in the current thread, using its stored answer rather than arbitrary link text.
+Submission reuses the Questions form's connection/compaction guard and reply
+action: steer an active turn or start a turn when idle. Draft ownership stays
+with the originating prompt/question/fork until submission succeeds. An open
+Questions form synchronizes an externally selected option without overwriting
+it with its previous memo text. History formatting defaults to non-actionable
+option text. Focused checks cover multiple questions in one item, Unicode and
+altered targets, reply states, form synchronization and Ctrl+Enter.
+
+Both Remote editions share a fifth native indicator window per monitor for
+`Codex is using your computer (ESC to disconnect)`. It uses the existing
+indicator class, stock GUI font and GDI text drawing; no VCL, bitmap, WebView,
+new timer or added runtime library. The opaque caption follows the border's
+RO/RW color and complete connection lifecycle. Tool-window/no-activate styles
+and transparent hit-testing keep it out of the taskbar and input path.
+Release and ESC hide it with the border. Isolated-console checks cover notice
+text, scope visibility, release, styles, opacity and click-through. Remote86
+also passes the PE32 console/import audit; this does not replace physical
+legacy-system validation.
 
 Source links resolve to a path, line and optional column separately. Only Open
 uses the position for navigation; Explorer and downloads operate on the path,
@@ -167,7 +189,7 @@ must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
 Rolling reads `rolling-2`. Stable 2.4 advances `stable-2` and is GitHub's Latest
-numbered release. The independent 2.x Rolling package is 2.4.9804.24881;
+numbered release. The independent 2.x Rolling package is 2.4.9805.29111;
 legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
 `TMILitePlusBundle-2.4.G.T-Win64.zip`. The old single-EXE package recognizer does
