@@ -1,10 +1,51 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.4  
+Document version 2.5  
 Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
-Stable 2.4 — 2 November 2026  
-Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0  
-Local IPC protocol: 16
+Stable 2.5 — 6 November 2026  
+Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider  
+Local IPC protocol: 17
+
+## Version 2.5 integration
+
+The native session negotiates `requiredHumanApproval` only for a selected CLI
+0.167 or later. Initialize normalization is shared by frontend, scheduler and
+reconnect paths; older selected versions do not advertise this capability.
+The original native pending request and its approval identity remain authoritative.
+Human command checkpoints accept only the exact one-time `accept`, `decline` or
+`cancel` decision; session/permanent grants, amendments and Auto-review cannot
+answer them. They are distinct from safety-monitor findings.
+
+The frontend no longer discards a pending request merely because a reply was
+enqueued over IPC. Host acknowledgement or native resolution completes it;
+a recoverable rejection retains the request, while uncertain delivery disables
+resubmission. Closing a frontend detaches it without manufacturing a decision.
+The shared interaction form uses designer-owned controls: an amber request
+header, verbatim copyable command, separate cwd, collapsed technical Details
+and three explicit actions. Enter is not a default human acceptance. Isolated
+checks cover async lifecycle and layout at 96, 144 and 192 DPI. A real CLI 0.167
+checkpoint was confirmed with a narrowly scoped temporary managed test rule;
+the rule was then removed. No test policy is distributed.
+
+MCP elicitation metadata supplies a tool name and optional declared annotations.
+Absent and false remain distinct; these hints do not change permissions.
+CLI 0.167 `thread/section/changed` events drive the existing catalog journal,
+including same-section reordering. Older supported versions retain response-based
+invalidation. This is not a cross-process ChatGPT desktop app database watcher.
+
+Visualize gains keyboard tabs, variant carousels and bounded-lifecycle tooltips
+in the existing assets. No animation timer, additional rendering engine, Node
+process or weakened sandbox is introduced. The existing lazy/history-preview
+budget remains in force. Focused native, response-delivery, interaction and
+isolated WebView fixtures passed; they do not certify every live provider.
+
+Thread-list actions preserve immutable target IDs across async refreshes. New
+resolves an omitted cwd from the selected project's first root or the Windows
+Documents known folder, not another work's cwd. New/rootless projects require
+an explicit directory. Catalog invalidation refreshes affected groups without
+transcript reloads. Safety Review findings sends only a valid current
+server-provided continuation after explicit acknowledgement; historical errors
+and missing findings never authorize a local continuation.
 
 ## Rolling 2.4 changes
 
@@ -188,11 +229,11 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.4 advances `stable-2` and is GitHub's Latest
+Rolling reads `rolling-2`. Stable 2.5 advances `stable-2` and is GitHub's Latest
 numbered release. The independent 2.x Rolling package is 2.4.9805.29111;
 legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.4.G.T-Win64.zip`. The old single-EXE package recognizer does
+`TMILitePlusBundle-2.5.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
@@ -398,7 +439,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.4.
+The following historical notes do not describe missing features in current 2.5.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

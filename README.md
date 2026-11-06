@@ -19,24 +19,48 @@ cache writes, output, reasoning tokens and elapsed time. On-demand Usage charts
 and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
-Version **2.4** is a **stable release** (2 November 2026), with an independent
+Version **2.5** is a **stable release** (6 November 2026), with an independent
 **2.x Rolling** channel for subsequent updates.
-Stable Windows executable version: **2.4.9802.24179** (Release/Win64).
+Stable Windows executable version: **2.5.9806.24165** (Release/Win64).
 Current Rolling Windows executable version: **2.4.9805.29111**
 (Release/Win64, 5 November 2026).
-Codex CLI **0.166.0** integration and regression checks are included, with
-earlier installed-version and focused checks covering **0.164.0 / 0.165.0**.
+Codex CLI **0.167.0** integration and regression checks are included, with
+focused compatibility checks covering **0.164.0 / 0.165.0 / 0.166.0**.
 This is not a guarantee for every capability or later CLI build.
 
-[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.4-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.5-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5)
 [![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.4.9805.29111-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.164%20%2F%200.165%20%2F%200.166-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.167-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in Rolling 2.4
+## What's new in stable 2.5
+
+- **Clear human approval requests:** a prominent amber header, exact command
+  and separate working directory make the decision evident. Technical details
+  stay collapsed. Native human checkpoints offer only Accept, Decline and Cancel;
+  Auto-review and remembered grants cannot answer them.
+- **Reliable approval delivery:** requests remain pending until acknowledged by
+  the host or resolved by Codex. Refusals stay actionable with an explanation;
+  uncertain decisions and commands are never resent automatically.
+- **Better tool and thread feedback:** MCP summaries expose available tool
+  annotations without treating them as permission. CLI 0.167 section events
+  synchronize Pinned membership/order without reloading conversations.
+- **Interactive Visualize controls:** keyboard-accessible tabs, variant
+  carousels and mouse/keyboard/touch tooltips use the existing lightweight viewer.
+- **Safer thread operations:** list actions keep their original target through
+  asynchronous updates. A blank New directory resolves from the selected project's
+  roots or Windows Documents, never from another work or the executable folder.
+- **Safety review when supplied by Codex:** Review findings shows the server's
+  explanation and continuation for an explicit user decision. No local approval
+  can revive a server-terminated chat or invent a continuation.
+
+Install all four matching 2.5 executables together: local IPC is now protocol 17.
+Version 2.5 also includes the following Rolling 2.4 improvements.
+
+## Rolling 2.4 improvements included in 2.5
 
 - **Answer Questions inline:** click a proposed answer in the conversation to
   send it immediately, without replacing the prompt draft or sending duplicates.
@@ -106,8 +130,8 @@ Version 2.4 also includes these improvements from Rolling 2.3.9798.40375:
   retains its first prompt if opening fails, disabled schedules cannot dispatch
   queued jobs, downloads can be cancelled, and CLI Setup inputs stay dark.
 
-The `stable-2` channel and GitHub's Latest numbered release remain on stable
-2.4. Rolling updates are published separately on `rolling-2`. The stable 2.3
+The `stable-2` channel and GitHub's Latest numbered release now provide stable
+2.5. Rolling updates are published separately on `rolling-2`. The stable 2.3
 improvements below are retained.
 
 ## What's new in stable 2.3
@@ -189,7 +213,7 @@ The independent Rolling channel contains `TMILitePlusBundle-2.4.9805.29111-Win64
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2).
 Its separate `TMIRemote-2.4.9805.29111-Windows.zip` updates the two Remote
 editions; copy the selected EXE to the target manually and keep its existing INI.
-Stable 2.4 is on `stable-2` and GitHub's Latest numbered release.
+Stable 2.5 is on `stable-2` and GitHub's Latest numbered release.
 Publishing Rolling does not replace that stable package, frozen earlier ZIPs or
 legacy 1.x assets/endpoints.
 
@@ -230,7 +254,7 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Open the [TMI Lite+ 2.4 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4) and download its Win64 ZIP.
+1. Open the [TMI Lite+ 2.5 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5) and download its Win64 ZIP.
 2. Check the archive against its published SHA-256 checksum.
 3. Extract the **complete** archive into a writable directory.
 4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
@@ -238,7 +262,7 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 Keep `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, the supplied documentation and viewer assets together.
-Install matching binaries from one bundle; local IPC protocol **16** rejects
+Install matching binaries from one bundle; local IPC protocol **17** rejects
 incompatible peers. Do not run from inside the ZIP or replace a running host by
 copying only one executable.
 
@@ -247,14 +271,14 @@ accepted EULA or internal switches. Local preferences remain beside the
 frontend. Common defaults and desktop grants use the current user's registry.
 
 When upgrading from 1.x, finish existing work, exit all old frontends and exit
-any running TMI host before extracting the complete 2.4 bundle. Retain backups
+any running TMI host before extracting the complete 2.5 bundle. Retain backups
 of your settings and Codex data. Earlier published ZIPs remain available.
 
 ## Requirements
 
 - 64-bit Windows.
 - Separately installed and authenticated Codex CLI; focused checks cover
-  **0.164.0 / 0.165.0 / 0.166.0** as described above.
+  **0.164.0 / 0.165.0 / 0.166.0 / 0.167.0** as described above.
 - An account/service supported by Codex CLI.
 - For Visualize and Mermaid: Microsoft Edge WebView2 Runtime, installed separately.
 - For graphical LaTeX only: the optional renderer described in
@@ -271,7 +295,7 @@ The host/frontends still require 64-bit Windows. A **remote target** can use the
 modern Win64 console or the separate Win32 console tested on an XP VM:
 
 1. Download the separate **TMI Remote Windows ZIP** from the
-   [2.4 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4) and
+   [2.5 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5) and
    verify its published SHA-256. Copy the matching `TMIRemote64.exe` +
    `TMIRemote64.ini`, or `TMIRemote86.exe` + `TMIRemote86.ini`, to the target.
 2. Set `HostIP` in that INI to the actual IPv4 address of the TMI Host computer.
@@ -331,18 +355,18 @@ cross-client coordination with that app.
 - [Optional MicroTeX Setup](MICROTEX_SETUP.md)
 - [Development Notes](DEVELOPMENT_NOTES.md)
 
-The **2.4 ZIP is linked directly above**, and v2.4 is GitHub's Latest numbered
+The **2.5 ZIP is linked directly above**, and v2.5 is GitHub's Latest numbered
 release. Use the complete 2.x bundle, not an old single-EXE update package.
 The 2.x **Release** channel uses `stable-2`; **Rolling** uses `rolling-2`.
 The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the current rolling bundle, separately from stable v2.4. Legacy 1.x
+contains the current rolling bundle, separately from stable v2.5. Legacy 1.x
 assets and its `rolling` endpoint are preserved and may receive separate 1.x
 updates; the old updater does not recognize 2.x bundle filenames.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets
 and documentation; personal INI settings are never overwritten. Package names
-use `TMILitePlusBundle-2.4.G.T-Win64.zip` for this release, which the legacy updater does not
+use `TMILitePlusBundle-2.5.G.T-Win64.zip` for this release, which the legacy updater does not
 recognize. Upgrade from 1.x remains a manual full-ZIP installation.
 See the User Guide for coordinated local/remote updates. Official Codex documentation:
 [developers.openai.com/codex](https://developers.openai.com/codex/).

@@ -1,9 +1,9 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.4  
+Version 2.5  
 Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
-Stable 2.4 — 2 November 2026  
-Tested Codex CLI: 0.166.0; earlier installed-version and focused checks also covered 0.164.0 and 0.165.0
+Stable 2.5 — 6 November 2026  
+Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
 not provide an AI model, account or subscription. It is hobby-developed and
@@ -15,7 +15,8 @@ the user's discretion and risk. Read the supplied EULA and notices.
 Extract the complete Win64 package into a writable directory. Keep
 `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, documentation and viewer assets together.
-All four executables must be from the same bundle (local IPC protocol 16).
+All four executables must be from the same bundle. Version 2.5 uses local IPC
+protocol 17; update the runtime executables together, not one binary at a time.
 Start `TMILitePlus.exe`; it starts/connects to the resident host as needed.
 Accept the versioned EULA when requested. Acceptance stores its version and
 SHA-256 fingerprint; a changed EULA version or text asks for acceptance again.
@@ -29,7 +30,7 @@ continues to be handled by Codex. A failed/uncertain prompt is not resent after
 login automatically; review it and send it explicitly.
 
 For **1.x to 2.x**, upgrade manually: finish work, close old frontend instances,
-exit any running host, back up settings/Codex data and extract the full 2.4 ZIP.
+exit any running host, back up settings/Codex data and extract the full 2.5 ZIP.
 The old single-executable updater is not a four-binary 2.x installer. Do not
 overwrite an executable while it is running.
 
@@ -52,6 +53,9 @@ order, then **Unassigned**, **Documents** and **Archived**.
 - **Pinned** opens automatically once per frontend startup. A pinned thread
   remains under its normal project too; both rows open the same thread, not
   another writer. Manual expansion/collapse survives refreshes.
+  With CLI 0.167, section notifications also refresh Pinned
+  membership and ordering through TMI Host, without reloading the conversation.
+  They do not provide a cross-process database watcher for the ChatGPT desktop app.
 - **Unassigned** contains active threads without a project, except those
   presented in Documents.
 - **Documents** includes the current user's Windows-known Documents folder
@@ -75,14 +79,28 @@ prefixes; last-activity date and time are in their tooltip, formatted by Windows
 
 Right-click actions apply to the row actually clicked. **New** offers an optional
 working directory, title and project, then waits for the first prompt before
-creating a thread. Leave directory blank for native defaults and title blank for
-Codex to name the thread. Choose an existing project, explicitly create a named
+creating a thread. Leave the title blank for Codex to name the thread. When the
+directory is blank, an existing project supplies its first root in project order;
+without a project, TMI uses the current user's Windows Documents directory.
+Both are sent explicitly, never inherited from another conversation or the TMI
+executable. If the project has no roots, or you create a new named project,
+choose a directory explicitly. An unavailable root is reported, not replaced
+silently. Choose an existing project, explicitly create a named
 project, or leave it unassigned. Global/special-group New starts without a project;
 New in a real project preselects that project. Choosing a directory does not
 create a project. The first prompt keeps the model and reasoning selected for it.
 **Duplicate (fork)** retains the source project independently of the chosen
 working directory and requires an initial prompt. Rename and project assignment
 are server-backed operations. Named project creation is explicit.
+
+List commands keep the ID of the row right-clicked, including while a menu or
+dialog is open and the list is reordered. Pin, Rename and Assign to project are
+not blocked by unrelated work in the current frontend. Requests already pending
+for that operation and unavailable destinations still prevent submission.
+Archive/Delete check the resident work affected by the target; they do not stop
+another conversation automatically. New/Open/Duplicate still respect actual
+frontend selection transitions. Catalog changes refresh the affected groups in
+other frontends without reloading their open conversation or adding polling.
 
 **Project Roots**, opened with the working-directory **Project Roots** button, lists roots
 and refreshes them from project threads. Add a root using the edit/folder dialog,
@@ -411,6 +429,51 @@ duplicate. **Question** still opens the form for managing several questions or
 writing a different reply. An already-open form reflects the inline choice.
 Reloading history displays old options as text rather than reactivating replies.
 
+### Required human approvals (Codex CLI 0.167+)
+
+A managed command policy can require a fresh human decision even when Auto-review
+is enabled. A prominent **Your approval is required** header identifies the
+request. The exact server-provided command has its own copyable monospace area,
+with the supplied working directory shown separately. **Details**, initially
+closed, contains request identifiers and the original policy reason. Opening
+details does not submit a decision. TMI never unescapes or reinterprets the
+command preview for display.
+
+Choose **Accept**, **Decline** or **Cancel**. Accept is not a default Enter action;
+there is no session or permanent choice. Closing this request window cancels the request;
+closing/detaching the whole frontend does not authorize it.
+
+The host retains pending requests for frontend reattachment. A response remains
+**Submitting** until the host accepts its delivery or Codex resolves the request.
+Rejected valid pending requests become available again with the reason shown.
+If delivery is uncertain, TMI offers no retry: close/reopen the thread to reconcile
+the current pending state. Decisions and commands are never automatically resent.
+
+This support is negotiated only with compatible selected CLI versions. It does
+not create managed rules or change your saved approval/sandbox choices. These
+checkpoints are separate from safety findings and cannot unlock a chat that the
+server has terminated.
+
+MCP approval summaries also show the tool name and any available declared
+read-only, destructive, idempotent and open-world hints. Yes and No refer to the
+tool's declarations, not verified guarantees; missing declarations are omitted.
+They do not authorize the tool or change approval persistence.
+
+### Safety findings
+
+When Codex stops a conversation for safety review, **Review findings** appears
+in the conversation header. Read both the server's explanation and its proposed
+continuation request. Check the acknowledgement and click **Acknowledge and
+continue** only if you have checked that the task can safely proceed. TMI sends
+the exact server-provided request and does not change permissions or your draft.
+
+If Codex provides no findings or no valid continuation, the command shows a
+**Safety notice** and does not allow continuing. A terminated chat is not locally
+unblocked. Switching threads, replaced findings, disconnects or a submission
+invalidate acknowledgement. There are no automatic retries. Findings are retained
+by the resident host work for frontend reopen, not restored as actionable consent
+from historical messages.
+
 ## 6. Computer Use and permissions
 
 TMI's local `tmi_desktop` MCP tools are independent of the ChatGPT desktop app's
@@ -479,7 +542,7 @@ to the Internet or connect over an untrusted network.**
 
 #### Deploy and connect
 
-1. Download the separate **TMI Remote Windows ZIP** from the chosen stable 2.4
+1. Download the separate **TMI Remote Windows ZIP** from the chosen stable 2.5
    or `rolling-2` release
    and verify it using its own published SHA-256 file. The normal Win64 bundle
    and its automatic updater do not deploy Remote to another computer.
@@ -686,7 +749,7 @@ While a download runs, its context-menu command becomes **Cancel download**.
 Closing the frontend cancels the transfer within its bounded shutdown; failed
 or cancelled transfers preserve an existing destination and remove temporary files.
 
-In Rolling 2.4, a reference such as `path/to/file.pas:120:8` keeps its line and
+Since Rolling 2.4, a reference such as `path/to/file.pas:120:8` keeps its line and
 optional column separate from the filename. **Referenced file editor** in
 Configuration chooses **Windows default (no line jump)**, **Visual Studio Code**,
 **BowPad** or **Notepad++**. For a named editor, leave its executable blank to
@@ -762,7 +825,7 @@ Current, Past and All select the retained quota-reset cycles. The last 200
 observed decreases are retained across cycles, one row per sample, newest first.
 Measured zero time remains a real observation. Older per-point data is retained
 as one-point samples when the saved format is upgraded.
-In Rolling 2.4, the next automatic-reset timestamp identifies a quota cycle
+The next automatic-reset timestamp identifies a quota cycle
 approximately. Changes of less than two minutes are treated as estimation or
 rounding. A new cycle requires both a meaningful deadline change (forward or
 backward) and a change in the remaining percentage. A moving deadline alone
@@ -787,7 +850,7 @@ The current cycle and earlier cycles are saved by the host in the shared Windows
 registry, separately from UI preferences. Existing Usage and token counters
 remain unchanged. Click the Worktime text again to read a fresh graph snapshot.
 
-For troubleshooting in Rolling 2.4, enable **Diagnostics** from the host tray.
+For troubleshooting, enable **Diagnostics** from the host tray.
 It starts off and clears its 128-event in-memory buffer when disabled. Ask the
 agent to call `tmi_desktop.diagnostics_read` with category `worktime` and, if
 needed, a `limit` (default 20, maximum 64). The tool only reads the calling
@@ -834,7 +897,12 @@ Widgets run in an opaque-origin sandbox. Native objects/commands, arbitrary
 navigation, downloads, browser permissions, arbitrary file resources and
 fetch/XHR are blocked. Allowed static CDN resources may make HTTPS requests.
 Follow-ups ask before replacing a draft and never submit it automatically.
-Basic styles/icons/tabs/tooltips/state/follow-up APIs are supported; host-only
+Basic styles/icons/tabs/tooltips/state/follow-up APIs are supported. The next
+local update adds arrow/Home/End tab navigation, previous/next and named variant
+selection for carousels, and mouse/keyboard/touch tooltips that disappear when
+their target is hidden or removed. These controls are event-driven, with no
+autoplay or refresh timer. Existing inline sizing and offscreen suspension remain
+active. Host-only
 Tweak/calendar and generic MCP Apps are not included.
 
 Completed assistant code blocks marked `mermaid` render automatically as inline
@@ -969,14 +1037,14 @@ an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
 `rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle and is not replaced by stable 2.4.
-GitHub's Latest numbered release is v2.4; the direct
-[2.4 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.4)
+contains the independent rolling bundle and is not replaced by stable 2.5.
+GitHub's Latest numbered release is v2.5; the direct
+[2.5 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5)
 also provides the full bundle for initial installation. Earlier versioned ZIPs,
 legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
 single-EXE updater does not recognize 2.x bundle filenames.
 
-This release uses `TMILitePlusBundle-2.4.G.T-Win64.zip`; downloaded 2.x bundles stage the four
+This release uses `TMILitePlusBundle-2.5.G.T-Win64.zip`; downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching

@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.4  
-Last updated: 4 November 2026
+Version 2.5  
+Last updated: 6 November 2026
 
 ## Summary
 
@@ -46,7 +46,7 @@ The session log is overwritten when the first TMI Lite+ instance starts.
 Additional concurrently running instances append synchronized entries to that
 same current-session log.
 
-Rolling 2.4 also offers optional host **Diagnostics**, separate from the session
+TMI also offers optional host **Diagnostics**, separate from the session
 log. It is off at startup. When enabled, a 128-event buffer holds Worktime quota
 observations and accounting decisions in RAM only. Disabling diagnostics clears
 the buffer. It contains no prompt or reply text, credentials, file contents or
