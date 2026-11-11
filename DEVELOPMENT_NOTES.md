@@ -1,10 +1,30 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.5  
+Document version 2.6  
 Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
-Stable 2.5 — 6 November 2026  
+Stable 2.6 — 10 November 2026  
 Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider  
 Local IPC protocol: 17
+
+## Version 2.6 Remote window monitor
+
+`remote_monitor` exposes request, interval and pixel-change captures on the
+existing approved RO/RW lease. A fixed client crop is resolved in the isolated
+Remote worker and copied using GDI. Each frame is a full PNG; change mode
+compares the pixels before encoding. The window identity is revalidated on
+capture; visible bounds and occlusion are checked without substituting a desktop
+capture. Only an explicit request may activate the target, followed by a
+200 ms repaint wait. The ordinary `get_window_state` path is unchanged.
+
+The Remote opens a separate capture lane to the same Host port. The Host checks
+the lease, connection generation and one-time ticket, then serves the frames to
+one authenticated loopback reader. There is no image history, unbounded queue or
+automatic replay. The monitor closes on stop, connection loss or release.
+
+Isolated fixtures cover the control/stream protocol and Win64 GDI capture. The
+live Win32 check on Misura-VM2 received two decoded 800 × 600 Quindos-Graphics
+crop PNGs in RO interval mode. Full capture was correctly refused for an
+off-screen area. Explicit activation on the VM was not tested.
 
 ## Version 2.5 integration
 
@@ -229,11 +249,11 @@ not shown or automatically answered by the host. All four matching binaries
 must be installed together. Version components G.T remain compiler-generated.
 
 Remote 2.x update routing is separate from legacy 1.x: Release reads `stable-2`,
-Rolling reads `rolling-2`. Stable 2.5 advances `stable-2` and is GitHub's Latest
+Rolling reads `rolling-2`. Stable 2.6 advances `stable-2` and is GitHub's Latest
 numbered release. The independent 2.x Rolling package is 2.4.9805.29111;
 legacy 1.x assets and the legacy `rolling` endpoint stay unchanged. The direct versioned
 release links to the full bundle ZIP, named
-`TMILitePlusBundle-2.5.G.T-Win64.zip`. The old single-EXE package recognizer does
+`TMILitePlusBundle-2.6.G.T-Win64.zip`. The old single-EXE package recognizer does
 not accept this bundle. The 2.x extractor stages all four matching EXEs and
 the package's approved runtime/documentation files; personal INI is excluded.
 Fixture validation of extraction/staging is distinct from a live network update.
@@ -439,7 +459,7 @@ change conversation counters or assume new model-step RPCs.
 
 Historical baseline/minimum: Codex CLI 0.157.1. Stable release: 3 October 2026.
 Release build environment: CLI 0.160.0; native queue minimum: 0.159.0.
-The following historical notes do not describe missing features in current 2.5.
+The following historical notes do not describe missing features in current 2.x.
 
 - Server-owned prompt queue, next-item preview and an on-demand editing panel;
   no local queue scheduler or invented pause protocol.

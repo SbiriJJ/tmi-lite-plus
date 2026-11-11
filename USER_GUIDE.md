@@ -1,8 +1,8 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.5  
-Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
-Stable 2.5 — 6 November 2026  
+Version 2.6  
+2.x Rolling build: 2.6.9811.21485 — 11 November 2026  
+Published stable build: 2.5.9806.24165 — 6 November 2026  
 Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
@@ -15,7 +15,7 @@ the user's discretion and risk. Read the supplied EULA and notices.
 Extract the complete Win64 package into a writable directory. Keep
 `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, documentation and viewer assets together.
-All four executables must be from the same bundle. Version 2.5 uses local IPC
+All four executables must be from the same bundle. Version 2.6 uses local IPC
 protocol 17; update the runtime executables together, not one binary at a time.
 Start `TMILitePlus.exe`; it starts/connects to the resident host as needed.
 Accept the versioned EULA when requested. Acceptance stores its version and
@@ -30,7 +30,7 @@ continues to be handled by Codex. A failed/uncertain prompt is not resent after
 login automatically; review it and send it explicitly.
 
 For **1.x to 2.x**, upgrade manually: finish work, close old frontend instances,
-exit any running host, back up settings/Codex data and extract the full 2.5 ZIP.
+exit any running host, back up settings/Codex data and extract the full 2.x ZIP.
 The old single-executable updater is not a four-binary 2.x installer. Do not
 overwrite an executable while it is running.
 
@@ -421,13 +421,18 @@ always mean the agent is waiting or that the task must be interrupted.
 Press Ctrl+Enter in the Questions window to send the selected or written reply.
 The shortcut does not insert a newline; ordinary Enter keeps its normal behavior.
 
-In the current Rolling build, proposed answers on newly received Questions are
-also clickable directly in the conversation. Clicking an answer sends it
+Proposed answers on newly received Questions are also clickable directly in
+the conversation. Live answer links begin with **Quick reply ->** to make their
+immediate action explicit; that prefix is not included in the submitted answer.
+Clicking an answer sends it
 immediately; it does not paste over or clear text in the prompt. While sending,
 or after the question is answered or dismissed, another click cannot send a
 duplicate. **Question** still opens the form for managing several questions or
 writing a different reply. An already-open form reflects the inline choice.
 Reloading history displays old options as text rather than reactivating replies.
+If the message body exactly repeats its structured question titles or formatted
+question block, TMI displays that content once. Additional explanatory prose is
+preserved. Live completion and historical loading use the same composition.
 
 ### Required human approvals (Codex CLI 0.167+)
 
@@ -517,7 +522,7 @@ Ask for a relevant window/control rather than a full tree or full desktop.
 Discovery can filter title/application; reads can target a named control,
 focused element or subtree. Text/output limits and cropped/resized images
 bound returned data. Truncation is explicit. Fresh observations identify
-targets; native handles remain private. Unsupported actions/capture and
+targets; the tools do not return native handles. Unsupported actions/capture and
 cancelled calls return explicit outcomes.
 
 Password values are excluded from accessible reads, but screenshots may show
@@ -528,6 +533,25 @@ executables or other software.
 
 `TMIHost.exe --mcp-stdio` instances are adapters, not duplicate tray hosts.
 Temporary TMIDesktop workers isolate UIA/capture; they do not own target apps.
+
+### Pick a local window or attach a screen area (Rolling 2.6)
+
+The window icon lets you identify a local window without clicking through to
+the application. Press it, then click the target; TMI temporarily hides and
+returns with the window reference appended to the prompt draft. When available,
+the reference includes the window title, executable, HWND, PID, process start
+value, class and screen bounds. `screenPoint` is in physical desktop pixels;
+`windowPoint` is relative to the visible window's upper-left corner and is
+omitted for a point outside those bounds. Esc cancels. For Desktop tools the
+agent still obtains the current `windowId` with `list_windows`; the reference
+does not grant permission to operate the window.
+
+Press the adjacent camera icon to capture part of the desktop. Drag the
+rectangle over the dimmed preview. A new drag replaces the previous rectangle.
+Confirm with the secondary mouse button or press Esc to cancel. The PNG is
+kept under `TMI` in the Windows Pictures folder and added to the draft as an
+attachment. No prompt is sent and the clipboard is not changed. Review the
+selection for confidential information before sending the draft.
 
 ### TMI Remote (trusted LAN)
 
@@ -542,8 +566,8 @@ to the Internet or connect over an untrusted network.**
 
 #### Deploy and connect
 
-1. Download the separate **TMI Remote Windows ZIP** from the chosen stable 2.5
-   or `rolling-2` release
+1. Download the separate **TMI Remote Windows ZIP** from the same stable or
+   `rolling-2` release as your Host
    and verify it using its own published SHA-256 file. The normal Win64 bundle
    and its automatic updater do not deploy Remote to another computer.
 2. Copy one matching pair to the target: `TMIRemote64.exe` + `TMIRemote64.ini`
@@ -586,13 +610,13 @@ red RW** border. Red may also warn of a pending RW request; it is not proof that
 the upgrade has already been approved. The border stays on through network
 interruptions and does not take focus or add a taskbar button.
 
-The Rolling Remote package additionally shows **Codex is using your computer
+The Remote package also shows **Codex is using your computer
 (ESC to disconnect)** at the top of every monitor for the same connection
 lifetime and with the same azure/red scope. The notice is click-through,
 does not activate and disappears with the border when access is released.
 It is native WinAPI/GDI, with no graphical framework or runtime library added.
 To update a Remote already configured, replace its matching EXE with the new
-one from the separate Rolling Remote ZIP; retain the target's existing INI.
+one from the matching separate Remote ZIP; retain the target's existing INI.
 
 **While the border is visible, ESC from any window on the Remote computer
 interrupts the current operation, ends the task connection and revokes remembered
@@ -609,6 +633,32 @@ After normal release, global ESC is removed so it does not affect other programs
 To revoke the remembered grant while idle, focus the Remote console and press
 ESC there. Restarting Remote also clears it. Revocation does not undo actions
 already performed or delete earlier observations from the agent's history.
+
+#### Window monitor
+
+Use matching 2.6 Host and Remote builds. On an authorized RO or RW connection,
+find the window with `remote_call` / `list_windows` and start `remote_monitor`
+with the target IP and returned `windowId`. Select `request`, `interval`, or
+`change` mode. Interval and change modes sample at `intervalMs` (1000 by default;
+250–60000 supported) while a local reader is connected. In change mode, an
+unchanged sample sends nothing. Each frame that is sent is a complete PNG.
+
+The monitor can capture the full client area or a fixed rectangle given by
+`cropX`, `cropY`, `cropWidth` and `cropHeight`, all in client pixels. The selected
+area must be visible and unobstructed; use a crop above 4 million pixels or when
+part of the window is off-screen. The monitor never substitutes a desktop image.
+
+Automatic captures do not take focus. A specific `capture` request may use
+`activate: true` to ask Windows to bring the target forward and allow 200 ms for
+repaint. This is permitted on an already approved RO lease and does not enable
+other input actions. It can fail if Windows refuses foreground activation.
+
+Connect one TCP reader to the loopback address/port returned by `start` within
+60 seconds and authenticate with the supplied token. The reader receives PNGs
+instead of the frames being included in MCP responses. The Remote ZIP's README
+describes the length-prefixed protocol and includes a reader example. `stop`
+ends only the monitor. Disconnecting the reader, ending/revoking the Remote
+lease or losing the control connection also closes the stream.
 
 #### Recovery, capabilities and limits
 
@@ -633,14 +683,18 @@ Win64 offers native window messages, semantic UIA and PNG capture, subject to
 the same Windows/provider limits as local tools. Native operations do not
 implicitly activate the target; UIA/physical actions retain their own constraints.
 Win32 provides native enumeration/text, Unicode native editing, supported direct
-clicks, wheel/key messages and full-window GDI PNG. It does not offer UIA,
-physical input, drag, application launching or activation, and rejects crop
-requests explicitly. Locked/protected desktops and Windows permissions are not
-bypassed. Neither provider grants hidden or unattended Internet access.
+clicks, wheel/key messages and full-window GDI PNG. Its ordinary observation
+command does not support crop; the window monitor supports client-area crop on
+both editions. Win32 does not offer UIA, physical input, drag, application
+launching or the general `activate_window` action. Locked/protected desktops and
+Windows permissions are not bypassed. Neither provider grants hidden or
+unattended Internet access.
 
 XP VM operator tests passed for RO/RW consent, denied upgrades, grant reuse,
 native Unicode writing, full-window PNG, initial azure border and active/idle
-ESC behavior. **Physical-LAN outage tests, multiple Remote monitors, actual
+ESC behavior. The 2.6 Win32 monitor also delivered two live cropped PNGs of
+Quindos-Graphics on Misura-VM2 in RO mode without changing focus. The full area
+was refused because part was off-screen. **Physical-LAN outage tests, multiple Remote peers, actual
 Remote64 deployment and Windows 2000 execution remain unverified.** Linux is
 not included. See the README in the Remote ZIP for deployment details.
 
@@ -782,9 +836,11 @@ or retained by TMI across restarts.
 
 Context and account limits are native readings. Limits+ keeps additional
 buckets in the hint. Reset-credit count/earliest expiry appear only when supplied;
-the Token warning highlights relevant expiry or exhausted limits. Missing data
-is not invented. Turn-end summaries distinguish consumed tokens from input/output
-and conversation totals.
+**Token** is visible whenever a usable reset credit is available. It uses the
+normal background unless expiry or exhausted limits warrant a warning color.
+Click it to confirm using a credit, including before the limit is exhausted.
+Missing data is not invented. Turn-end summaries distinguish consumed tokens
+from input/output and conversation totals.
 
 TMI does not enable experimental background compaction. Manual Compact remains
 available; no compaction test switch or automatic activation is added here.
@@ -1037,14 +1093,13 @@ an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
 `rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle and is not replaced by stable 2.5.
-GitHub's Latest numbered release is v2.5; the direct
-[2.5 release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5)
+contains the independent rolling bundle. GitHub's Latest numbered release is
+v2.5; the direct [stable release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5)
 also provides the full bundle for initial installation. Earlier versioned ZIPs,
 legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
 single-EXE updater does not recognize 2.x bundle filenames.
 
-This release uses `TMILitePlusBundle-2.5.G.T-Win64.zip`; downloaded 2.x bundles stage the four
+The Rolling build uses `TMILitePlusBundle-2.6.9811.21485-Win64.zip`; downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching

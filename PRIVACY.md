@@ -1,7 +1,7 @@
 # TMI Lite+ Privacy Notice
 
-Version 2.5  
-Last updated: 6 November 2026
+Version 2.6  
+Last updated: 10 November 2026
 
 ## Summary
 
@@ -118,6 +118,12 @@ arguments and responses travel over that LAN connection in plaintext. Use only
 an operator-controlled trusted LAN; never expose the port to the Internet or
 use it on an untrusted network. Remote observations returned to the agent may
 also reach the configured AI provider and remain in Codex history.
+
+The optional window monitor sends complete PNGs to one token-authenticated TCP
+reader on the Host computer, through a listener bound only to loopback. It uses
+a separate Remote connection to the same trusted-LAN Host port. Monitor frames
+are not included in the MCP tool response or recorded by TMI; a reader may save
+or forward frames independently. Keep the temporary reader token private.
 
 The Remote console retains approval in memory until it restarts or the operator
 revokes it with ESC. Normal task release ends access/borders but retains that
