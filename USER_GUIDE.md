@@ -1,9 +1,9 @@
 # TMI Lite+ for AI agents — User Guide
 
 Version 2.6  
-2.x Rolling build: 2.6.9811.21485 — 11 November 2026  
-Published stable build: 2.5.9806.24165 — 6 November 2026  
-Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider
+Stable build: 2.6.9818.25491 — 18 November 2026  
+2.x Rolling build: 2.6.9820.21842 — 20 November 2026  
+Tested Codex CLI: focused integration checks with 0.170.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
 not provide an AI model, account or subscription. It is hobby-developed and
@@ -181,13 +181,13 @@ the current turn finishes; an empty live list does not mean there are no saved
 agent threads. Agent metadata is loaded only for the open thread, without polling
 or a full-history scan.
 
-Double-click an agent in either list to open its conversation snapshot in a
-separate read-only window with text search. TMI sends `thread/read` through the
-parent's running Codex process; it does not resume the agent, detach the parent
-thread, or switch the parent writer.
-Inspection is also available while the parent is working. The window shows the
-history received for that request, not a continuously updated live transcript.
-Stop or close the window to cancel local preparation; late replies are ignored.
+Double-click an agent in either list to open its conversation in a separate
+read-only window with text search. TMI reads it through the parent's Codex
+process; it does not resume the agent, detach the parent or switch the writer.
+In Rolling, the reader of an active agent with paginated history refreshes the
+latest saved turn (up to 100 items) every three seconds. Inactive agents show
+static history. Ephemeral and legacy agents do not offer live history.
+Stop or close the window to stop following without interrupting either agent.
 
 Only after an explicit expansion of a real project returns zero active threads
 does TMI scan unassigned threads for automatic assignment, at most once per
@@ -209,6 +209,13 @@ Code Mode interruption is stable and enabled. Effectiveness is determined by
 Codex and its current operation, not by an extra TMI interrupt command.
 While the context is being compacted, Steer is unavailable and the draft is
 retained; wait until compaction ends. Normal append/queue handling is unchanged.
+In Rolling, Steer keeps the prompt and attachments visible and locks editing
+until Codex confirms the matching request. If the turn ends before confirmation,
+or the request fails or disconnects, the draft is unlocked and retained.
+
+In the prompt editor, **Alt+Backspace** undoes one edit and
+**Alt+Shift+Backspace** redoes it. A paste or deletion of a selection counts
+as one edit. Ctrl+Z keeps its native behavior.
 
 **Enqueue** and **Queue (n)** use the persistent server-owned prompt queue.
 Its panel reads, edits, removes, reorders or starts queued prompts. The next
@@ -251,13 +258,52 @@ retry an interrupted model-resolution step and reopen the same existing thread.
 Buttons become available after the server has actually opened the thread; TMI
 does not bypass that connection requirement.
 
+**Web search** shows the thread's preferred search mode. Set the shared default
+in **Configuration > Global Codex defaults**; with no configuration entry it is
+**Cached**. The thread selector marks that choice with **(default)**. Choosing
+it removes the thread override. Codex decides what search mode it can use each
+turn from the preference, sandbox, provider and policy; changing sandbox does
+not write a different preference into TMI.
+
+**Output detail** is a per-thread control: **Model default**, **Low**, **Medium**
+or **High**. Two threads using the same model can use different detail levels.
+Selecting **Model default** removes the TMI override and leaves the choice to
+Codex. TMI does not edit a shared verbosity setting or erase one set outside TMI.
+
+For a new conversation, the two choices apply when its thread is created.
+For an idle loaded thread, changing either choice closes and reopens only that
+thread's Codex session. It keeps the same thread ID, project, working directory,
+model, reasoning and permissions, and does not send a prompt. The frontend stays
+connected to Host; other threads are unaffected. The controls are unavailable
+during work, compaction, pending requests or connection transitions. A failed
+change remains visible and is not saved as a confirmed choice.
+
+**Reasoning summary** starts at **None** for both new and existing threads unless
+you have chosen a different value for that thread in TMI. A manual change uses
+Codex's native settings and does not reopen the thread; the choice applies to
+subsequent turns and is retained for the next time you open the same thread.
+If Codex sends a readable summary, TMI displays it as a temporary
+`Thinking: …` status next to Activity, not in the conversation history.
+
+**Sandbox** lists the three traditional modes and the custom permission profiles
+that Codex allows for the current working directory. Profile choices use their
+native IDs and are not converted into simplified sandbox rules. **Approvals** and
+**Auto-review** remain separate. **Network access** is not editable for a custom
+profile: its network rules belong to that profile. Changing model or reasoning
+does not replace the permission profile. **CLI Setup → Sandbox Profiles**
+can edit the global profile definition while disconnected. It writes only
+the selected custom profile, not the default or other configuration. Project
+profile files are not edited by TMI. Windows sandbox backend limitations
+still apply; for example, the legacy elevated backend requires effective
+root read access.
+
 Fast, Auto-review, Network access, Auto switch and Poll use compact toggle buttons.
 On uses the active color; Off uses the normal background with a thin diagonal
 red slash and readable text. Poll is idle limit polling; its hint shows the
 configured interval. Fast reflects Codex's available service tier, not a
 guarantee of speed or model availability.
 
-**Auto switch**, beside Network access, is host-owned and changes all frontends
+**Auto switch**, below the thread settings, is host-owned and changes all frontends
 until the host restarts. After an accepted prompt it activates an already-open,
 non-minimized frontend, prioritizing input requests, permissions, then idle
 threads; ties use most recent activity. It focuses the prompt without changing
@@ -566,8 +612,7 @@ to the Internet or connect over an untrusted network.**
 
 #### Deploy and connect
 
-1. Download the separate **TMI Remote Windows ZIP** from the same stable or
-   `rolling-2` release as your Host
+1. Download the separate **TMI Remote Windows ZIP** from the same release as your Host
    and verify it using its own published SHA-256 file. The normal Win64 bundle
    and its automatic updater do not deploy Remote to another computer.
 2. Copy one matching pair to the target: `TMIRemote64.exe` + `TMIRemote64.ini`
@@ -739,7 +784,10 @@ In **Configuration > Memories**, **Enable Memories** controls the native feature
 The **Use memories** selector permits or prevents shared-memory use in new Codex
 sessions; **Generate memories** is a separate checkbox permitting automatic
 background generation from eligible conversations, not a "generate now" command.
-Disabling the feature disables these two inputs without erasing their selections
+**Allow memories from tool-assisted chats** permits conversations that used MCP,
+web search or other external context to contribute to memory generation. It does
+not enable those tools or change whether existing memories can be used.
+Disabling the feature disables these inputs without erasing their selections
 or deleting the stored memories. Changes are saved with **Save** to Codex's user
 or selected-profile configuration, not TMI's INI. Existing sessions are unchanged.
 The current global values are read whenever Configuration opens. If another
@@ -799,6 +847,11 @@ task/session/day. Opening it selects the latest edit automatically, including
 all edits with the same timestamp to the second. Select several diffs with
 Ctrl/Shift to view them together. File links support default open, Show in
 Explorer and Download; Download remembers its chosen location.
+In Rolling, **Preview** in these menus opens local `.txt` and `.md` files
+as selectable, copyable text in TMI. **Open** retains its normal behavior.
+**Turn Diff**, at the right of Activity, opens the native combined diff for the
+latest completed turn if Codex reported one. The existing per-edit diffs remain
+separate.
 While a download runs, its context-menu command becomes **Cancel download**.
 Closing the frontend cancels the transfer within its bounded shutdown; failed
 or cancelled transfers preserve an existing destination and remove temporary files.
@@ -842,6 +895,13 @@ Click it to confirm using a credit, including before the limit is exhausted.
 Missing data is not invented. Turn-end summaries distinguish consumed tokens
 from input/output and conversation totals.
 
+In Rolling, click the **Ctx** bar when it shows usage to see the usable
+capacity, used and remaining tokens. Set the orange and red percentages for
+that exact usable capacity; all threads with that capacity share the local INI
+settings. The labels show the token equivalent. Leave either field blank to
+use its default (orange 80%, red disabled), or enter 100% to disable that
+color explicitly.
+
 TMI does not enable experimental background compaction. Manual Compact remains
 available; no compaction test switch or automatic activation is added here.
 Native read/unread result metadata is separate from conversation retention:
@@ -851,6 +911,9 @@ answer. When a loaded turn has no final answer, TMI additionally pages that
 turn's persisted messages, including commentary and partial answers. It keeps
 their order and does not retain historical tool/diff payloads from this recovery.
 Normal line/turn limits and Full Load's Stop/memory limit remain in effect.
+In Rolling, **Reload Detail** separately reloads recent commentary and available
+Activity/diffs within the visible history budget. Commentary and final answers
+use their respective live colors.
 A complete live replay replaces the same turn during reattachment, without
 duplicating its messages. Old summary-only caches are invalidated. Text never
 persisted before an abrupt process loss cannot be reconstructed by this feature.
@@ -1091,15 +1154,16 @@ Release and Rolling are independent opt-in channels in Configuration.
 Checks use the selected channel/schedule and run in the background; installing
 an available update requires confirmation. Their visible names and frequency
 choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
-`rolling-2`**, separate from legacy 1.x Latest/`rolling`. The
-[2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-contains the independent rolling bundle. GitHub's Latest numbered release is
-v2.5; the direct [stable release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.5)
+`rolling-2`**, separate from legacy 1.x. The Rolling option also considers newer
+stable builds. GitHub's Latest numbered release is
+v2.6; the direct [stable release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
 also provides the full bundle for initial installation. Earlier versioned ZIPs,
 legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
 single-EXE updater does not recognize 2.x bundle filenames.
 
-The Rolling build uses `TMILitePlusBundle-2.6.9811.21485-Win64.zip`; downloaded 2.x bundles stage the four
+Stable uses `TMILitePlusBundle-2.6.9818.25491-Win64.zip`, and the
+[2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+provides `TMILitePlusBundle-2.6.9820.21842-Win64.zip`. Downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching
@@ -1107,6 +1171,9 @@ staged files in `update\\`: newer numeric Windows file versions are required
 for binaries, changed data/docs are compared by content. Personal INI settings
 are not replaced. Restart and Update is coordinated with the host and refuses
 active work/requests or running maintenance; idle frontends are allowed.
+The updater restores each frontend's window and reconnects its attached thread
+once the Host is ready. Empty windows stay empty. Only updates started from a
+build that supports this feature restore the windows.
 
 Never copy a lone incompatible binary over a running bundle. Keep backups.
 Do not use TMI Lite+ and the **ChatGPT desktop app on the same project at the

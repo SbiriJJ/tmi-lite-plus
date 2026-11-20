@@ -1,10 +1,10 @@
 # TMI Lite+ for AI agents — Development Notes
 
 Document version 2.6  
-Current 2.x Rolling build: 2.4.9805.29111 — 5 November 2026  
-Stable 2.6 — 10 November 2026  
-Tested Codex CLI: 0.167.0; focused compatibility checks also cover 0.164.0–0.166.0, not every capability or provider  
-Local IPC protocol: 17
+Stable 2.6.9818.25491 — 18 November 2026  
+Rolling 2.6.9820.21842 — 20 November 2026  
+Tested Codex CLI: focused integration checks with 0.170.0  
+Local IPC protocol: 18
 
 ## Version 2.6 Remote window monitor
 
