@@ -2,7 +2,7 @@
 
 Version 2.6  
 Stable build: 2.6.9818.25491 — 18 November 2026  
-2.x Rolling build: 2.6.9820.21842 — 20 November 2026  
+2.x Rolling build: 2.6.9820.29566 — 20 November 2026  
 Tested Codex CLI: focused integration checks with 0.170.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
@@ -176,10 +176,10 @@ or inserted into an AI prompt without choosing **<Prompt**.
 
 **Spawn agents** shows saved descendants of the open thread, including nested
 agents, with nickname and role when supplied by Codex. It is independent of the
-browser's selected row. **Subagents** shows live agent activity and clears when
-the current turn finishes; an empty live list does not mean there are no saved
-agent threads. Agent metadata is loaded only for the open thread, without polling
-or a full-history scan.
+browser's selected row. **Subagents** shows live activity. In Rolling, each
+agent keeps its own row while active, even if the parent turn ends or another
+one starts. An empty live list does not mean there are no saved agent threads.
+Agent metadata discovery is scoped to the open thread.
 
 Double-click an agent in either list to open its conversation in a separate
 read-only window with text search. TMI reads it through the parent's Codex
@@ -800,8 +800,10 @@ preferences and application-update commands remain available.
 
 **Sample** asks a temporary question using the loaded conversation context.
 It requires an idle, persistent main thread with at least one finished,
-failed or interrupted turn, and no attachments. The prompt remains in the
-input editor. Activity shows preparation, generation and completion, with an
+failed or interrupted turn, and no attachments. While pending in Rolling, the
+prompt remains editable, but Append and Ctrl+Enter cannot send it. On success,
+TMI clears only the unchanged Sample prompt if no attachments were added.
+Failure or cancellation retains the draft. Activity shows preparation, generation and completion, with an
 independent elapsed time. While pending, the green **Cancel Sample** button
 cancels only that temporary request. The question, answer and available Sample
 token counts appear in the normal conversation view, with its usual copying,
@@ -850,8 +852,8 @@ Explorer and Download; Download remembers its chosen location.
 In Rolling, **Preview** in these menus opens local `.txt` and `.md` files
 as selectable, copyable text in TMI. **Open** retains its normal behavior.
 **Turn Diff**, at the right of Activity, opens the native combined diff for the
-latest completed turn if Codex reported one. The existing per-edit diffs remain
-separate.
+latest completed turn if Codex reported one. Blue file headers separate each
+file's changes. The existing per-edit diffs remain separate.
 While a download runs, its context-menu command becomes **Cancel download**.
 Closing the frontend cancels the transfer within its bounded shutdown; failed
 or cancelled transfers preserve an existing destination and remove temporary files.
@@ -1163,7 +1165,7 @@ single-EXE updater does not recognize 2.x bundle filenames.
 
 Stable uses `TMILitePlusBundle-2.6.9818.25491-Win64.zip`, and the
 [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-provides `TMILitePlusBundle-2.6.9820.21842-Win64.zip`. Downloaded 2.x bundles stage the four
+provides `TMILitePlusBundle-2.6.9820.29566-Win64.zip`. Downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching

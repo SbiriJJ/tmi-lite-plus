@@ -2,7 +2,7 @@
 
 Document version 2.6  
 Stable 2.6.9818.25491 — 18 November 2026  
-Rolling 2.6.9820.21842 — 20 November 2026  
+Rolling 2.6.9820.29566 — 20 November 2026  
 Tested Codex CLI: focused integration checks with 0.170.0  
 Local IPC protocol: 18
 

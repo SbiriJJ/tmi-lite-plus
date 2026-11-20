@@ -20,19 +20,26 @@ and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
 Stable Windows executable version: **2.6.9818.25491** (Release/Win64).
-Independent **2.x Rolling** build: **2.6.9820.21842** (20 November 2026).
+Independent **2.x Rolling** build: **2.6.9820.29566** (20 November 2026).
 Focused integration checks used Codex CLI **0.170.0**. Compatibility can vary
 by provider, Codex version and Windows sandbox backend.
 
 [![Release 2.x](https://img.shields.io/badge/Release%202.x-2.6-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
-[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.6.9820.21842-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+[![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.6.9820.29566-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
 [![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.170-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in Rolling 2.6.9820.21842
+## What's new in Rolling 2.6.9820.29566
+
+- **Turn Diff:** a blue header marks the start of each file's changes.
+- **Sample:** Append and Ctrl+Enter wait while a Sample is running. The draft
+  remains editable and is cleared on success only if still unchanged.
+- **Subagents:** still-active agents remain visible after the main turn ends.
+
+### Also included from previous Rolling builds
 
 - **Ctx thresholds:** click the context bar to set orange/red thresholds by
   usable context capacity, with their equivalent token counts. Blank uses
@@ -262,7 +269,7 @@ Version 2.2 also retains these stable 2.1 improvements:
 The [stable 2.6 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
 provides the Win64 bundle and a separate Windows ZIP for both Remote editions.
 The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-provides the newer `TMILitePlusBundle-2.6.9820.21842-Win64.zip` and a separate
+provides the newer `TMILitePlusBundle-2.6.9820.29566-Win64.zip` and a separate
 Remote ZIP with the same Remote executables as stable 2.6.
 Copy the selected Remote EXE to the target manually and keep its existing INI.
 Earlier numbered releases and the legacy 1.x update line are separate.
