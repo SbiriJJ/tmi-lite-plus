@@ -19,38 +19,35 @@ cache writes, output, reasoning tokens and elapsed time. On-demand Usage charts
 and host-owned working-time statistics help compare workflows without claiming
 to calculate subscription billing costs.
 
-Stable Windows executable version: **2.6.9818.25491** (Release/Win64).
+Published stable Windows executable version: **2.7.9824.39087** (Release/Win64).
 Independent **2.x Rolling** build: **2.6.9820.29566** (20 November 2026).
-Focused integration checks used Codex CLI **0.170.0**. Compatibility can vary
+Version 2.7 was developed with Codex CLI **0.172.0**. Compatibility can vary
 by provider, Codex version and Windows sandbox backend.
 
-[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.6-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
+[![Release 2.x](https://img.shields.io/badge/Release%202.x-2.7-blue?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.7)
 [![Rolling 2.x](https://img.shields.io/badge/Rolling%202.x-2.6.9820.29566-orange?style=flat-square)](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D4?style=flat-square)](#requirements)
-[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.170-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
+[![Codex CLI](https://img.shields.io/badge/Codex%20CLI-0.172-6f42c1?style=flat-square)](https://developers.openai.com/codex/)
 [![Downloads](https://img.shields.io/github/downloads/SbiriJJ/tmi-lite-plus/total?style=flat-square&color=brightgreen)](https://github.com/SbiriJJ/tmi-lite-plus/releases)
 [![License](https://img.shields.io/badge/license-Custom%20EULA-lightgrey?style=flat-square)](EULA.md)
 [![Status](https://img.shields.io/badge/status-unofficial-orange?style=flat-square)](LEGAL_NOTICE.md)
 
-## What's new in Rolling 2.6.9820.29566
+## What's new in stable 2.7
 
-- **Turn Diff:** a blue header marks the start of each file's changes.
-- **Sample:** Append and Ctrl+Enter wait while a Sample is running. The draft
-  remains editable and is cleared on success only if still unchanged.
-- **Subagents:** still-active agents remain visible after the main turn ends.
-
-### Also included from previous Rolling builds
-
-- **Ctx thresholds:** click the context bar to set orange/red thresholds by
-  usable context capacity, with their equivalent token counts. Blank uses
-  the default; 100% disables that color.
-- **Turn Diff and Preview:** see Codex's combined diff after a turn, or preview
-  local text and Markdown files inside TMI without changing the Open command.
-- **Steer:** the draft and attachments remain visible until Codex confirms
-  the request. If the turn ends first, the draft is unlocked and retained.
-- **Live subagent reader and Reload Detail:** follow recent saved messages for
-  supported active agents, or reload recent commentary and available Activity
-  separately from the normal summary view.
+- **Optional Browser Tools with Playwright:** connect to a tab in your already
+  open browser after approving it. The per-thread toggle unloads its Node
+  process when turned off. See [Browser Tools setup](BROWSER_TOOLS.md).
+- **Fast and Ultrafast:** separate buttons choose one speed at a time, only
+  when offered by Codex for the current model and account. Click the active
+  speed again to return to Standard.
+- **Sample and token reporting:** Codex CLI 0.172.0 removes Sample's fixed
+  4,000-byte limit; the input counter stays visible. TMI retains the known
+  starting token count when reattaching to a turn, even if the live replay
+  buffer has expired.
+- **Changes and history:** native Turn Diff with blue file headers, read-only
+  text and Markdown previews, editable Ctx thresholds, and Reload Detail with
+  commentary and Activity when available. Steer keeps the draft until Codex
+  acknowledges it. The subagent reader can follow recent saved messages.
 
 ## What's new in stable 2.6
 
@@ -63,11 +60,11 @@ by provider, Codex version and Windows sandbox backend.
   options before showing the Quick reply links.
 - **Per-thread response settings:** choose Web search, Output detail and
   Reasoning summary independently.
-- **Named sandbox profiles:** choose a profile in the Sandbox selector, or
-  define and edit a global custom profile offline in **CLI Setup → Sandbox
-  Profiles**. The editor changes only the selected profile, not Codex defaults.
+- **Named sandbox profiles:** choose a profile in the Sandbox selector or
+  edit its global definition offline in **CLI Setup → Sandbox Profiles**.
+  The editor changes only the selected profile.
 
-### Also included in this release
+### Window picker and screen capture
 
 - **Pick a window:** click the window icon, then a local window to add its title,
   executable, HWND, PID, class and click coordinates to the prompt draft. The
@@ -77,7 +74,7 @@ by provider, Codex version and Windows sandbox backend.
   TMI saves a PNG in the Windows Pictures folder under `TMI` and attaches it to
   the draft without sending the prompt or modifying the clipboard.
 
-This Rolling bundle also includes the following changes prepared for stable 2.6:
+Stable 2.6 also includes the following changes:
 
 - **Remote window monitor:** deliver complete client-area PNGs to a local TCP
   reader on the Host, on request, at intervals, or when the pixels change. A
@@ -188,8 +185,7 @@ Version 2.4 also includes these improvements from Rolling 2.3.9798.40375:
   retains its first prompt if opening fails, disabled schedules cannot dispatch
   queued jobs, downloads can be cancelled, and CLI Setup inputs stay dark.
 
-The `stable-2` channel and GitHub's Latest numbered release provide stable
-2.6. The stable 2.3 improvements below are retained.
+The stable 2.3 improvements below are retained.
 
 ## What's new in stable 2.3
 
@@ -266,13 +262,11 @@ Version 2.2 also retains these stable 2.1 improvements:
 - **Agent snapshots while working:** inspect an agent's conversation through
   its parent's process without resuming it or changing the parent writer.
 
-The [stable 2.6 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
+The [stable 2.7 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.7)
 provides the Win64 bundle and a separate Windows ZIP for both Remote editions.
-The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-provides the newer `TMILitePlusBundle-2.6.9820.29566-Win64.zip` and a separate
-Remote ZIP with the same Remote executables as stable 2.6.
 Copy the selected Remote EXE to the target manually and keep its existing INI.
-Earlier numbered releases and the legacy 1.x update line are separate.
+The [2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
+and the legacy 1.x update line remain separate.
 
 ## Core 2.x features
 
@@ -311,7 +305,7 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 ## Download and installation
 
-1. Download the Win64 ZIP from the [stable 2.6 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6).
+1. Download the Win64 ZIP from the [stable 2.7 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.7).
 2. Check the archive against its published SHA-256 checksum.
 3. Extract the **complete** archive into a writable directory.
 4. Start `TMILitePlus.exe` and accept the versioned disclaimer/EULA.
@@ -319,7 +313,7 @@ See [Release Notes](RELEASE_NOTES.md) for changes, verification and limitations.
 
 Keep `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, the supplied documentation and viewer assets together.
-Install matching binaries from one bundle; local IPC protocol **17** rejects
+Install matching binaries from one bundle; local IPC protocol **18** rejects
 incompatible peers. Do not run from inside the ZIP or replace a running host by
 copying only one executable.
 
@@ -352,7 +346,7 @@ The host/frontends still require 64-bit Windows. A **remote target** can use the
 modern Win64 console or the separate Win32 console tested on an XP VM:
 
 1. Download the separate **TMI Remote Windows ZIP** from the same
-   [numbered release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6) as the Host
+   [numbered release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.7) as the Host
    and verify its published SHA-256. Copy the matching `TMIRemote64.exe` +
    `TMIRemote64.ini`, or `TMIRemote86.exe` + `TMIRemote86.ini`, to the target.
 2. Set `HostIP` in that INI to the actual IPv4 address of the TMI Host computer.
@@ -409,13 +403,14 @@ cross-client coordination with that app.
 - [Third-Party Notices](THIRD_PARTY_NOTICES.md)
 - [User Guide](USER_GUIDE.md)
 - [Release Notes](RELEASE_NOTES.md)
+- [Optional Browser Tools setup](BROWSER_TOOLS.md)
 - [Optional MicroTeX Setup](MICROTEX_SETUP.md)
 - [Development Notes](DEVELOPMENT_NOTES.md)
 
 Use the complete 2.x bundle linked above, not an old single-EXE update package.
-The 2.x **Release** channel uses `stable-2`. **Rolling** can also receive
-newer builds from `rolling-2`. Legacy 1.x assets and the `rolling` endpoint
-are unchanged.
+The 2.x **Release** channel uses `stable-2`. **Rolling** also considers newer
+eligible bundles from `rolling-2`; it does not install an older rolling build
+over stable 2.7. Legacy 1.x assets and the `rolling` endpoint are unchanged.
 
 The visible Release/Rolling choices and check schedules remain unchanged.
 Remote 2.x packages stage all four executables plus supplied runtime assets

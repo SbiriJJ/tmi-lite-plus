@@ -1,10 +1,24 @@
 # TMI Lite+ for AI agents — Development Notes
 
-Document version 2.6  
-Stable 2.6.9818.25491 — 18 November 2026  
+Document version 2.7  
+Stable 2.7.9824.39087 — 24 November 2026  
 Rolling 2.6.9820.29566 — 20 November 2026  
-Tested Codex CLI: focused integration checks with 0.170.0  
+Codex CLI used for development: 0.172.0  
 Local IPC protocol: 18
+
+## Version 2.7 browser and thread settings
+
+Browser Tools adds an optional stdio Playwright server to the selected work's
+Codex launch only. The existing Windows process job owns its Node child and
+stops it when the work reconnects with Browser Tools off. The global Codex
+configuration is not written. Packaging includes setup instructions, not Node
+or npm dependencies.
+
+Speed controls use the model catalog's advertised service-tier IDs and one
+native `serviceTier` setting. The Sample byte cap is gated by the selected
+worker version. The resident snapshot transports token baselines separately
+from transcript replay, so a completed turn does not lose its exact token
+delta simply because the frontend attached after the replay buffer expired.
 
 ## Version 2.6 Remote window monitor
 

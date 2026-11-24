@@ -1,7 +1,7 @@
 # TMI Lite+ Legal and Copyright Notice
 
-Document version 2.6  
-Last updated: 10 November 2026
+Document version 2.7  
+Last updated: 24 November 2026
 
 ## Copyright
 

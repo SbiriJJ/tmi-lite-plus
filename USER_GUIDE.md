@@ -1,9 +1,9 @@
 # TMI Lite+ for AI agents — User Guide
 
-Version 2.6  
-Stable build: 2.6.9818.25491 — 18 November 2026  
+Version 2.7  
+Stable build: 2.7.9824.39087 — 24 November 2026  
 2.x Rolling build: 2.6.9820.29566 — 20 November 2026  
-Tested Codex CLI: focused integration checks with 0.170.0
+Codex CLI used for development: 0.172.0
 
 TMI Lite+ is a lightweight independent Windows client for Codex CLI. It does
 not provide an AI model, account or subscription. It is hobby-developed and
@@ -15,8 +15,8 @@ the user's discretion and risk. Read the supplied EULA and notices.
 Extract the complete Win64 package into a writable directory. Keep
 `TMILitePlus.exe`, `TMIHost.exe`, `TMIDesktop.exe`,
 `TMIMaintenance.exe`, documentation and viewer assets together.
-All four executables must be from the same bundle. Version 2.6 uses local IPC
-protocol 17; update the runtime executables together, not one binary at a time.
+All four executables must be from the same bundle. Version 2.7 uses local IPC
+protocol 18; update the runtime executables together, not one binary at a time.
 Start `TMILitePlus.exe`; it starts/connects to the resident host as needed.
 Accept the versioned EULA when requested. Acceptance stores its version and
 SHA-256 fingerprint; a changed EULA version or text asks for acceptance again.
@@ -176,18 +176,18 @@ or inserted into an AI prompt without choosing **<Prompt**.
 
 **Spawn agents** shows saved descendants of the open thread, including nested
 agents, with nickname and role when supplied by Codex. It is independent of the
-browser's selected row. **Subagents** shows live activity. In Rolling, each
-agent keeps its own row while active, even if the parent turn ends or another
-one starts. An empty live list does not mean there are no saved agent threads.
-Agent metadata discovery is scoped to the open thread.
+browser's selected row. **Subagents** shows live activity. Each agent stays
+visible while active, even if the parent turn ends or another one starts.
+An empty live list does not mean there are no saved agent threads. Agent
+metadata discovery is scoped to the open thread.
 
 Double-click an agent in either list to open its conversation in a separate
 read-only window with text search. TMI reads it through the parent's Codex
 process; it does not resume the agent, detach the parent or switch the writer.
-In Rolling, the reader of an active agent with paginated history refreshes the
-latest saved turn (up to 100 items) every three seconds. Inactive agents show
-static history. Ephemeral and legacy agents do not offer live history.
-Stop or close the window to stop following without interrupting either agent.
+For an active agent with paginated history, the reader refreshes its latest
+saved turn (up to 100 items) every three seconds while open. Inactive agents
+show static history; ephemeral and legacy agents do not offer live history.
+Stop or close the reader without interrupting either agent.
 
 Only after an explicit expansion of a real project returns zero active threads
 does TMI scan unassigned threads for automatic assignment, at most once per
@@ -209,9 +209,9 @@ Code Mode interruption is stable and enabled. Effectiveness is determined by
 Codex and its current operation, not by an extra TMI interrupt command.
 While the context is being compacted, Steer is unavailable and the draft is
 retained; wait until compaction ends. Normal append/queue handling is unchanged.
-In Rolling, Steer keeps the prompt and attachments visible and locks editing
-until Codex confirms the matching request. If the turn ends before confirmation,
-or the request fails or disconnects, the draft is unlocked and retained.
+Steer keeps the prompt and attachments visible and locks editing until Codex
+acknowledges the request. If the turn ends first or the request fails, TMI
+unlocks and retains the draft.
 
 In the prompt editor, **Alt+Backspace** undoes one edit and
 **Alt+Shift+Backspace** redoes it. A paste or deletion of a selection counts
@@ -282,8 +282,8 @@ change remains visible and is not saved as a confirmed choice.
 you have chosen a different value for that thread in TMI. A manual change uses
 Codex's native settings and does not reopen the thread; the choice applies to
 subsequent turns and is retained for the next time you open the same thread.
-If Codex sends a readable summary, TMI displays it as a temporary
-`Thinking: …` status next to Activity, not in the conversation history.
+Readable summaries sent by Codex appear temporarily next to Activity, not in
+the conversation history.
 
 **Sandbox** lists the three traditional modes and the custom permission profiles
 that Codex allows for the current working directory. Profile choices use their
@@ -291,17 +291,18 @@ native IDs and are not converted into simplified sandbox rules. **Approvals** an
 **Auto-review** remain separate. **Network access** is not editable for a custom
 profile: its network rules belong to that profile. Changing model or reasoning
 does not replace the permission profile. **CLI Setup → Sandbox Profiles**
-can edit the global profile definition while disconnected. It writes only
-the selected custom profile, not the default or other configuration. Project
-profile files are not edited by TMI. Windows sandbox backend limitations
-still apply; for example, the legacy elevated backend requires effective
-root read access.
+edits only the selected global profile while disconnected. It does not change
+Codex defaults or edit project profile files. Windows backend limitations
+still apply; the legacy elevated backend requires effective root read access.
 
-Fast, Auto-review, Network access, Auto switch and Poll use compact toggle buttons.
+Fast, Ultrafast, Auto-review, Network access, Auto switch and Poll use compact toggle buttons.
 On uses the active color; Off uses the normal background with a thin diagonal
 red slash and readable text. Poll is idle limit polling; its hint shows the
-configured interval. Fast reflects Codex's available service tier, not a
+configured interval. Fast and Ultrafast reflect Codex's available service tiers, not a
 guarantee of speed or model availability.
+They are mutually exclusive and independent of reasoning effort. If the
+catalog does not offer a speed for the selected model and account, its button
+stays disabled. Click the selected speed again to return to Standard.
 
 **Auto switch**, below the thread settings, is host-owned and changes all frontends
 until the host restarts. After an accepted prompt it activates an already-open,
@@ -612,7 +613,8 @@ to the Internet or connect over an untrusted network.**
 
 #### Deploy and connect
 
-1. Download the separate **TMI Remote Windows ZIP** from the same release as your Host
+1. Download the separate **TMI Remote Windows ZIP** from the same stable or
+   `rolling-2` release as your Host
    and verify it using its own published SHA-256 file. The normal Win64 bundle
    and its automatic updater do not deploy Remote to another computer.
 2. Copy one matching pair to the target: `TMIRemote64.exe` + `TMIRemote64.ini`
@@ -800,19 +802,19 @@ preferences and application-update commands remain available.
 
 **Sample** asks a temporary question using the loaded conversation context.
 It requires an idle, persistent main thread with at least one finished,
-failed or interrupted turn, and no attachments. While pending in Rolling, the
-prompt remains editable, but Append and Ctrl+Enter cannot send it. On success,
-TMI clears only the unchanged Sample prompt if no attachments were added.
-Failure or cancellation retains the draft. Activity shows preparation, generation and completion, with an
+failed or interrupted turn, and no attachments. The prompt remains editable
+while Sample runs, but Append and its keyboard shortcut cannot send it.
+On success, only the unchanged submitted prompt is cleared; errors and
+cancellation retain it. Activity shows preparation, generation and completion, with an
 independent elapsed time. While pending, the green **Cancel Sample** button
 cancels only that temporary request. The question, answer and available Sample
 token counts appear in the normal conversation view, with its usual copying,
 links and local rendering. An unavailable token count is shown as a dash.
 
-The counter below Attach shows the prompt's **UTF-8 bytes, not tokens**. Sample
-accepts at most **4,000 bytes**; accented characters and emoji can occupy more
-than one byte. Exceeding that limit disables Sample only, not ordinary sending.
-The click handler checks the limit again before submitting the request.
+The counter below Attach shows the prompt's **UTF-8 bytes, not tokens**.
+Codex CLI 0.172.0 or newer does not apply the fixed Sample limit of 4,000 bytes.
+With earlier CLI versions, going over 4,000 bytes disables Sample only.
+Accented characters and emoji can occupy more than one byte.
 
 The server allows **30 seconds** for a Sample. No tools are executed: an attempted
 tool call may yield no text. Sampling still consumes model tokens. Results are
@@ -849,11 +851,10 @@ task/session/day. Opening it selects the latest edit automatically, including
 all edits with the same timestamp to the second. Select several diffs with
 Ctrl/Shift to view them together. File links support default open, Show in
 Explorer and Download; Download remembers its chosen location.
-In Rolling, **Preview** in these menus opens local `.txt` and `.md` files
-as selectable, copyable text in TMI. **Open** retains its normal behavior.
-**Turn Diff**, at the right of Activity, opens the native combined diff for the
-latest completed turn if Codex reported one. Blue file headers separate each
-file's changes. The existing per-edit diffs remain separate.
+**Preview** opens local `.txt` and `.md` files as selectable, copyable text in TMI.
+**Turn Diff**, at the right of Activity, shows Codex's combined diff for the
+latest completed turn when available. Blue file headers separate the files.
+The existing per-edit diff viewer remains available.
 While a download runs, its context-menu command becomes **Cancel download**.
 Closing the frontend cancels the transfer within its bounded shutdown; failed
 or cancelled transfers preserve an existing destination and remove temporary files.
@@ -895,14 +896,14 @@ buckets in the hint. Reset-credit count/earliest expiry appear only when supplie
 normal background unless expiry or exhausted limits warrant a warning color.
 Click it to confirm using a credit, including before the limit is exhausted.
 Missing data is not invented. Turn-end summaries distinguish consumed tokens
-from input/output and conversation totals.
+from input/output and conversation totals. When reattaching to a running
+turn, TMI restores the known starting count independently of the chat
+replay. If no valid starting count is available, TMI does not estimate the
+task total.
 
-In Rolling, click the **Ctx** bar when it shows usage to see the usable
-capacity, used and remaining tokens. Set the orange and red percentages for
-that exact usable capacity; all threads with that capacity share the local INI
-settings. The labels show the token equivalent. Leave either field blank to
-use its default (orange 80%, red disabled), or enter 100% to disable that
-color explicitly.
+Click a populated **Ctx** bar to see used and remaining tokens and set the
+orange and red thresholds by percentage for that usable context capacity.
+Blank uses the default (orange at 80%, red disabled); 100% disables that color.
 
 TMI does not enable experimental background compaction. Manual Compact remains
 available; no compaction test switch or automatic activation is added here.
@@ -913,12 +914,12 @@ answer. When a loaded turn has no final answer, TMI additionally pages that
 turn's persisted messages, including commentary and partial answers. It keeps
 their order and does not retain historical tool/diff payloads from this recovery.
 Normal line/turn limits and Full Load's Stop/memory limit remain in effect.
-In Rolling, **Reload Detail** separately reloads recent commentary and available
-Activity/diffs within the visible history budget. Commentary and final answers
-use their respective live colors.
 A complete live replay replaces the same turn during reattachment, without
 duplicating its messages. Old summary-only caches are invalidated. Text never
 persisted before an abrupt process loss cannot be reconstructed by this feature.
+**Reload Detail** also reloads recent commentary and available Activity/diffs
+within the visible history budget, with separate shades for commentary and
+final answers.
 
 **Usage** is an on-demand statistics window, separate from live context/limits:
 7-day and 30-day bars, weekday min/mean/max comparisons, and an extended
@@ -1063,23 +1064,16 @@ Codex path and common permission defaults. Frontends submit changes rather than
 rewriting stale values. Model/reasoning and native thread metadata remain
 Codex-owned, not duplicated common defaults.
 
-**OpenAI browser tools (Codex startup)** is a shared
-host setting, disabled by default. Disabled prevents TMI-started Codex sessions
-from automatically launching the OpenAI browser/Node runtimes. Enabled follows
-your normal Codex configuration. The choice is stored as
-`OpenAIBrowserToolsEnabled` in `HKCU\Software\TMILitePlus`, not in the UI INI or
-Codex `config.toml`; it does not alter the ChatGPT desktop app. It applies to new
-Codex sessions: close and reopen idle work, or restart the host when convenient.
-Changing the selector does not restart a working thread or terminate existing
-Node processes. TMI Computer Use (`tmi_desktop`), HTML/Mermaid and LaTeX viewers
-are unaffected. OpenAI browser tools are unavailable in sessions started with
-the setting disabled.
+**Browser Tools** uses optional Playwright MCP with the Microsoft browser
+extension. Install the separate components using the [Browser Tools setup](BROWSER_TOOLS.md).
+Enable it only when needed and explicitly approve the tab you want to share.
+This does not change the ChatGPT desktop app or Codex's global configuration.
+TMI Computer Use (`tmi_desktop`), HTML/Mermaid and LaTeX viewers are unaffected.
 
-The **Browser Tools** toggle in the main window changes this choice temporarily
-for the current thread. It is available only when that thread is idle; TMI
-disconnects/reopens that work to apply the selection. The host owns the per-thread
-choice until its lifetime ends. Configuration remains the saved default for new
-sessions; toggling the button does not change it.
+The main toggle temporarily changes the selected idle thread. TMI reconnects
+only that thread; switching off terminates the Node process it started without
+closing a browser independently opened by the user. The shared Configuration
+setting is the default for new work and is off by default.
 
 For supported Codex startup, TMI disables the automatic marketplace recommendation
 prefetch. This is separate from **Browser Tools**: it does not disable installed
@@ -1152,20 +1146,16 @@ Maintenance can also run alone, without host/frontend. It enforces a single
 maintenance window and refuses unsafe connected-operation conditions. Internal
 Thread Transfer is not part of the normal public UI.
 
-Release and Rolling are independent opt-in channels in Configuration.
-Checks use the selected channel/schedule and run in the background; installing
-an available update requires confirmation. Their visible names and frequency
-choices are unchanged, but **2.x Release uses `stable-2` and 2.x Rolling uses
-`rolling-2`**, separate from legacy 1.x. The Rolling option also considers newer
-stable builds. GitHub's Latest numbered release is
-v2.6; the direct [stable release link](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.6)
-also provides the full bundle for initial installation. Earlier versioned ZIPs,
-legacy 1.x assets and the legacy `rolling` endpoint remain unchanged. The old
-single-EXE updater does not recognize 2.x bundle filenames.
+**Release** checks stable 2.x builds only (`stable-2`). **Rolling** checks
+both stable and rolling 2.x builds (`stable-2` and `rolling-2`), at the
+Rolling check frequency. TMI offers only the newest eligible bundle when its
+build number is higher than the installed one. A missing rolling build does
+not prevent a stable update. Checks run in the background; installation still
+requires confirmation. The legacy 1.x updater remains separate. The
+[stable 2.7 release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/v2.7)
+provides the full bundle for initial installation.
 
-Stable uses `TMILitePlusBundle-2.6.9818.25491-Win64.zip`, and the
-[2.x Rolling release](https://github.com/SbiriJJ/tmi-lite-plus/releases/tag/rolling-2)
-provides `TMILitePlusBundle-2.6.9820.29566-Win64.zip`. Downloaded 2.x bundles stage the four
+Downloaded 2.x bundles stage the four
 matching executables, supplied runtime assets and documentation together.
 They are not packages for the 1.x updater. Personal INI settings are never
 overwritten. For local 2.x updates, place matching
